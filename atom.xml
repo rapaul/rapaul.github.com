@@ -4,7 +4,7 @@
   <title><![CDATA[rapaul.com]]></title>
   <link href="http://www.rapaul.com/atom.xml" rel="self"/>
   <link href="http://www.rapaul.com/"/>
-  <updated>2012-10-22T16:27:23+13:00</updated>
+  <updated>2012-10-22T16:42:20+13:00</updated>
   <id>http://www.rapaul.com/</id>
   <author>
     <name><![CDATA[Richard Paul]]></name>
@@ -640,9 +640,9 @@ au! Syntax gherkin source ~/.vim/cucumber.vim
   
   <entry>
     <title type="html"><![CDATA[Avoiding Brittle Tests with Mockito's ArgumentCaptor]]></title>
-    <link href="http://www.rapaul.com/2010/06/11/avoiding-brittle-tests-with-mockitos-argument-captor/"/>
-    <updated>2010-06-11T11:28:49+12:00</updated>
-    <id>http://www.rapaul.com/2010/06/11/avoiding-brittle-tests-with-mockitos-argument-captor</id>
+    <link href="http://www.rapaul.com/2010/06/10/avoiding-brittle-tests-with-mockitos-argument-captor/"/>
+    <updated>2010-06-10T00:00:00+12:00</updated>
+    <id>http://www.rapaul.com/2010/06/10/avoiding-brittle-tests-with-mockitos-argument-captor</id>
     <content type="html"><![CDATA[<p>One of the core principles behind my love of <a href="http://mockito.org">Mockito</a> is its ability to avoid brittle tests, by brittle tests I mean unit tests which fail when seemingly unrelated functionality changes.</p>
 
 <p>Below I will outline one of Mockito&#8217;s lesser known features, the <a href="http://mockito.googlecode.com/svn/branches/1.8.3/javadoc/org/mockito/ArgumentCaptor.html">ArgumentCaptor</a> that shines in certain use cases.</p>
