@@ -1,0 +1,339 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>A Behavioural World - rapaul.com</title>
+  <meta name="author" content="Richard Paul">
+
+  
+  <meta name="description" content="Or at least a behavioural twitter world, http://abehaviouralworld.rapaul.com/ is a little project just launched which attempts to distill behaviours &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://rapaul.github.com/2009/09/14/a-behavioural-world/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="rapaul.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">rapaul.com</a></h1>
+  
+    <h2>A technical blog written by Richard Paul</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:rapaul.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">A Behavioural World</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-09-14T05:16:49+12:00" pubdate data-updated="true">Sep 14<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Or at least a behavioural twitter world,</p>
+
+<p><a href="http://abehaviouralworld.rapaul.com/"><img src="http://www.rapaul.com/wp-content/uploads/2009/09/intro.png" alt="introduction" /></a></p>
+
+<p><a href="http://abehaviouralworld.rapaul.com/">http://abehaviouralworld.rapaul.com/</a> is a little project just launched which attempts to distill behaviours from twitter. Given my recent rapture in the world of <a href="http://en.wikipedia.org/wiki/Behaviour_driven_development">BDD</a>, the behaviours we are distilling are those that match the scenario format.</p>
+
+<pre><code>Given ...
+When ...
+Then ...
+</code></pre>
+
+<p>If you look carefully at the page source, you will notice a large portion of it is dedicated to an HTML comment containing the list of features and the breakdown into scenarios.  To keep things easily accessible, each time I thought of a scenario I added it to the page, once completed, it was marked with [Done].</p>
+
+<p>For example, starting with the most important feature:</p>
+
+<pre><code>  Feature 1)
+  In order to see how BDD syntax is being used on twitter
+  As a BDD zealot
+  I want to see tweets that contain 'given', 'when' &amp; 'then', in that order.
+</code></pre>
+
+<p>I then broke this feature down into scenarios:</p>
+
+<pre><code>  [Done]
+  Given the search returns more than matching 10 tweets
+  When the user views the page
+  Then the 10 most recent tweets should be displayed
+
+  ...
+</code></pre>
+
+<p>Each time a scenario was satisfied, I marked it with [Done]. Not all scenarios ended up being all that important, the following scenario is still pending.</p>
+
+<pre><code>  Given the search returns no matching tweets
+  When the user views the page
+  Then instead of showing any tweets a message should be shown
+</code></pre>
+
+<p>In fact, if we attempt to tie this scenario back into the vision of the website (distilling behaviours in twitter), then we realise it adds no value. If no one is tweeting about behaviours, then it is highly unlike that anyone will be visiting our behaviour distillery.</p>
+
+<p>There are a couple of features (3 &amp; 4) in the source which haven&#8217;t yet been implemented.</p>
+
+<pre><code>  Feature 3)
+  In order to emphasis the given/when/then syntax
+  As a BDD zealot
+  I want to see give/when/then highlighted in the displayed tweets
+
+  Feature 4)
+  In order to encourage BDD syntax usage on twitter
+  As a BDD zealot
+  I want to be able to tweet from this page using a BDD template
+</code></pre>
+
+<p>If anyone would like to work on these features, or even just break down some useful scenarios, please feel free to fork the <a href="http://github.com/rapaul/abehaviouralworld">code on github</a>, provide me with a diff or add a comment (note at the time of writing github looks to be having some caching issues on the &#8216;Source&#8217; tab).</p>
+
+<p><strong>What no executable scenarios?</strong>
+Oops, nope. I&#8217;m yet to get into the world of writing executable scenarios in Javascript. If someone has some knowledge in this area, please feel free to fork the <a href="http://github.com/rapaul/abehaviouralworld">github repository</a> and start automating the scenarios from the page source.</p>
+
+<p>PS: This idea was partially inspired by a <a href="http://twitter.com/soulnafein/status/3712851157">tweet by soulnafein</a> which read:
+<em>My girlfriend is taking the mickey out of me because recently I started explaining things using the Scenario format (Given When Then) :-)</em></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Richard Paul</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-09-14T05:16:49+12:00" pubdate data-updated="true">Sep 14<span>th</span>, 2009</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://rapaul.github.com/2009/09/14/a-behavioural-world/" data-via="rapaul" data-counturl="http://rapaul.github.com/2009/09/14/a-behavioural-world/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2009/09/02/meetups-in-london/" title="Previous Post: Meetups in London">&laquo; Meetups in London</a>
+      
+      
+        <a class="basic-alignment right" href="/2009/09/16/jquery-behaviours/" title="Next Post: jQuery Behaviours">jQuery Behaviours &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2011/07/11/constructor-injection-unit-tests/">Constructor injection, and how it simplifies unit test setup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/06/06/zero-to-headless-browser-tests-jenkins/">From zero to headless browser tests in Jenkins</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/04/13/specification-by-example-review/">Specification by Example, a review in snippets</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/03/25/cucumber-on-the-jvm-with-groovy/">Cucumber on the JVM with Groovy</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/02/28/vertical-slicing/">Vertical Slicing</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/rapaul">@rapaul</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'rapaul',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("rapaul", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/rapaul" class="twitter-follow-button" data-show-count="false">Follow @rapaul</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Richard Paul -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'rapaul';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://rapaul.github.com/2009/09/14/a-behavioural-world/';
+        var disqus_url = 'http://rapaul.github.com/2009/09/14/a-behavioural-world/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

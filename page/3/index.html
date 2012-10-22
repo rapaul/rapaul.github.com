@@ -1,0 +1,799 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>rapaul.com</title>
+  <meta name="author" content="Richard Paul">
+
+  
+  <meta name="description" content="On the 23rd of July, Mockito 1.8.0 was released, you can see a full listing of changes in their release notes. One feature that took my fancy was the &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://rapaul.github.com/page/3/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="rapaul.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">rapaul.com</a></h1>
+  
+    <h2>A technical blog written by Richard Paul</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:rapaul.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/08/09/bddmockito-eclipse/">BDDMockito & Eclipse</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-08-09T21:32:49+12:00" pubdate data-updated="true">Aug 9<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>On the 23rd of July, <a href="http://mockito.org/">Mockito</a> 1.8.0 was released, you can see a full listing of changes in their <a href="http://code.google.com/p/mockito/wiki/ReleaseNotes">release notes</a>.  One feature that took my fancy was the inclusion of <a href="http://en.wikipedia.org/wiki/Behavior_Driven_Development">BDD</a> aliases for stubbing an API, instead of using when, the Mockito team now encourage the use of given to bring your tests inline with the BDD style. To illustrate this, here is an example taken from the <a href="http://mockito.googlecode.com/svn/branches/1.8.0/javadoc/org/mockito/BDDMockito.html">BDDMockito javadoc</a>.</p>
+
+<p>[cc lang=&#8221;java&#8221; lines=&#8221;50&#8221;]
+import static org.mockito.BDDMockito.*;</p>
+
+<p>Seller seller = mock(Seller.class);
+Shop shop = new Shop(seller);</p>
+
+<p>public void shouldBuyBread() throws Exception {
+  //given<br/>
+  given(seller.askForBread()).willReturn(new Bread());</p>
+
+<p>  //when
+  Goods goods = shop.buyBread();</p>
+
+<p>  //then
+  assertThat(goods, containBread());
+}<br/>
+[/cc]</p>
+
+<p>By breaking the test into given, when &amp; then, future maintainers of the tests will more quickly understand which parts of the test relate to setup, exercising the SUT and asserting.</p>
+
+<p><em>(stealing from Apple&#8217;s <a href="http://www.youtube.com/watch?v=szrsfeyLzyg">AppStore ad</a>)</em> What&#8217;s great about Eclipse, is that if you want to write a foreach loop, there&#8217;s a template for that.  If you want to create a unit test, there&#8217;s a template for that. Yip there&#8217;s an <del>app</del> template for just about anything.</p>
+
+<p>To minimise keystrokes and encourage the use of this style, you can modify the existing Test template as shown below to automatically generate the BDD style comments &amp; statically import the BDDMockito members.  To modify the template, navigate to Window > Preferences > Java > Editor > Templates.  Click on Test (the JUnit 4 test template) and click edit.  Paste in the follow template:</p>
+
+<p>[cc lang=&#8221;java&#8221; lines=&#8221;50&#8221;]
+@${testType:newType(org.junit.Test)}</p>
+
+<p>public void ${testname}() throws Exception {
+  // given ${cursor}
+  ${staticImport:importStatic(&#8216;org.junit.Assert.<em>&#8217;, &#8216;org.mockito.BDDMockito.</em>&#8217;)}</p>
+
+<p>  // when</p>
+
+<p>  // then</p>
+
+<p>}
+[/cc]</p>
+
+<p>You are now ready to start writing BDDMockito style unit tests using Eclipse&#8217;s template, simply type Test, hit Ctrl+Space and you will be given the following option.</p>
+
+<p><img src="http://www.rapaul.com/wp-content/uploads/2009/08/ctrl-space.png" alt="ctrl-space" /></p>
+
+<p>Selecting the option will generate the test method, focus first given to the test name, then to the blank line after // given.</p>
+
+<p><img src="http://www.rapaul.com/wp-content/uploads/2009/08/created-template.jpg" alt="created-template" /></p>
+
+<p>There you have it, a simple Eclipse template to generate your BDDMockito style tests.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/06/12/review-spring-web-flow-2/">Review: Spring Web Flow 2 Web Development</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-12T09:19:39+12:00" pubdate data-updated="true">Jun 12<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.rapaul.com/wp-content/uploads/2009/06/spring-webflow-2.png"><img src="http://www.rapaul.com/wp-content/uploads/2009/06/spring-webflow-2.png" alt="spring-webflow-2" /></a>
+<a href="http://www.packtpub.com/develop-powerful-web-applications-with-spring-web-flow-2/book">Spring Web Flow 2 Web Development</a>
+Authors: Markus Stäuble &amp; Sven Lüppken
+Publisher: <a href="http://www.packtpub.com/">Packt Publishing</a>
+Date of Publishing: March 2009
+Sample Chapter: <a href="http://www.packtpub.com/files/spring-web-flow-2-web-development-sample-chapter-4-spring-faces.pdf">Chapter 4: Spring Faces</a></p>
+
+<h2>Intended Audience</h2>
+
+<p>This book is intended for Java web application developers who wish to learn about <a href="http://www.springsource.org/webflow">Spring Web Flow 2</a>.  A base knowledge of the Spring Framework and its associated MVC is advised, however most examples in the book provide sufficient detailing of the surrounding technologies and their integration points.  This allows the reader to follow the examples without looking up details from other reference sources.</p>
+
+<h2>Chapter 1 - Introduction</h2>
+
+<p>The first chapter of this book provides a general introduction to Spring Web Flow 2 including some of the basic terminology.  For those familiar with Spring Web Flow 1, there is a useful section detailing the major changes introduced in Web Flow 2.  Having not used Spring Web Flow in over a year, I found the summary provided enough information to reacquaint myself.</p>
+
+<h2>Chapter 2 - Setup for Spring Web Flow 2</h2>
+
+<p>Chapter 2 details how to get Spring Web Flow setup in a Spring web application.  Details on where to find the source code and examples provides a good starting point for users who wish to see Web Flow in action before delving into the details.  An explanation of tooling support, such as setting up Eclipse to visualise flow, is a helpful addition especially with the prevalent screenshots.</p>
+
+<h2>Chapter 3 - The Basics of Spring Web Flow 2</h2>
+
+<p>As expected, this chapter covers the necessities for building a Web Flow, focussing on defining the flow using XML.  This is by far the most important and useful chapter of the book.  The chapter is just over 50 pages long, but is well worth the read as most sections are fundamental in using Web Flow, topics include: flow descriptors (including a diagram), flow scoped persistence, the newly supported EL expression language, scope levels, @Autowired behaviour gotchas, inputs &amp; outputs, subflows and end states.</p>
+
+<h2>Chapter 4 - Spring Faces</h2>
+
+<p>Not being a JavaServer Faces (JSF) user, I skimmed over this chapter, however it is available as a <a href="http://www.packtpub.com/files/spring-web-flow-2-web-development-sample-chapter-4-spring-faces.pdf">sample chapter</a>.</p>
+
+<h2>Chapter 5 - Mastering Spring Web Flow</h2>
+
+<p>This chapter contains a mix of topics.  The first section includes further information on the usage of subflows, however I feel the explanation is a little brief.</p>
+
+<p>The next section talks about integration with the Spring Javascript project.  Spring Javascript is explained as being an abstraction layer on top of existing toolkits (only Dojo supported so far), but the example given has a hardwired dependency on dijit.form.DateTextBox.  I&#8217;m not sure if this is just a bad example or if that is how Spring Javascript works.  An introduction to the Tiles framework is then given and tied in nicely with an explanation of how to load page fragments using Spring Javascript.</p>
+
+<p>The final section in this chapter covers advanced configuration of flows. I would advise using this section purely as a reference as it is heavy on detail.</p>
+
+<h2>Chapter 6 - Testing Spring Web Flow Applications</h2>
+
+<p>Being a bit of a testing zealot, this was the section I was really hanging out for.  The opening sentence reads, &#8220;Testing is an important aspect in every software development process&#8221;.  Off to a good start, unfortunately this chapter didn&#8217;t live up to my expectations.</p>
+
+<p>The Web Flow specific test setup and assertions are explained well, for example calls such as context.setEventId(&#8220;login&#8221;), this.resumeFlow(context) and assertFlowExecutionEnded().</p>
+
+<p>The example then introduces <a href="http://easymock.org/">EasyMock</a> to help isolate and focus the unit tests.  However this example has a glaring issue; it creates a mock of the wrong object.  The example models a user login using a UserService to fetch a user by username.  You would expect the mocked object in this case to be the UserService, but the example mocks out the underlying EntityManager.  As a result the unit test for the flow ends up setting expectations on Hibernate HQL, thus polluting the flow&#8217;s unit test with database queries that should really be tested at the service or DAO layer.  If you change the way users were fetched in the DAO (or you moved away from Hibernate) you wouldn&#8217;t expect your Web Flow tests to be affected.</p>
+
+<p>My advice when reading this chapter is to skip to the section titled <em>More testing with EasyMock</em>.  This section shows correct usage of EasyMock and demonstrates a test driven approach to testing.</p>
+
+<h2>Chapter 7 - Security</h2>
+
+<p>The final chapter covers the integration of Spring Security, the only real option for security in Spring.  The details in this section are largely not specific to Spring Webflow, however they are important for developing any non-trivial application and are well explained with examples.</p>
+
+<h2>Conclusion</h2>
+
+<p>I would recommend this book to any developer new to Spring Web Flow.  The concepts and much of the implementation between Web Flow 1 and 2 remains the same, meaning this isn&#8217;t an essential read for existing Web Flow users.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/03/30/springs-dependency-injection-mvc/">Spring&#8217;s Dependency Injection & MVC</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-03-30T03:20:57+13:00" pubdate data-updated="true">Mar 30<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Below are slides from a presentation I gave to colleagues at Kiwiplan. The presentation covered two <a href="http://www.springsource.org/">Spring Framework</a> topics, the first being a brief introduction to Spring&#8217;s Dependency Injection Container.  The second presentation was an introduction to Spring&#8217;s MVC (web) component, with a focus on the annotation style introduced in Spring 2.5.  PDF versions are available for both <a href="http://www.rapaul.com/wp-content/uploads/2009/03/spring_dependency_injection.pdf">Dependency Injection</a> and <a href="http://www.rapaul.com/wp-content/uploads/2009/03/spring_mvc.pdf">MVC</a>.</p>
+
+<p><a href="http://www.slideshare.net/rapaul/introduction-to-springs-dependency-injection?type=presentation">Introduction to Spring&#8217;s Dependency Injection</a></p>
+
+<p>View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/rapaul">Richard Paul</a>.</p>
+
+<p><a href="http://www.slideshare.net/rapaul/introduction-to-spring-mvc?type=presentation">Introduction to Spring MVC</a></p>
+
+<p>View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/rapaul">Richard Paul</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/03/03/unit-testing-fundamentals/">Unit Testing Fundamentals</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-03-03T10:00:38+13:00" pubdate data-updated="true">Mar 3<span>rd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Below and <a href="http://www.rapaul.com/wp-content/uploads/2009/03/unit_testing_fundamentals.pdf">attached</a> are slides from a presentation I gave to colleagues at Kiwiplan.  The presentation covers a range of topics regarding unit testing best practices, including test driven development (TDD), mocking frameworks, avoiding over-specification and test coverage.  The slides also include diagrams to help explain the concept of isolating code through the use of seams.</p>
+
+<p><a href="http://www.slideshare.net/rapaul/unit-testing-fundamentals?type=presentation">Unit Testing Fundamentals</a></p>
+
+<p>View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/rapaul">Richard Paul</a>. (tags: <a href="http://slideshare.net/tag/unit-testing">unit testing</a> <a href="http://slideshare.net/tag/slides">slides</a>)</p>
+
+<p>I&#8217;ve attached the final outcome of the live TDD examples.  Obviously TDD doesn&#8217;t come across very well as a final solution, however the code also provides basic examples of the <a href="http://www.mockito.org">Mockito</a> and <a href="http://ayende.com/projects/rhino-mocks.aspx">Rhino Mocks</a> libraries.  The code style is based on Spring Framework&#8217;s annotation driven MVC framework.</p>
+
+<p><a href="http://www.rapaul.com/wp-content/uploads/2009/03/java-unit-testing-example.zip">Java example code</a> - JUnit, Mockito, EclEMMA (Eclipse Java coverage)
+<a href="http://www.rapaul.com/wp-content/uploads/2009/03/vbnet-unit-test-example.zip">VB.Net example code</a> - NUnit, Rhino Mocks</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/02/16/using-dojo/">Using Dojo</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-16T10:44:00+13:00" pubdate data-updated="true">Feb 16<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Below are slides from a presentation I gave to colleagues at Kiwiplan.  The slides cover how to use some core Dojo APIs and also showcase some of the features <a href="http://www.dojotoolkit.org">Dojo</a> provides.</p>
+
+<p><a href="http://www.slideshare.net/rapaul/using-dojo?type=powerpoint">Using Dojo</a></p>
+
+<p>View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/rapaul">Richard Paul</a>. (tags: <a href="http://slideshare.net/tag/dojotoolkit">dojotoolkit</a> <a href="http://slideshare.net/tag/tutorial">tutorial</a>)</p>
+
+<p>I also modified the javascript console created for my <a href="http://www.rapaul.com/2009/02/02/javascript-ajax-basics-slides/">previous blog entry</a> to use Dojo.  You can download the <a href="http://www.rapaul.com/wp-content/uploads/2009/02/dojotutorial.zip">source</a> to try out Dojo examples on your local box. You will need Java and <a href="http://www.grails.org">Grails</a> installed and can run the server using the usual grails command.</p>
+
+<p><code>grails run-app</code></p>
+
+<p>The console can then be accessed at <a href="http://localhost:8080/AjaxServer/">http://localhost:8080/AjaxServer/</a> (only tested in Firefox).</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/02/03/javascript-ajax-basics-slides/">Javascript & Ajax Basics (Slides + Console)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-03T10:34:44+13:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The following slides are from a presentation I gave at Kiwiplan (my employer).</p>
+
+<p><a href="http://www.slideshare.net/rapaul/javascript-ajax-basics?type=presentation">Javascript &amp; Ajax Basics</a></p>
+
+<p>View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/rapaul">Richard Paul</a>. (tags: <a href="http://slideshare.net/tag/javascipt">javascipt</a> <a href="http://slideshare.net/tag/ajax">ajax</a>)</p>
+
+<p>I&#8217;ve also created a live Javascript console to play around with Javascript in a browser.  You can download the <a href="http://www.rapaul.com/wp-content/uploads/2009/02/ajaxservertutorial.zip">source</a> and play about with it on your local server.  You will need Java and <a href="http://grails.org">Grails</a> installed and can run the server using the usual grails command.</p>
+
+<pre><code>grails run-app
+</code></pre>
+
+<p>The console can then be accessed at <a href="http://localhost:8080/AjaxServer/">http://localhost:8080/AjaxServer/</a>  (only tested in Firefox).</p>
+
+<p><a href="http://www.rapaul.com/wp-content/uploads/2009/02/live-javascript-console.png"><img src="http://www.rapaul.com/wp-content/uploads/2009/02/live-javascript-console-300x232.png" alt="live-javascript-console" /></a></p>
+
+<p>Thanks <a href="http://twitter.com/cgarethc">@cgarethc</a> (development manager @ Kiwiplan) for allowing me to post this on my personal blog.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2008/12/23/the-making-of-rockin-robin/">The Making of Rockin&#8217; Robin</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-12-23T11:30:34+13:00" pubdate data-updated="true">Dec 23<span>rd</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>This post details the making of Rockin&#8217; Robin, a client side mashup between last.fm and twitter.  If you missed my introduction to Rockin&#8217; Robin, you can read the post <a href="http://www.rapaul.com/2008/11/11/rockin-robin/">here</a>. Or you can try it out @ <a href="http://robin.rapaul.com/">http://robin.rapaul.com/</a></p>
+
+<p><strong>Querying</strong></p>
+
+<p>What makes this mashup special is that the entire mashup runs client side, all requests to the last.fm and twitter services are made in the user&#8217;s browser.  Being a purely in-browser mashup there are some restrictions as to what requests can be made, specifically current browsers do not support cross-site requests for regular XmlHttpRequests (XHR).  While this is a proposed feature for upcoming browsers, we need a solution that works with current browsers.</p>
+
+<p>Enter <a href="http://api.dojotoolkit.org/jsdoc/dojo/1.2/dojo.io.script.get">dojo.io.script.get()</a>, Dojo&#8217;s workaround for cross-domain requests.  The general gist of this hack is that it adds a script block to the page with the src attribute set to the query URL, the server then returns the JSON data as the content of the script block, this technique is known as <a href="http://en.wikipedia.org/wiki/JSONP#JSONP">JSONP</a>.  Fortunately Dojo hides the complexity of this hack behind a similar interface to the regular request (<a href="http://api.dojotoolkit.org/jsdoc/dojo/1.2/dojo.xhrGet">dojo.xhrGet()</a>).</p>
+
+<p><strong>Last.fm</strong></p>
+
+<p>Accessing last.fm&#8217;s API requires a registration key, which can bet set up on <a href="http://www.last.fm/api">http://www.last.fm/api</a> This page also details all the available API methods broken down into areas.  For the Rockin&#8217; Robin mashup we are concerned with finding the most recently scrobbled tracks which are accessible via the <a href="http://www.last.fm/api/show?service=278">user.getRecentTracks</a> method.  Below is a code snippet for making the request to load the data from the last.fm API.</p>
+
+<p>[gist id=&#8221;36396&#8221;]</p>
+
+<p>The data returned by this request includes that meta information for the last 5 tracks submitted to the user&#8217;s last.fm profile.  This information includes the artist, album (including cover art links), track name as well as when the track was played.  This information is used to build up the recent track HTML as shown below.</p>
+
+<p><img src="http://www.rapaul.com/wp-content/uploads/2008/12/lastfm-data-visualised.png" alt="lastfm-data-visualised" /></p>
+
+<p><strong>Twitter</strong></p>
+
+<p>The next step is to query twitter for tweets that contain the keyword artist and title combination.  Twitter&#8217;s API can be viewed at <a href="http://apiwiki.twitter.com/Search+API+Documentation">http://apiwiki.twitter.com/Search+API+Documentation</a>.  No registration key is required, simply make a call to their public search API, e.g.  <a href="http://search.twitter.com/search.json?q=MGMT+Kids">http://search.twitter.com/search.json?q=MGMT+Kids</a></p>
+
+<p>[gist id=&#8221;38897&#8221;]</p>
+
+<p>It is now simply a matter of extracting the required data to build the elements to add to the page.</p>
+
+<p><strong>Building the HTML</strong></p>
+
+<p>Dojo provides a handy method for setting attributes on nodes (<a href="http://api.dojotoolkit.org/jsdoc/dojo/1.2/dojo.NodeList.attr">attr</a>), the API was designed for existing nodes, however it can be used by passing in a newly created node. Here we use dojo.query to return a nodelist which gives access to the attr function then returns the first item (the node we just created).</p>
+
+<p>[gist id=&#8221;38917&#8221;]</p>
+
+<p>I&#8217;ve heard from <a href="http://twitter.com/amatix">@amatix</a> that a <a href="http://github.com/madrobby/scriptaculous/wikis/builder">Builder</a> equivalent is slated for a post 1.2 release of Dojo which will hopefully do away with the above build function and make element creation tasks simpler.</p>
+
+<p><strong>Bookmarking Support</strong></p>
+
+<p>To allow users to bookmark and link to their Rockin&#8217; Robin page, the username is stored in the URL hash. This is a two stage process, the first is to append the username to the URL, e.g. <a href="http://robin.rapaul.com/#GexNZ">http://robin.rapaul.com/#GexNZ</a> The below snippet strips off any existing hash and adds &#8216;#username&#8217; to URL.</p>
+
+<p>[gist id=&#8221;38909&#8221;]</p>
+
+<p>The username also needs to be extacted from the URL when the page is first loaded.  The username is then used to populate the username text box and kick off the mashup.</p>
+
+<p>[gist id=&#8221;38912&#8221;]</p>
+
+<p>That wraps up the major technical details of Rockin&#8217; Robin, you can browse the full source on <a href="http://github.com/rapaul/rockinrobin/tree/master">github</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2008/11/20/mocking-in-java-with-mockito/">Mocking in Java With Mockito</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-20T10:08:32+13:00" pubdate data-updated="true">Nov 20<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A ran a session at the <a href="http://www.meetup.com/auckland-jug/calendar/9081887/">Auckland Java User Group</a> on using <a href="http://mockito.org/">Mockito</a>.  Slides are embedded below using slideshare:</p>
+
+<p><a href="http://www.slideshare.net/rapaul/mockito-presentation?type=powerpoint">Mocking in Java with Mockito</a></p>
+
+<p>View SlideShare <a href="http://www.slideshare.net/rapaul/mockito-presentation?type=powerpoint">presentation</a> or <a href="http://www.slideshare.net/upload?type=powerpoint">Upload</a> your own.</p>
+
+<p>As promised I&#8217;ve attached my <a href="http://www.rapaul.com/wp-content/uploads/2008/11/mockito.pdf">slides</a> and also included the example source files in a <a href="http://www.rapaul.com/wp-content/uploads/2008/11/mockito-example-code.zip">zip</a>.  To run the unit tests you will need <a href="http://sourceforge.net/project/showfiles.php?group_id=15278&amp;package_id=12472">JUnit 4.5</a> and <a href="http://mockito.googlecode.com/files/mockito-all-1.6.jar">Mockito 1.6</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2008/11/12/rockin-robin/">Rockin&#8217; Robin</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-12T10:59:20+13:00" pubdate data-updated="true">Nov 12<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Introducing <a href="http://robin.rapaul.com/">Rockin&#8217; Robin</a>, a mashup between <a href="http://www.last.fm/">Last.fm</a> and <a href="http://twitter.com/">Twitter</a>.  Head over to <a href="http://robin.rapaul.com/">http://robin.rapaul.com/</a> to check it out if you haven&#8217;t already.</p>
+
+<p>The basic premise is that you enter your Last.fm username, Rockin&#8217; Robin fetches your recently scrobbled tracks, then mashes them up with the latest tweets from Twitter. It&#8217;s an excellent way to see what the Twitter community thinks of your tracks and to find Twitter users who have similar musical tastes. Of course you don&#8217;t need to enter your own username, you can enter the username of any Last.fm user to mashup their latest tracks.</p>
+
+<p>Below is a screenshot (click to enlarge) highlighting some of the mashup goodness. <a href="http://www.last.fm/music/MGMT/_/Electric+Feel">Electric Feel</a> by <a href="http://www.last.fm/music/MGMT">MGMT</a> is the recently played track, with tweets shown from different Twitter users. To view more details on the artist, track or Twitter user you can click through to Last.fm or Twitter using the links (orange text).</p>
+
+<p><a href="http://www.rapaul.com/wp-content/uploads/2008/11/mgmt-electric-feel-rockin-robin.png"><img src="http://www.rapaul.com/wp-content/uploads/2008/11/mgmt-electric-feel-rockin-robin.png" alt="" /></a></p>
+
+<p>Rockin&#8217; Robin is in its early stages of development, as such there are many things that should/could be done to make Rockin&#8217; Robin more rockin&#8217;.</p>
+
+<p>Some ideas include:</p>
+
+<ul>
+<li><p>Allow Twitter users to add there own tweets to the conversation from within Rockin&#8217; Robin.</p></li>
+<li><p>Show more tweets for popular tracks.</p></li>
+<li><p>Tweak the Twitter API search to favour real user comments over radio station type tweets.</p></li>
+<li><p>Show shortcut links to your Last.fm friends to make mashing up their recent tracks a simple click away.</p></li>
+</ul>
+
+
+<p>If you have any suggestions or comments please feel free to add them below.</p>
+
+<p>Also stay tuned for a follow up post &#8220;The making of Rockin&#8217; Robin&#8221; which will cover the technical side including: Accessing Twitter &amp; Last.fm APIs, JSONP and Dojo Toolkit (query, behavior, script.io).</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2008/10/28/setting-up-rapaulcom/">Setting Up RAPaul.com</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-10-28T09:55:26+13:00" pubdate data-updated="true">Oct 28<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Setting up RAPaul.com has been a breeze.  Especially easy with recommendations from <a href="http://robfe.com">Rob</a>.</p>
+
+<ol>
+<li><p><strong>Set up a web host</strong> - This was done using <a href="http://www.asmallorange.com">A Small Orange</a> (ASO) - yes that&#8217;s the name of the hosting provider.</p></li>
+<li><p><strong>Secure a domain name</strong> - This can be done automatically when setting up an account with ASO and worked perfectly.  The trickiest part is finding a domain name that is available.</p></li>
+<li><p><strong>Install Wordpress</strong> - ASO provides a large feature set of administration tools, one of which is a really handy install tool named Fantastico.  Installing Wordpress comes down to a couple of clicks.</p></li>
+<li><p><strong>Customise Wordpress</strong> - Installing a Wordpress theme is also very simple, extract a theme (e.g. <a href="http://wordpress.org/extend/themes/demar">deMar</a>) into the themes folder then it is available to be chosen through the built in Wordpress admin tool.</p></li>
+<li><p><strong>Set up Feedburner</strong> - This collates statistics about your subscribers etc. Details are shown <a href="http://www.google.com/support/feedburner/bin/answer.py?answer=78483&amp;topic=13252">here</a>.  The plugin makes it very easy to add both the post and comments feeds.</p></li>
+</ol>
+
+
+<p>Note the process I used to upload content was to use ASO&#8217;s cPanel interface.  There is an option called &#8216;File Manager&#8217; that lets you upload a zip or tar.gz to a required location, you can then unpack the archive by selecting it and choosing &#8216;Extract&#8217;.</p>
+
+<p>All in all, the process has been very simple and painless.</p>
+
+<p>If you&#8217;re thinking of setting up an account with A Small Orange, here is my <a href="http://refer.asmallorange.com/19824">referrer url</a>.</p>
+
+<p>There are some additional configuration options I haven&#8217;t had time to play with yet, including:</p>
+
+<ul>
+<li><p>Install the google sitemap plugin</p></li>
+<li><p>Install the google code syntax highlighter</p></li>
+<li><p>Install google analytics</p></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/page/2/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2011/07/11/constructor-injection-unit-tests/">Constructor injection, and how it simplifies unit test setup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/06/06/zero-to-headless-browser-tests-jenkins/">From zero to headless browser tests in Jenkins</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/04/13/specification-by-example-review/">Specification by Example, a review in snippets</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/03/25/cucumber-on-the-jvm-with-groovy/">Cucumber on the JVM with Groovy</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/02/28/vertical-slicing/">Vertical Slicing</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/rapaul">@rapaul</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'rapaul',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("rapaul", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/rapaul" class="twitter-follow-button" data-show-count="false">Follow @rapaul</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Richard Paul -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'rapaul';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

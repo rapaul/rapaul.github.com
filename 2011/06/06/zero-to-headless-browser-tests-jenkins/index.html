@@ -1,0 +1,422 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>From zero to headless browser tests in Jenkins - rapaul.com</title>
+  <meta name="author" content="Richard Paul">
+
+  
+  <meta name="description" content="After spending a large portion of the day I can proudly say I have a working set of browser based tests that run on a headless Jenkins install. By &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://rapaul.github.com/2011/06/06/zero-to-headless-browser-tests-jenkins/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="rapaul.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">rapaul.com</a></h1>
+  
+    <h2>A technical blog written by Richard Paul</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:rapaul.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">From Zero to Headless Browser Tests in Jenkins</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-06T11:34:09+12:00" pubdate data-updated="true">Jun 6<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>After spending a large portion of the day I can proudly say I have a working set of browser based tests that run on a headless Jenkins install. By headless I mean a server without any physical display installed, as is typical for server machines. This facilitates the execution of high level acceptance tests in much the same fashion as lower level unit and integration based tests, albeit at a slower rate.</p>
+
+<p><a href="http://www.rapaul.com/wp-content/uploads/2011/06/jenkins-headless.png"><img src="http://www.rapaul.com/wp-content/uploads/2011/06/jenkins-headless-300x230.png" alt="" /></a></p>
+
+<p>The problem I am trying to solve here is a quick feedback loop on acceptance test level behaviour. This blog post will be talking about getting Cucumber scenarios running for a single browser (Firefox). Cross browser testing is a different problem, for which think <a href="http://saucelabs.com/">Sauce Labs</a> would be a better solution as they take the hassle out of provisioning and maintaining a wide range of operating system and browser combinations.</p>
+
+<p>Outlined below are the steps I followed to go from installing Ubuntu server edition through to running the browser based tests (with <a href="http://cukes.info/">Cucumber</a>, <a href="https://github.com/jnicklas/capybara">Capybara</a>, Selenium-Webdriver). You may find some steps are not required on your operating system or for the project you wish to test. Admittedly I dove down a few rabbit holes, but thanks to VirtualBox&#8217;s snapshot feature I could safely revert if things turned sour.</p>
+
+<ul>
+<li><p>Installing Ubuntu</p></li>
+<li><p>Installing Jenkins</p></li>
+<li><p>Going Headless</p></li>
+<li><p>Installing Ruby with RVM</p></li>
+<li><p>Installing Firefox</p></li>
+<li><p>Creating a Job</p></li>
+<li><p>Bonus Points, watching the browser in realtime</p></li>
+</ul>
+
+
+<h2>Installing Ubuntu</h2>
+
+<p>If you have an existing server you can skip this step. If not grab yourself a copy of <a href="http://www.ubuntu.com/download/server/download">Ubuntu Server edition</a>. As I wanted a simple way to play with Jenkins without provisioning hardware I used VirtualBox for virtualisation. I followed the usual VirtualBox installation, however once installed the server showed a blank screen on boot. This was fixed by following the workaround on the <a href="http://ubuntuforums.org/showthread.php?t=1743535">Ubuntu forums</a>.</p>
+
+<p>When installing, it is handy to enable the OpenSSH server so you can SSH onto the box from your desktop terminal, this makes copy &amp; pasting some of the later steps much easier. To make the VirutalBox server visible on the network, change the network mode from NAT to bridged.</p>
+
+<h2>Installing Jenkins</h2>
+
+<p>Installing Jenkins is a breeze, as debian packages have been set up, check the <a href="https://wiki.jenkins-ci.org/display/JENKINS/Installing+Jenkins+on+Ubuntu">wiki page</a> for details.
+[cc]
+$ wget -q -O - http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
+$ sudo vi /etc/apt/sources.list.d/jenkins.list
+Add &#8220;deb http://pkg.jenkins-ci.org/debian binary/&#8221;
+$ sudo apt-get update
+$ sudo apt-get install jenkins
+[/cc]
+This automatically creates an account called <em>jenkins</em>. We will need to login as this user later so set a password for <em>jenkins</em> with:
+[cc]
+sudo passwd jenkins
+[/cc]
+You should now be able to view the Jenkins dashboard at http://your.server:8080/</p>
+
+<h3>Going Headless</h3>
+
+<p>Now that Jenkins is installed, we want to get a headless display configured for our browser based tests. First up hit <em>Manage Jenkins > Manage Plugins > Available</em> and install the <em>Hudson Xvnc</em> plugin (this works with Jenkins despite its name). Schedule Jenkins to restart to pickup the plugin.  Once installed this gives us the ability to start a headless display automatically when we configure our jobs, more on that later.</p>
+
+<p>With Jenkins configured we need to ensure the required software is installed on the server:
+[cc]
+$ sudo apt-get install vnc4server
+[/cc]</p>
+
+<p>vncserver requires a password to be set before it can be used, this needs to be set before Jenkins can make use of the vncserver. For this we need to switch to the jenkins user and set a password.</p>
+
+<p>[cc]
+$ sudo -Hiu jenkins
+$ vncserver
+Enter a password, and verify it
+$ vncserver -kill :1 # or whichever display the vncserver output mentioned
+[/cc]</p>
+
+<p>When Jenkins runs it doesn&#8217;t need to know this password, but if you want to watch a running job you can connect to the running vnc session with that password and watch the tests in real time.</p>
+
+<p>I initially headed down the Xvfb route but that seemed to require a lot of custom configuration in the job&#8217;s build script and isn&#8217;t related to the Xvnc plugin.</p>
+
+<h2>Installing Ruby with RVM</h2>
+
+<p>The job I&#8217;m wanting to run is a set of acceptance tests written in Cucumber with automation done using Capybara (Selenium-Webdriver under the hood). So its a Ruby job, and all good Ruby jobs use <a href="https://rvm.beginrescueend.com/">RVM</a>. Fortunately RVM has a page on <a href="https://rvm.beginrescueend.com/integration/hudson/">integrating with Hudson/Jenkins</a>. I followed the recommended steps and <a href="https://rvm.beginrescueend.com/rvm/install/">installed RVM</a> for a single user (jenkins).
+[cc]
+$ sudo apt-get install curl bison build-essential zlib1g-dev libssl-dev libreadline5-dev libxml2-dev git-core
+$ sudo -Hiu jenkins
+$ bash &lt; &lt;(curl -s https://rvm.beginrescueend.com/install/rvm)
+[/cc]
+Once RVM is configured, run <em>rvm notes</em> to find the full list of dependencies you need to install for your required version of Ruby. e.g.
+[cc]
+$ source ~/.rvm/scripts/rvm
+$ rvm notes
+$ sudo apt-get install build-essential bison openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev
+[/cc]
+Note that I didn&#8217;t give the jenkins user sudo rights, so I installed all packages through my usual admin account on the server.</p>
+
+<p>RVM can be configured to allow the automatic installation of Ruby versions and gemsets by adding the following to ~/.rvmrc for the jenkins user:</p>
+
+<p>[cc]
+rvm_install_on_use_flag=1
+rvm_project_rvmrc=1
+rvm_gemset_create_on_use_flag=1
+[/cc]</p>
+
+<h2>Installing Firefox</h2>
+
+<p>Of course, a headless server isn&#8217;t any good without a browser to test
+[cc]
+sudo apt-get install firefox
+[/cc]
+This is the default browser that selenium will select.</p>
+
+<h2>Creating a Job</h2>
+
+<p>At this point the Jenkins server should be fully configured to run headless jobs, so lets dive in and create one. Create a new <em>freestyle</em> job. Notice there is a new option available under the &#8216;Build Environment&#8217; section call &#8216;Run Xvnc during build&#8217;, check this to have the plugin automatically do its magic.</p>
+
+<p>For my example, I didn&#8217;t bother with checking projects out source control, I simply created a project in the /tmp directory. You&#8217;ll want to enable the appropriate SCM plugin and configure a checkout.
+Under the build section add an <em>Execute shell</em> step with the following:
+[cc]</p>
+
+<h1>!/bin/bash -e</h1>
+
+<p>cd /tmp/selenium-test
+source &#8220;$HOME/.rvm/scripts/rvm&#8221;
+[[ -s &#8220;.rvmrc&#8221; ]] &amp;&amp; source .rvmrc
+bundle install
+cucumber
+[/cc]
+The <em>-e</em> flag in <em>#!/bin/bash -e</em> ensures the script stops after any errors.
+You will notice that the script sources the .rvmrc file directly for the project, this ensures the correct version of Ruby is used with a gemset appropriate for your project. My .rvmrc looked something like:
+[cc]
+rvm &#8211;create use ruby-1.9.2@selenium-test
+[/cc]
+Calling <em>bundle install</em> automatically installs bundler, reads the Gemfile.lock and installs all required gems. Finally <em>cucumber</em> kicks off the actual cucumber scenarios, and fingers crossed, they should pass with flying colours.</p>
+
+<p>[cc]
+Feature:Headless
+  In order to keep happy customers
+  As a developer I want to ensure all my features continue to pass on CI</p>
+
+<p>  Scenario: Headless browser</p>
+
+<pre><code>When I check the nets without a head
+Then I the nets should be readable
+</code></pre>
+
+<p>1 scenario (1 passed)
+2 steps (2 passed)
+0m7.975s
+Terminating xvnc.
+$ vncserver -kill :33
+Killing Xvnc4 process ID 6873
+Finished: SUCCESS
+[/cc]</p>
+
+<h2>Bonus Points, watching the browser in realtime</h2>
+
+<p>As the headless display is running in vncserver, you can connect to the vnc session and watch the tests run in real time. Just use your regular VNC client and connect to your.server:59xx where xx is the display number output on the Jenkins console for the running job. You will need to enter the password you set the first time you ran vncserver.</p>
+
+<p>[Note: most/all of these instructions should work with Hudson also]</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Richard Paul</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-06T11:34:09+12:00" pubdate data-updated="true">Jun 6<span>th</span>, 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://rapaul.github.com/2011/06/06/zero-to-headless-browser-tests-jenkins/" data-via="rapaul" data-counturl="http://rapaul.github.com/2011/06/06/zero-to-headless-browser-tests-jenkins/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2011/04/13/specification-by-example-review/" title="Previous Post: Specification by Example, a review in snippets">&laquo; Specification by Example, a review in snippets</a>
+      
+      
+        <a class="basic-alignment right" href="/2011/07/11/constructor-injection-unit-tests/" title="Next Post: Constructor injection, and how it simplifies unit test setup">Constructor injection, and how it simplifies unit test setup &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2011/07/11/constructor-injection-unit-tests/">Constructor injection, and how it simplifies unit test setup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/06/06/zero-to-headless-browser-tests-jenkins/">From zero to headless browser tests in Jenkins</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/04/13/specification-by-example-review/">Specification by Example, a review in snippets</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/03/25/cucumber-on-the-jvm-with-groovy/">Cucumber on the JVM with Groovy</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/02/28/vertical-slicing/">Vertical Slicing</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/rapaul">@rapaul</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'rapaul',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("rapaul", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/rapaul" class="twitter-follow-button" data-show-count="false">Follow @rapaul</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Richard Paul -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'rapaul';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://rapaul.github.com/2011/06/06/zero-to-headless-browser-tests-jenkins/';
+        var disqus_url = 'http://rapaul.github.com/2011/06/06/zero-to-headless-browser-tests-jenkins/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
