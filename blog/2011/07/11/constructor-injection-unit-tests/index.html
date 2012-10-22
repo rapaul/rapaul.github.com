@@ -1,0 +1,349 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Constructor injection, and how it simplifies unit test setup - rapaul.com</title>
+  <meta name="author" content="Richard Paul">
+
+  
+  <meta name="description" content="I&#8217;ve recently been reading Growing Object-Oriented Software Guided by Tests (GOOS), and one (of the many) aha moments was a piece of test code &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://rapaul.github.com/blog/2011/07/11/constructor-injection-unit-tests/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="rapaul.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">rapaul.com</a></h1>
+  
+    <h2>A technical blog written by Richard Paul</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:rapaul.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Constructor Injection, and How It Simplifies Unit Test Setup</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-07-11T04:36:57+12:00" pubdate data-updated="true">Jul 11<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I&#8217;ve recently been reading <a href="http://www.growing-object-oriented-software.com/">Growing Object-Oriented Software Guided by Tests</a> (GOOS), and one (of the many) aha moments was a piece of test code that mocked the collaborators and instantiated the object under test - all in the declaration of the test&#8217;s private fields.  I am particularly fond of this approach for two reasons:</p>
+
+<ul>
+<li>The test code setup is minimal and easily scanned</li>
+<li>This approach encourages all required collaborators to be passed in through the constructor (aka constructor injection)</li>
+</ul>
+
+
+<p>I&#8217;ve included an illustrative example below using Mockito, the actual test isn&#8217;t important but it proves this setup style works.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">mockito</span><span class="o">.</span><span class="na">BDDMockito</span><span class="o">.*;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.junit.Test</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ItemCheckerTest</span> <span class="o">{</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="kd">private</span> <span class="kd">final</span> <span class="n">ItemFetcher</span> <span class="n">itemFetcher</span> <span class="o">=</span> <span class="n">mock</span><span class="o">(</span><span class="n">ItemFetcher</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="kd">final</span> <span class="n">Notifier</span> <span class="n">notifier</span> <span class="o">=</span> <span class="n">mock</span><span class="o">(</span><span class="n">Notifier</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="kd">final</span> <span class="n">ItemChecker</span> <span class="n">itemChecker</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ItemChecker</span><span class="o">(</span><span class="n">itemFetcher</span><span class="o">,</span> <span class="n">notifier</span><span class="o">);</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="nd">@Test</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">notifiesStoreManager</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">given</span><span class="o">(</span><span class="n">itemFetcher</span><span class="o">.</span><span class="na">fetch</span><span class="o">()).</span><span class="na">willReturn</span><span class="o">(</span><span class="k">new</span> <span class="n">FetchedItem</span><span class="o">());</span>
+</span><span class='line'>      
+</span><span class='line'>      <span class="n">itemChecker</span><span class="o">.</span><span class="na">check</span><span class="o">();</span>
+</span><span class='line'>      
+</span><span class='line'>      <span class="n">verify</span><span class="o">(</span><span class="n">notifier</span><span class="o">).</span><span class="na">notifyStoreManager</span><span class="o">();</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="o">...</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For those unfamiliar with Mockito, the <code>given</code> call stubs a query, while the <code>verify</code> call uses a <a href="http://xunitpatterns.com/Test%20Spy.html">test spy</a> to check a command call was made.</p>
+
+<p>The important lines are the 3 private member variables of the test class, the first 2 use Mockito&#8217;s mock method to instantiate test doubles for our collaborators. The 3rd member variable (itemChecker) is the object under test, you will notice that it is instantiated with both of its required collaborators in the constructor.  These 3 lines perform all the wiring we require for our test, without having to resort to <code>@Before</code> methods to set properties.</p>
+
+<p>The reason we can leverage the member variables for this setup is that <a href="http://martinfowler.com/bliki/JunitNewInstance.html">JUnit creates a new instance</a> of ItemCheckerTest for each of the test methods (<code>@Test</code>). Providing each test with its own set of collaborators ensuring each test runs in isolation.</p>
+
+<p>The most important side effect of setting up the test code in this fashion is that it promotes the use of constructors for wiring up collaborators. Using the constructor for collaborators has a couple of very appealing aspects:</p>
+
+<ul>
+<li>It becomes impossible to create circular dependencies between your objects</li>
+<li>Your objects are less prone to wiring bugs as they are upfront about their required collaborators.</li>
+</ul>
+
+
+<p>Why would you want to be upfront about your collaborators, Steve Freeman &amp; Nat Price (GOOS) have this to say:</p>
+
+<blockquote><p>Partially creating an object and then finishing it off by setting properties is brittle because the programmer has to remember to set all the dependencies. When the object changes to add new dependencies, the existing client code will still compile even though it no longer constructs a valid instance. At best this will cause a NullPointerException, at worst it will fail misleadingly.</p></blockquote>
+
+<p>Miško Hevery also has a great blog post on <a href="http://misko.hevery.com/2009/02/19/constructor-injection-vs-setter-injection/">constructor vs setter injection</a>.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Richard Paul</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-07-11T04:36:57+12:00" pubdate data-updated="true">Jul 11<span>th</span>, 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://rapaul.github.com/blog/2011/07/11/constructor-injection-unit-tests/" data-via="rapaul" data-counturl="http://rapaul.github.com/blog/2011/07/11/constructor-injection-unit-tests/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/06/06/zero-to-headless-browser-tests-jenkins/" title="Previous Post: From zero to headless browser tests in Jenkins">&laquo; From zero to headless browser tests in Jenkins</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/07/11/constructor-injection-unit-tests/">Constructor injection, and how it simplifies unit test setup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/06/zero-to-headless-browser-tests-jenkins/">From zero to headless browser tests in Jenkins</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/04/13/specification-by-example-review/">Specification by Example, a review in snippets</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/03/25/cucumber-on-the-jvm-with-groovy/">Cucumber on the JVM with Groovy</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/02/28/vertical-slicing/">Vertical Slicing</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/rapaul">@rapaul</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'rapaul',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("rapaul", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/rapaul" class="twitter-follow-button" data-show-count="false">Follow @rapaul</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Richard Paul -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'rapaul';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://rapaul.github.com/blog/2011/07/11/constructor-injection-unit-tests/';
+        var disqus_url = 'http://rapaul.github.com/blog/2011/07/11/constructor-injection-unit-tests/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,368 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>My git svn workflow - rapaul.com</title>
+  <meta name="author" content="Richard Paul">
+
+  
+  <meta name="description" content="Below are the steps I use when working with Git &amp; SVN. Please note, I am in no way a Git or SVN expert, but these are the steps that seem to work &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://rapaul.github.com/blog/2010/01/14/my-git-svn-workflow/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="rapaul.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">rapaul.com</a></h1>
+  
+    <h2>A technical blog written by Richard Paul</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:rapaul.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">My Git Svn Workflow</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-01-14T11:28:03+13:00" pubdate data-updated="true">Jan 14<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Below are the steps I use when working with Git &amp; SVN. Please note, I am in no way a Git or SVN expert, but these are the steps that seem to work for me.</p>
+
+<p><strong>1) Checkout codebase</strong>
+This step only needs to be done once, it will pull down a local copy of the entire history allowing for very fast nagivation of revisions and allow work to be down when no connection to a central repository is available.</p>
+
+<pre><code>git svn clone svn://path/to/code/ --stdlayout
+</code></pre>
+
+<p><strong>2) Create a topic branch to work on</strong>
+We now want to start work on our first story, so we create a local branch for it.  This allows us to keep all changes related to the first story out of the master branch.  By keeping the master branch clean we can create as many local branches as we wish from it allowing us to quickly fix a bug in a separate local branch to the story we are working on.  I&#8217;ll come to this later.  The <em>-b</em> option means checkout and create a branch, this is a shortcut to creating the branch then checking it out.</p>
+
+<pre><code>git checkout -b story1
+</code></pre>
+
+<p>.. implement the first story ..</p>
+
+<p><strong>3) Add all new/deleted/modified files to staging area</strong>
+With git you can stage just the files that are important, these staged items then make up the contents of your commit.</p>
+
+<pre><code>git add path/to/resource
+</code></pre>
+
+<p><strong>4) Create a commit</strong>
+We then create a commit of the staged files in our local branch, note this differs from SVN as a commit is only local.</p>
+
+<pre><code>git commit -m "My commit message"
+</code></pre>
+
+<p><strong>5) Merge changes from your topic branch into the master branch</strong>
+Ensure the master branch is up to date</p>
+
+<pre><code>git checkout master
+git svn rebase
+</code></pre>
+
+<p>Then merge your topic branch into master</p>
+
+<pre><code>git merge story1
+</code></pre>
+
+<p><strong>6) Merge conflicts</strong>
+Merge any conflicts either manually or using <em>mergetool</em> (I&#8217;m yet to figure out how to use the <em>mergetool</em> command)</p>
+
+<p><strong>7) Push to SVN</strong>
+This is the bridge that takes our Git commits and pushes them to SVN.  Each Git commit will be mapped to a respective SVN commit.</p>
+
+<pre><code>git svn dcommit
+</code></pre>
+
+<p><strong>Working with multiple branches</strong>
+As I mentioned earlier, one of the major advantages of Git over SVN is the ability to have multiple working branches locally, allowing you to switch between them with relative ease.  Take for example you are working on a story, it might take you a whole day to get it done.  At midday an urgent support request arrives for a bug in the live software.  Using SVN I would typically have to checkout the HEAD revision into a separate directory and import it into Eclipse as a new project.  With Git it is much simpler, I use the following steps to do the switching.</p>
+
+<h1>Commit all current work to the topic branch</h1>
+
+<pre><code>git add path/to/noncommited/work
+</code></pre>
+
+<h1>Switch to the master branch and make sure it is up to date</h1>
+
+<pre><code>git checkout master
+git svn rebase
+</code></pre>
+
+<h1>Create a new branch for the bug fix</h1>
+
+<pre><code>git checkout -b bugfix
+</code></pre>
+
+<h1>Fix the bug</h1>
+
+<h1>Follow steps 3-7 above</h1>
+
+<h1>Carry on working on the story</h1>
+
+<pre><code>git checkout story1
+</code></pre>
+
+<p><strong>Git GUI</strong>
+You can use the <a href="http://www.kernel.org/pub/software/scm/git/docs/git-gui.html">Git GUI</a> tool for most of the steps above, I find it particularly useful for steps 3 &amp; 4.
+You can also review the history and changes using gitk, this is useful for code reviews before you push your code into a master repo.</p>
+
+<p><strong>JGit (Eclipse Plugin)</strong>
+I use the <a href="http://www.jgit.org/">JGit Eclipse Plugin</a> when working in Eclipse, it provides a diff with the previous version which I find invaluable.
+Install in Eclipse using the update site: http://www.jgit.org/updates</p>
+
+<p><strong>References</strong>
+<a href="http://blog.tsunanet.net/2007/07/learning-git-svn-in-5min.html">http://blog.tsunanet.net/2007/07/learning-git-svn-in-5min.html</a>
+<a href="http://stackoverflow.com/questions/190431/is-git-svn-dcommit-after-merging-in-git-dangerous">http://stackoverflow.com/questions/190431/is-git-svn-dcommit-after-merging-in-git-dangerous</a>
+<a href="http://www.kernel.org/pub/software/scm/git/docs/user-manual.html#resolving-a-merge">http://www.kernel.org/pub/software/scm/git/docs/user-manual.html#resolving-a-merge</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Richard Paul</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-01-14T11:28:03+13:00" pubdate data-updated="true">Jan 14<span>th</span>, 2010</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://rapaul.github.com/blog/2010/01/14/my-git-svn-workflow/" data-via="rapaul" data-counturl="http://rapaul.github.com/blog/2010/01/14/my-git-svn-workflow/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2009/09/16/jquery-behaviours/" title="Previous Post: jQuery Behaviours">&laquo; jQuery Behaviours</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2010/02/15/request-mapping-ordering/" title="Next Post: Avoiding ambiguities when using @RequestMapping">Avoiding ambiguities when using @RequestMapping &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/07/11/constructor-injection-unit-tests/">Constructor injection, and how it simplifies unit test setup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/06/06/zero-to-headless-browser-tests-jenkins/">From zero to headless browser tests in Jenkins</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/04/13/specification-by-example-review/">Specification by Example, a review in snippets</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/03/25/cucumber-on-the-jvm-with-groovy/">Cucumber on the JVM with Groovy</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/02/28/vertical-slicing/">Vertical Slicing</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/rapaul">@rapaul</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'rapaul',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("rapaul", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/rapaul" class="twitter-follow-button" data-show-count="false">Follow @rapaul</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Richard Paul -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'rapaul';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://rapaul.github.com/blog/2010/01/14/my-git-svn-workflow/';
+        var disqus_url = 'http://rapaul.github.com/blog/2010/01/14/my-git-svn-workflow/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

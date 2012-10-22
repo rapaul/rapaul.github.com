@@ -4,7 +4,7 @@
   <title><![CDATA[rapaul.com]]></title>
   <link href="http://rapaul.github.com/atom.xml" rel="self"/>
   <link href="http://rapaul.github.com/"/>
-  <updated>2012-10-22T12:36:56+13:00</updated>
+  <updated>2012-10-22T13:12:11+13:00</updated>
   <id>http://rapaul.github.com/</id>
   <author>
     <name><![CDATA[Richard Paul]]></name>
@@ -12,5 +12,1082 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Constructor injection, and how it simplifies unit test setup]]></title>
+    <link href="http://rapaul.github.com/blog/2011/07/11/constructor-injection-unit-tests/"/>
+    <updated>2011-07-11T04:36:57+12:00</updated>
+    <id>http://rapaul.github.com/blog/2011/07/11/constructor-injection-unit-tests</id>
+    <content type="html"><![CDATA[<p>I&#8217;ve recently been reading <a href="http://www.growing-object-oriented-software.com/">Growing Object-Oriented Software Guided by Tests</a> (GOOS), and one (of the many) aha moments was a piece of test code that mocked the collaborators and instantiated the object under test - all in the declaration of the test&#8217;s private fields.  I am particularly fond of this approach for two reasons:</p>
+
+<ul>
+<li>The test code setup is minimal and easily scanned</li>
+<li>This approach encourages all required collaborators to be passed in through the constructor (aka constructor injection)</li>
+</ul>
+
+
+<p>I&#8217;ve included an illustrative example below using Mockito, the actual test isn&#8217;t important but it proves this setup style works.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">mockito</span><span class="o">.</span><span class="na">BDDMockito</span><span class="o">.*;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.junit.Test</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ItemCheckerTest</span> <span class="o">{</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="kd">private</span> <span class="kd">final</span> <span class="n">ItemFetcher</span> <span class="n">itemFetcher</span> <span class="o">=</span> <span class="n">mock</span><span class="o">(</span><span class="n">ItemFetcher</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="kd">final</span> <span class="n">Notifier</span> <span class="n">notifier</span> <span class="o">=</span> <span class="n">mock</span><span class="o">(</span><span class="n">Notifier</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="kd">final</span> <span class="n">ItemChecker</span> <span class="n">itemChecker</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ItemChecker</span><span class="o">(</span><span class="n">itemFetcher</span><span class="o">,</span> <span class="n">notifier</span><span class="o">);</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="nd">@Test</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">notifiesStoreManager</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">given</span><span class="o">(</span><span class="n">itemFetcher</span><span class="o">.</span><span class="na">fetch</span><span class="o">()).</span><span class="na">willReturn</span><span class="o">(</span><span class="k">new</span> <span class="n">FetchedItem</span><span class="o">());</span>
+</span><span class='line'>      
+</span><span class='line'>      <span class="n">itemChecker</span><span class="o">.</span><span class="na">check</span><span class="o">();</span>
+</span><span class='line'>      
+</span><span class='line'>      <span class="n">verify</span><span class="o">(</span><span class="n">notifier</span><span class="o">).</span><span class="na">notifyStoreManager</span><span class="o">();</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="o">...</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For those unfamiliar with Mockito, the <code>given</code> call stubs a query, while the <code>verify</code> call uses a <a href="http://xunitpatterns.com/Test%20Spy.html">test spy</a> to check a command call was made.</p>
+
+<p>The important lines are the 3 private member variables of the test class, the first 2 use Mockito&#8217;s mock method to instantiate test doubles for our collaborators. The 3rd member variable (itemChecker) is the object under test, you will notice that it is instantiated with both of its required collaborators in the constructor.  These 3 lines perform all the wiring we require for our test, without having to resort to <code>@Before</code> methods to set properties.</p>
+
+<p>The reason we can leverage the member variables for this setup is that <a href="http://martinfowler.com/bliki/JunitNewInstance.html">JUnit creates a new instance</a> of ItemCheckerTest for each of the test methods (<code>@Test</code>). Providing each test with its own set of collaborators ensuring each test runs in isolation.</p>
+
+<p>The most important side effect of setting up the test code in this fashion is that it promotes the use of constructors for wiring up collaborators. Using the constructor for collaborators has a couple of very appealing aspects:</p>
+
+<ul>
+<li>It becomes impossible to create circular dependencies between your objects</li>
+<li>Your objects are less prone to wiring bugs as they are upfront about their required collaborators.</li>
+</ul>
+
+
+<p>Why would you want to be upfront about your collaborators, Steve Freeman &amp; Nat Price (GOOS) have this to say:</p>
+
+<blockquote><p>Partially creating an object and then finishing it off by setting properties is brittle because the programmer has to remember to set all the dependencies. When the object changes to add new dependencies, the existing client code will still compile even though it no longer constructs a valid instance. At best this will cause a NullPointerException, at worst it will fail misleadingly.</p></blockquote>
+
+<p>Miško Hevery also has a great blog post on <a href="http://misko.hevery.com/2009/02/19/constructor-injection-vs-setter-injection/">constructor vs setter injection</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[From zero to headless browser tests in Jenkins]]></title>
+    <link href="http://rapaul.github.com/blog/2011/06/06/zero-to-headless-browser-tests-jenkins/"/>
+    <updated>2011-06-06T11:34:09+12:00</updated>
+    <id>http://rapaul.github.com/blog/2011/06/06/zero-to-headless-browser-tests-jenkins</id>
+    <content type="html"><![CDATA[<p>After spending a large portion of the day I can proudly say I have a working set of browser based tests that run on a headless Jenkins install. By headless I mean a server without any physical display installed, as is typical for server machines. This facilitates the execution of high level acceptance tests in much the same fashion as lower level unit and integration based tests, albeit at a slower rate.</p>
+
+<p><a href="http://www.rapaul.com/wp-content/uploads/2011/06/jenkins-headless.png"><img src="http://www.rapaul.com/wp-content/uploads/2011/06/jenkins-headless-300x230.png" alt="" /></a></p>
+
+<p>The problem I am trying to solve here is a quick feedback loop on acceptance test level behaviour. This blog post will be talking about getting Cucumber scenarios running for a single browser (Firefox). Cross browser testing is a different problem, for which think <a href="http://saucelabs.com/">Sauce Labs</a> would be a better solution as they take the hassle out of provisioning and maintaining a wide range of operating system and browser combinations.</p>
+
+<p>Outlined below are the steps I followed to go from installing Ubuntu server edition through to running the browser based tests (with <a href="http://cukes.info/">Cucumber</a>, <a href="https://github.com/jnicklas/capybara">Capybara</a>, Selenium-Webdriver). You may find some steps are not required on your operating system or for the project you wish to test. Admittedly I dove down a few rabbit holes, but thanks to VirtualBox&#8217;s snapshot feature I could safely revert if things turned sour.</p>
+
+<ul>
+<li><p>Installing Ubuntu</p></li>
+<li><p>Installing Jenkins</p></li>
+<li><p>Going Headless</p></li>
+<li><p>Installing Ruby with RVM</p></li>
+<li><p>Installing Firefox</p></li>
+<li><p>Creating a Job</p></li>
+<li><p>Bonus Points, watching the browser in realtime</p></li>
+</ul>
+
+
+<h2>Installing Ubuntu</h2>
+
+<p>If you have an existing server you can skip this step. If not grab yourself a copy of <a href="http://www.ubuntu.com/download/server/download">Ubuntu Server edition</a>. As I wanted a simple way to play with Jenkins without provisioning hardware I used VirtualBox for virtualisation. I followed the usual VirtualBox installation, however once installed the server showed a blank screen on boot. This was fixed by following the workaround on the <a href="http://ubuntuforums.org/showthread.php?t=1743535">Ubuntu forums</a>.</p>
+
+<p>When installing, it is handy to enable the OpenSSH server so you can SSH onto the box from your desktop terminal, this makes copy &amp; pasting some of the later steps much easier. To make the VirutalBox server visible on the network, change the network mode from NAT to bridged.</p>
+
+<h2>Installing Jenkins</h2>
+
+<p>Installing Jenkins is a breeze, as debian packages have been set up, check the <a href="https://wiki.jenkins-ci.org/display/JENKINS/Installing+Jenkins+on+Ubuntu">wiki page</a> for details.
+[cc]
+$ wget -q -O - http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
+$ sudo vi /etc/apt/sources.list.d/jenkins.list
+Add &#8220;deb http://pkg.jenkins-ci.org/debian binary/&#8221;
+$ sudo apt-get update
+$ sudo apt-get install jenkins
+[/cc]
+This automatically creates an account called <em>jenkins</em>. We will need to login as this user later so set a password for <em>jenkins</em> with:
+[cc]
+sudo passwd jenkins
+[/cc]
+You should now be able to view the Jenkins dashboard at http://your.server:8080/</p>
+
+<h3>Going Headless</h3>
+
+<p>Now that Jenkins is installed, we want to get a headless display configured for our browser based tests. First up hit <em>Manage Jenkins > Manage Plugins > Available</em> and install the <em>Hudson Xvnc</em> plugin (this works with Jenkins despite its name). Schedule Jenkins to restart to pickup the plugin.  Once installed this gives us the ability to start a headless display automatically when we configure our jobs, more on that later.</p>
+
+<p>With Jenkins configured we need to ensure the required software is installed on the server:
+[cc]
+$ sudo apt-get install vnc4server
+[/cc]</p>
+
+<p>vncserver requires a password to be set before it can be used, this needs to be set before Jenkins can make use of the vncserver. For this we need to switch to the jenkins user and set a password.</p>
+
+<p>[cc]
+$ sudo -Hiu jenkins
+$ vncserver
+Enter a password, and verify it
+$ vncserver -kill :1 # or whichever display the vncserver output mentioned
+[/cc]</p>
+
+<p>When Jenkins runs it doesn&#8217;t need to know this password, but if you want to watch a running job you can connect to the running vnc session with that password and watch the tests in real time.</p>
+
+<p>I initially headed down the Xvfb route but that seemed to require a lot of custom configuration in the job&#8217;s build script and isn&#8217;t related to the Xvnc plugin.</p>
+
+<h2>Installing Ruby with RVM</h2>
+
+<p>The job I&#8217;m wanting to run is a set of acceptance tests written in Cucumber with automation done using Capybara (Selenium-Webdriver under the hood). So its a Ruby job, and all good Ruby jobs use <a href="https://rvm.beginrescueend.com/">RVM</a>. Fortunately RVM has a page on <a href="https://rvm.beginrescueend.com/integration/hudson/">integrating with Hudson/Jenkins</a>. I followed the recommended steps and <a href="https://rvm.beginrescueend.com/rvm/install/">installed RVM</a> for a single user (jenkins).
+[cc]
+$ sudo apt-get install curl bison build-essential zlib1g-dev libssl-dev libreadline5-dev libxml2-dev git-core
+$ sudo -Hiu jenkins
+$ bash &lt; &lt;(curl -s https://rvm.beginrescueend.com/install/rvm)
+[/cc]
+Once RVM is configured, run <em>rvm notes</em> to find the full list of dependencies you need to install for your required version of Ruby. e.g.
+[cc]
+$ source ~/.rvm/scripts/rvm
+$ rvm notes
+$ sudo apt-get install build-essential bison openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev
+[/cc]
+Note that I didn&#8217;t give the jenkins user sudo rights, so I installed all packages through my usual admin account on the server.</p>
+
+<p>RVM can be configured to allow the automatic installation of Ruby versions and gemsets by adding the following to ~/.rvmrc for the jenkins user:</p>
+
+<p>[cc]
+rvm_install_on_use_flag=1
+rvm_project_rvmrc=1
+rvm_gemset_create_on_use_flag=1
+[/cc]</p>
+
+<h2>Installing Firefox</h2>
+
+<p>Of course, a headless server isn&#8217;t any good without a browser to test
+[cc]
+sudo apt-get install firefox
+[/cc]
+This is the default browser that selenium will select.</p>
+
+<h2>Creating a Job</h2>
+
+<p>At this point the Jenkins server should be fully configured to run headless jobs, so lets dive in and create one. Create a new <em>freestyle</em> job. Notice there is a new option available under the &#8216;Build Environment&#8217; section call &#8216;Run Xvnc during build&#8217;, check this to have the plugin automatically do its magic.</p>
+
+<p>For my example, I didn&#8217;t bother with checking projects out source control, I simply created a project in the /tmp directory. You&#8217;ll want to enable the appropriate SCM plugin and configure a checkout.
+Under the build section add an <em>Execute shell</em> step with the following:
+[cc]</p>
+
+<h1>!/bin/bash -e</h1>
+
+<p>cd /tmp/selenium-test
+source &#8220;$HOME/.rvm/scripts/rvm&#8221;
+[[ -s &#8220;.rvmrc&#8221; ]] &amp;&amp; source .rvmrc
+bundle install
+cucumber
+[/cc]
+The <em>-e</em> flag in <em>#!/bin/bash -e</em> ensures the script stops after any errors.
+You will notice that the script sources the .rvmrc file directly for the project, this ensures the correct version of Ruby is used with a gemset appropriate for your project. My .rvmrc looked something like:
+[cc]
+rvm &#8211;create use ruby-1.9.2@selenium-test
+[/cc]
+Calling <em>bundle install</em> automatically installs bundler, reads the Gemfile.lock and installs all required gems. Finally <em>cucumber</em> kicks off the actual cucumber scenarios, and fingers crossed, they should pass with flying colours.</p>
+
+<p>[cc]
+Feature:Headless
+  In order to keep happy customers
+  As a developer I want to ensure all my features continue to pass on CI</p>
+
+<p>  Scenario: Headless browser</p>
+
+<pre><code>When I check the nets without a head
+Then I the nets should be readable
+</code></pre>
+
+<p>1 scenario (1 passed)
+2 steps (2 passed)
+0m7.975s
+Terminating xvnc.
+$ vncserver -kill :33
+Killing Xvnc4 process ID 6873
+Finished: SUCCESS
+[/cc]</p>
+
+<h2>Bonus Points, watching the browser in realtime</h2>
+
+<p>As the headless display is running in vncserver, you can connect to the vnc session and watch the tests run in real time. Just use your regular VNC client and connect to your.server:59xx where xx is the display number output on the Jenkins console for the running job. You will need to enter the password you set the first time you ran vncserver.</p>
+
+<p>[Note: most/all of these instructions should work with Hudson also]</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Specification by Example, a review in snippets]]></title>
+    <link href="http://rapaul.github.com/blog/2011/04/13/specification-by-example-review/"/>
+    <updated>2011-04-13T10:10:23+12:00</updated>
+    <id>http://rapaul.github.com/blog/2011/04/13/specification-by-example-review</id>
+    <content type="html"><![CDATA[<p>I&#8217;ve just finished reading <a href="http://specificationbyexample.com/">Specification by Example</a>, a new book (currently in MEAP) by <a href="http://gojko.net/">Gojko Adzic</a>. Highly recommend to anyone involved in software creation (developers, testers, product owners, product managers, &#8230;). The book includes great insights into building the &#8216;right thing&#8217; and the &#8216;thing right&#8217;, drawing on experiences from many successful software projects and teams. These projects each have dedicated chapters providing real insight into how these teams work and the steps they took to get there.</p>
+
+<p>But you don&#8217;t have to trust my vague recommendations, I&#8217;ve included a few key examples from the book below:</p>
+
+<blockquote><p>Like cheap wine, long paper documentation ages rapidly and leaves you with a bad headache if you try to use it a year after it was created.</p>
+
+<p>Working from the outputs ensures that there is always something that the business users can provide feedback on.</p>
+
+<p>Understanding why something is needed, and who needs it, is crucial to evaluating a suggested solution.</p>
+
+<p>Solve technical difficulties in the automation layer. Do not try to solve them in the test specifications.</p>
+
+<p>We automate specifications to get fast feedback, but our primary goal should create executable specifications that are easily accessible and human-readable&#8230;</p>
+
+<p>When each team worked to deliver a whole feature end to end, it was much easier for business users to collaborate with the team to specify the conditions of satisfaction and engage in illustrating them with examples.</p>
+
+<p>The biggest benefit from this is getting us to talk together so that we have a mutual understanding of the requirements. That’s more important than test automation.</p>
+
+<p>Long term value comes from living documentation</p></blockquote>
+
+<p>The <a href="http://manning.com/adzic/adzic_meapch1.pdf">first chapter</a> is free to get you started.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Cucumber on the JVM with Groovy]]></title>
+    <link href="http://rapaul.github.com/blog/2011/03/25/cucumber-on-the-jvm-with-groovy/"/>
+    <updated>2011-03-25T08:00:32+13:00</updated>
+    <id>http://rapaul.github.com/blog/2011/03/25/cucumber-on-the-jvm-with-groovy</id>
+    <content type="html"><![CDATA[<p>Below is the presentation on Cucumber on the JVM with Groovy I presented at the <a href="http://skillsmatter.com/event/agile-scrum/cukeup">CukeUp</a> Cucumber conference at Skills Matter.</p>
+
+<p>You can catch a video of the full presentation over on the Skills Matter website: <a href="http://skillsmatter.com/podcast/agile-scrum/cuke-groovy">http://skillsmatter.com/podcast/agile-scrum/cuke-groovy</a></p>
+
+<p>Be sure to checkout all the <a href="http://skillsmatter.com/event/agile-scrum/cukeup">videos from the CukeUp</a> as there are some real gems.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Vertical Slicing]]></title>
+    <link href="http://rapaul.github.com/blog/2011/02/28/vertical-slicing/"/>
+    <updated>2011-02-28T09:12:17+13:00</updated>
+    <id>http://rapaul.github.com/blog/2011/02/28/vertical-slicing</id>
+    <content type="html"><![CDATA[<p>Vertical slicing is one of the key features I see in being able to deliver features rapidly, with the code developed being clean and simple to extend to future requirements. The basic premise is that instead of dividing work into horizontal slices where a task is something like <em>create a database schema</em>.  You instead slice your work into small user stories where each story is something that can be demonstrated to a stakeholder on its own.  These stories will often touch multiple &#8216;layers&#8217; of the application such as the view layer, service layer and persistence layer.</p>
+
+<p>The benefits of this approach are plenty,</p>
+
+<ul>
+<li><p>Each story delivers value, no matter how small.</p></li>
+<li><p>Work in progress (WIP) is reduced as tasks such as &#8216;create a schema&#8217; are not left floating around until the tasks that utilise them are completed.</p></li>
+<li><p>You can focus your development effort on purely delivering just enough code to satisfy the story, without adding code you think you may need (YAGNI).</p></li>
+<li><p>Tight feedback loop.</p></li>
+<li><p>Reduced merge conflicts - your local code diverges from master for shorter spans.</p></li>
+</ul>
+
+
+<p>Slicing stories vertically fits well with the Outside-In approach favoured by Behaviour Driven Development. Using an Outside-In approach you take a user story, build some acceptance criteria around it (potentially automated with a tool like <a href="http://cukes.info/">Cucumber</a>), then work from the outside in to complete the story. e.g In a web application I like to  start with the view layer, building in enough of the view to satisfy the acceptance criteria.  The view layer now defines the acceptance criteria for the layer beneath it, in this case the controller.  This process continues with each layer creating a pull signal to write more code at a lower level. Development continues in a Test Driven style until the acceptance criteria for the story is met.</p>
+
+<p>An example case I like to give for vertical slicing is for a search feature we implemented at f1000.com.  I talk briefly about it in my talk on <a href="http://www.rapaul.com/2011/01/26/agile-acceptance-testing-with-geb/">Acceptance Testing with Geb</a> (39 minutes in). The search feature contains a number of different stories - developing the entire feature behind closed doors without a tight feedback loop would invariably result in building the wrong thing, even if it was what was originally asked for.  Instead we took an iterative approach with thin vertical slices for each story.</p>
+
+<p>The first cut of the search feature was designed to offer the greatest value, allowing users to search by keyword. The user could not go to the second page of results, change the sort order or any of the other features we ended up with. By getting a first cut out to our stakeholders early on they could immediately play with search and provide feedback on the direction.  We continued in such a fashion adding support for more stories based on the importance, for example multi-domain search (evaluations, reports, faculty, blog) adds more value (and was done first) than being able to move to the next page in the results as the most relevant hits should appear on the first page.</p>
+
+<p>Related reading:
+<a href="http://www.energizedwork.com/weblog/2005/05/slicing-cake.html">http://www.energizedwork.com/weblog/2005/05/slicing-cake.html</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Acceptance Testing with Geb]]></title>
+    <link href="http://rapaul.github.com/blog/2011/01/27/agile-acceptance-testing-with-geb/"/>
+    <updated>2011-01-27T11:22:53+13:00</updated>
+    <id>http://rapaul.github.com/blog/2011/01/27/agile-acceptance-testing-with-geb</id>
+    <content type="html"><![CDATA[<p>Below are the slides and video of a presentation I gave at <a href="http://skillsmatter.com/podcast/agile-testing/acceptance-testing-with-geb">SkillsMatter</a> on Acceptance Testing with Geb. Fast forward to 1:30 when I start the presentation.</p>
+
+<blockquote><p>This talk will cover the basics of using Geb <a href="http://geb.codehaus.org">http://geb.codehaus.org</a> to automate browser testing.</p></blockquote>
+
+<p>It will compare Geb with raw WebDriver/Selenium showing Geb&#8217;s expressive Groovy API.It will also demonstrate how to integrate Geb with acceptance testing frameworks, namely Cucumber via Cuke4Duke.</p>
+
+<p>It also cover an experience report on how and why we transitioned from raw WebDriver to Geb and how existing WebDriver projects can be ported across to Geb with minimal initial effort due to its underlying use of WebDriver.</p>
+
+<p><strong><a href="http://www.slideshare.net/rapaul/acceptance-testing-with-geb">Acceptance testing with Geb</a></strong></p>
+
+<p>View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/rapaul">Richard Paul</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Cucumber, Maven & TeamCity]]></title>
+    <link href="http://rapaul.github.com/blog/2010/12/18/cucumber-maven-teamcity/"/>
+    <updated>2010-12-18T00:07:58+13:00</updated>
+    <id>http://rapaul.github.com/blog/2010/12/18/cucumber-maven-teamcity</id>
+    <content type="html"><![CDATA[<p>Having a suite of acceptances tests is all well and good, but if they don&#8217;t run regularly they tend to rot.  Much like unit tests they should be part of your continuous integration configuration.  We use TeamCity, so it was a logical choice for running our Cucumber scenarios.</p>
+
+<p><strong>Running Cucumber with Maven</strong>
+As we predominantly use Java/Groovy all our Cucumber tests are written in Groovy and run automatically through Maven as part of the integration test phase.  Checkout the <a href="https://github.com/aslakhellesoy/cuke4duke/wiki">Cuke4Duke</a> project if you want to see more details about using Cucumber on the JVM.  In particular there is a page dedicated to running <a href="https://github.com/aslakhellesoy/cuke4duke/wiki/Maven">Cuke4Duke with Maven</a>.  Once your pom has been configured its simply a matter of calling the integration phase:
+[cc]
+mvn integration-test                              # Run all features/scenarios
+mvn integration-test -DcukeArgs=&#8221;&#8211;tags @search&#8221;  # Run only scenarios tagged with @search
+[/cc]
+Locally I have a bash script that lets me simply type cuke @search to achieve the same result.
+[cc]</p>
+
+<h1>!/bin/bash</h1>
+
+<p>mvn integration-test -DcukeArgs=&#8221;&#8211;tags $1&#8221;
+[/cc]</p>
+
+<p><strong>Adding to TeamCity</strong>
+TeamCity has built in support for running Maven goals, as such it&#8217;s relatively trivial to get the Cucumber scenarios running.</p>
+
+<ol>
+<li><p>Create a new build configuration, on the build step select Maven2 as the runner type.</p></li>
+<li><p>Set the goal to integration-test</p></li>
+<li><p>Skip most of the remaining fields.</p></li>
+<li><p>In the JVM command line parameters enter:  -DcukeArgs=&#8221;&#8211;strict -DcukeMaxHeapSize=&#8221;-Xmx4000m&#8221; -DcukeMaxPermSize=&#8221;-XX:MaxPermSize=2000m&#8221;</p></li>
+</ol>
+
+
+<p>This should be all that is required to get the build running.  &#8211;strict tells Cucumber not to guess when a step doesn&#8217;t exactly match a step definition (optional but recommended).  The max heap size and max perm size are properties configured in the pom to boost the memory allocations.  These are required by our build, but I have a sneaking suspicion it&#8217;s to do with the parsing of the step definition closures (Groovy specific).</p>
+
+<p>Currently we have a dedicated desktop box (Win7) registered as a TeamCity agent, this allows Cucumber to run the scenarios through the browser (via Selenium/WebDriver).</p>
+
+<p><strong>Adding Reporting to TeamCity</strong>
+As the build configuration stands, Cucumber will output using its normal coloured terminal format.  So while you will be getting feedback on whether the build was successful from TeamCity, drilling in to see any failures will involve reading the raw Cucumber output.  Fortunately Cucumber allows us to specify the output format we require, including JUnit XML reports.</p>
+
+<ol>
+<li><p>Update the JVM command line parameters to include &#8211;format junit &#8211;out target/junit.xml</p></li>
+<li><p>Add an Ant JUnit report type with the reports directory set to %system.teamcity.build.checkoutDir%/target/<em>*/</em>.xml</p></li>
+</ol>
+
+
+<p><a href="http://www.rapaul.com/wp-content/uploads/2010/12/test-passed.png"><img src="http://www.rapaul.com/wp-content/uploads/2010/12/test-passed.png" alt="" /></a></p>
+
+<p>You now get individual scenarios reported as tests in TeamCity, you can then monitor for long running tests, check stacktraces and get notified immediately via a TeamCity notifier as soon as a single scenario fails (no need to wait until the entire suite finishes).</p>
+
+<p><a href="http://www.rapaul.com/wp-content/uploads/2010/12/stack.png"><img src="http://www.rapaul.com/wp-content/uploads/2010/12/stack.png" alt="" /></a></p>
+
+<p><strong>Triggering Cucumber</strong>
+Each time we deploy a new version of our application to the testing/dev box we want to automatically run the Cucumber tests.  Deployment is handled via TeamCity so we have a single click to push the latest code onto the server.  Once the application has been deployed the Cucumber build is automatically trigger, this can be set on the Build Triggering step of the configuration.  Should the testing deployment not be manually trigger, the nightly build will push the latest code and run the Cucumber tests.</p>
+
+<p><strong>Key Features</strong>
+<a href="http://www.rapaul.com/wp-content/uploads/2010/12/in-the-green.png"><img src="http://www.rapaul.com/wp-content/uploads/2010/12/in-the-green.png" alt="" /></a></p>
+
+<p>The above screenshot shows the various builds we have related to our product.  The Continuous Integration is our unit tests, these run quickly after every commit.  Next we break the Cucumber build down into 3 discrete builds. Key Features is a tag (@keyfeature) we use against features and scenarios the business identifies as being the most important, the idea being that these are run first to give us quick feedback, in this case there are 75 key features which run in just under 10 minutes.  The remaining scenarios are run in the non-key features build which runs automatically immediately after the key features have completed.  These currently take just under 50 minutes.  So the total feedback loop is roughly 1 hour.</p>
+
+<p><strong>Work in Progress (WIP)</strong>
+The last Cucumber build is the WIP (work in progress) build, these are features and stories that are currently being worked on.  TeamCity is configured slightly differently in this case, any scenarios that pass will fail the build.  The idea being that either the scenario was written wrongly (it should fail first) or the scenario is now complete and the @wip tag should be removed.  To make Cucumber fail when any scenarios pass we we need to pass a special flag &#8211;wip in the JVM parameters.
+[cc]
+-DcukeArgs=&#8221;&#8211;format junit &#8211;out target/junit.xml &#8211;tags @wip &#8211;wip&#8221;
+[/cc]
+The current value of 17 work in progress scenarios seems a bit high, ideally we&#8217;d like to eliminate waste by keeping our WIP down.  Cucumber supports such limits as a <a href="https://rspec.lighthouseapp.com/projects/16211/tickets/353-limiting-number-of-feature-elements-in-tagged-state">command line argument</a>.</p>
+
+<p><strong>Experience Report</strong>
+If you&#8217;d like to hear more about Cucumber, Cuke4Duke, Groovy, Selenium &amp; Geb I&#8217;m giving an experience report at <a href="http://skillsmatter.com/event/agile-testing/acceptance-testing-with-geb">SkillsMatter on the 26th of Jan</a>.</p>
+
+<p><strong>Related reading</strong>
+<a href="http://gojko.net/2010/01/01/bdd-in-net-with-cucumber-cuke4nuke-and-teamcity/">http://gojko.net/2010/01/01/bdd-in-net-with-cucumber-cuke4nuke-and-teamcity/</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Failing early in bash]]></title>
+    <link href="http://rapaul.github.com/blog/2010/11/26/failing-early-in-bash/"/>
+    <updated>2010-11-26T23:33:58+13:00</updated>
+    <id>http://rapaul.github.com/blog/2010/11/26/failing-early-in-bash</id>
+    <content type="html"><![CDATA[<p>We use a bash script to automate deployment to our live servers, today it didn&#8217;t go so well.  Drilling into the problem it appeared one of the copy commands failed due to permissions but the deployment continued anyway and we didn&#8217;t notice.</p>
+
+<p>Bash provides a handy feature which will stop the script if any of the commands fail (return a non-zero value).</p>
+
+<p>[cc lang=&#8221;bash&#8221;]set -o errexit[/cc]</p>
+
+<p>Here you can see a simple example</p>
+
+<p>[cc lang=&#8221;bash&#8221;]
+set -o errexit  ## exit after any error (non-zero statement)
+echo before failing command
+mkdir a/b
+echo after failing command
+[/cc]</p>
+
+<p>Without this toggle enabled the script would have quite happily failed to create directory a/b then continued on with the rest of the script printing out <em>after failing command</em>.  With the toggle enabled the script stops after it fails to create the directory.</p>
+
+<p>[cc]
+before failing command
+mkdir: cannot create directory `a/b&#8217;: No such file or directory
+[/cc]</p>
+
+<p>Obviously in this trivial example it doesn&#8217;t seem important, but when an essential part of your deployment fails you want to know about it immediately.</p>
+
+<p>Further reading available at: <a href="http://www.davidpashley.com/articles/writing-robust-shell-scripts.html">http://www.davidpashley.com/articles/writing-robust-shell-scripts.html</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Checking Wordpress images are present with Groovy]]></title>
+    <link href="http://rapaul.github.com/blog/2010/10/27/checking-wordpress-images-are-present-with-groovy/"/>
+    <updated>2010-10-27T08:16:15+13:00</updated>
+    <id>http://rapaul.github.com/blog/2010/10/27/checking-wordpress-images-are-present-with-groovy</id>
+    <content type="html"><![CDATA[<p>Below is a little script I knocked up today to ensure all uploaded images referenced in a Wordpress XML export are present on your server.  A useful check when moving to a new Wordpress instance.</p>
+
+<p>[cc lang=&#8221;java&#8221;]
+def imagePattern = ~&#8217;http://www.rapaul.com/wp-content/uploads/.+?/.+?/.+?(jpg|jpeg|png|gif)&#8217;
+new File(&#8216;./wordpress-export.xml&#8217;).text.findAll(imagePattern).each { address ->
+   try {</p>
+
+<pre><code>   new URL(address).openStream().close()
+</code></pre>
+
+<p>   } catch (FileNotFoundException e) {</p>
+
+<pre><code>   println "Could not find $address"
+</code></pre>
+
+<p>   }
+}
+[/cc]</p>
+
+<p>I&#8217;m sure a bash guru could hack together something similar but Groovy really does make it simple.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Avoiding Brittle Element Selection with Selenium2]]></title>
+    <link href="http://rapaul.github.com/blog/2010/07/19/avoiding-brittle-element-selection-with-selenium2/"/>
+    <updated>2010-07-19T10:31:20+12:00</updated>
+    <id>http://rapaul.github.com/blog/2010/07/19/avoiding-brittle-element-selection-with-selenium2</id>
+    <content type="html"><![CDATA[<p>By automating acceptance tests we are striving to cut back on the maintenance effort of our software. The automated tests perform a majority of the checks thus freeing up time for exploratory testing.  However care needs to be taken when automating acceptance tests to ensure they remain flexible in the face of change.  Brittle tests, which fail for seemingly unrelated reasons, can place a huge maintenance burden on a testing team negating, some of the gains automation brings.</p>
+
+<p>But fear not, there are steps you can take to ensure your tests are flexible to change.  The rest of this post will give examples using <a href="http://code.google.com/p/selenium/">Selenium2</a>, however most of these suggestions can be applied to any browser automation framework.</p>
+
+<h3>Naming Elements</h3>
+
+<p>Selenium2 provides an API for selecting elements on the page for inspection, for example you can find the first element with a given class using the following syntax:</p>
+
+<p>[cc lang=&#8221;java&#8221;]browser.findElementByClassName(&#8216;theClassName&#8217;)[/cc]</p>
+
+<p>Similarly finding multiple elements with the same class is done by simply calling [cci]findElements[/cci]</p>
+
+<p>These methods provide convenient access to elements on the page but we need to ensure the classes or IDs are semantic to ensure our selenium tests continue to function if the layout of the page changes.  Below is an example of how to build a navigational element and highlights semantic and brittle IDs for the elements.</p>
+
+<p><a href="http://www.rapaul.com/wp-content/uploads/2010/07/navigation.png"><img src="http://www.rapaul.com/wp-content/uploads/2010/07/navigation.png" alt="" /></a></p>
+
+<p>As you can see the navigation is broken down into a left and a right side. In order to select these sides a naïve approach would be to assign IDs of [cci]leftNav[/cci] and [cci]rightNav[/cci].  While these two navigational elements can be easily selected using [cci lang=&#8221;java&#8221;]browser.findElementById(&#8216;leftNav&#8217;)[/cci] and [cci lang=&#8221;java&#8221;]browser.findElementById(&#8216;rightNav&#8217;)[/cci], using these names can have a negative impact further down the line.</p>
+
+<p>First off imagine a new requirement is added whereby the right navigation should now be shown below the left navigation, this is already becoming confusing.  As a result any tests we have that needed to locate the right navigation now need to be updated to locate the [cci]bottomNav[/cci].  Similarly any stylesheets will need to be updated to reflect this same change.  We can see that by choosing a name that is related to how the navigation looks rather than what it represents becomes a maintenance nightmare.</p>
+
+<p>If in the first place we chose an ID that reflected the intention of the element, our tests would continue to work regardless of the layout of the page.  So how do we go about choosing an appropriate ID for the element?  By thinking of the purpose of the element we can come up with a more semantic name.  In this case all of the elements in the right navigation are related to the user, so we can simply assign an ID of [cci]userNavigation[/cci], no matter where the user navigation resides, be it on the right or in the footer our Selenium tests will continue to locate the element correctly. A huge save on the maintenance effort.</p>
+
+<p>Another important factor to consider when naming an ID or class for an element is how your users and other stakeholders refer to the element.  By ensuring all stakeholders refer to the element in the same way &#8216;the user navigation&#8217; we can reduce translation between user, developers, testers and the code base (selenium, view templates, stylesheets, domain model, etc).  This kind of controlled vocabulary is known in Domain Driven Design as a <a href="http://domaindrivendesign.org/node/132">Ubiquitous Language</a>.</p>
+
+<h3>Selecting Options</h3>
+
+<p>A common task when filling out a form is to select an option from a drop down list. For example you may need to select your favourite country and the list contains UK, USA, NZ.  There are number of ways to select New Zealand.
+[cc lang=&#8221;html&#8221;]</p>
+
+<p>  United Kingdom
+  USA
+  New Zealand</p>
+
+<p>[/cc]</p>
+
+<p>The worst possible solution is to grab all the options and select the country based on its position in the list.
+[cc lang=&#8221;java&#8221;]
+browser.findElementByTagName(&#8220;option&#8221;)[2].setSelected() // select NZ
+[/cc]
+This check is likely to break if any number of small changes are made, for example the sorting may be changed to alphabetical where NZ would be the first option.  If Australia were to be added to the list NZ could be bumped to the 4th option.</p>
+
+<p>To ensure our automation is not tied to the number of elements nor the ordering of the list we can make use of CSS&#8217;s <a href="http://www.w3.org/TR/CSS2/selector.html#attribute-selectors">attribute selector</a>.
+[cc lang=&#8221;java&#8221;]
+browser.findElementByCssSelector(&#8220;option[value=NZ]&#8221;).setSelected()
+[/cc]
+As you can see the code snippet shows the intent of the action much better, no comment is needed to qualify which option is actually being selected. As long as one of the options in this list has a value of &#8220;NZ&#8221;.</p>
+
+<p>If the labels for the options are the same as the submitted parameters the value attribute is often left off, in this cases we do not have an attribute to target with our attribute selector.  Instead we have to check the actual text of the options.
+[cc lang=&#8221;java&#8221;]
+browser.findElementsByTagName(&#8216;option&#8217;).find { it.text == &#8216;New Zealand&#8217; }.setSelected()
+[/cc]
+A little more code but at least we aren&#8217;t selecting based on the position in the list. Note that we now need to find all elements and further refine with Groovy&#8217;s [cci]find[/cci] method.</p>
+
+<h3>A Note on XPath</h3>
+
+<p>Selenium supports XPath for selecting elements, e.g.
+[cc lang=&#8221;java&#8221;]
+browser.findElementByXPath(&#8216;/html/body/div/div[2]/div/ul&#8217;)
+[/cc]
+The above example is the XPath Firefox will give you when you select the trending topic element on Twitter&#8217;s homepage.  This is exactly the type of XPath selector you want to avoid, at no point in the selector string is there a mention of the meaning of any of the elements we are selecting.  In fact if a [cci]div[/cci] were to be added or removed anywhere between the trending topics and the root of the homepage the selection would fail.  Of course XPath can be written much better.
+[cc lang=&#8221;java&#8221;]
+browser.findElementByXPath(&#8216;//*[@class=&#8221;trendscontent&#8221;]&#8217;)
+[/cc]
+However I would argue that the CSS selector is simpler to read and is more inline with the standard for web pages.  The fact that the element may already have appropriate IDs and classes to allow CSS selectors to work for styling purposes is a bonus.
+[cc lang=&#8221;java&#8221;]
+browser.findElementByCssSelector(&#8216;.trendscontent&#8217;)
+// or
+browser.findElementByClassName(&#8216;trendscontent&#8217;)
+[/cc]</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Agile Acceptance Testing Slides]]></title>
+    <link href="http://rapaul.github.com/blog/2010/06/27/agile-acceptance-testing-slides/"/>
+    <updated>2010-06-27T01:59:50+12:00</updated>
+    <id>http://rapaul.github.com/blog/2010/06/27/agile-acceptance-testing-slides</id>
+    <content type="html"><![CDATA[<p>Below are slides I presented at the LJC Unconference on Agile Acceptance Testing with Cucumber, Cuke4Duke, Groovy &amp; Selenium.  Download in <a href="http://www.rapaul.com/wp-content/uploads/2010/06/Acceptance_Tests.pdf">PDF</a> format.</p>
+
+<p>View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/rapaul">Richard Paul</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Gherkin Highlighting for VIM]]></title>
+    <link href="http://rapaul.github.com/blog/2010/06/22/gherkin-highlighting-for-vim/"/>
+    <updated>2010-06-22T08:28:34+12:00</updated>
+    <id>http://rapaul.github.com/blog/2010/06/22/gherkin-highlighting-for-vim</id>
+    <content type="html"><![CDATA[<p>UPDATE: Check the comments, people have had more success with Brent&#8217;s suggestion.</p>
+
+<p>I really wanted some highlighting on my .feature files in vim, I&#8217;m no vim expert so I did a bit of googling and came up with the following:</p>
+
+<ul>
+<li><p>Download cucumber.vim from http://github.com/tpope/vim-cucumber/blob/master/syntax/cucumber.vim</p></li>
+<li><p>Save the file to ~/.vim/cucumber.vim (creating the directory if required)</p></li>
+<li><p>vim ~/.vimrc and add the following lines
+[cc]au Bufread,BufNewFile *.feature set filetype=gherkin
+au! Syntax gherkin source ~/.vim/cucumber.vim
+[/cc]</p></li>
+<li><p>Make sure [cc]syntax on[/cc] is also present</p></li>
+<li><p>Open your feature file</p></li>
+</ul>
+
+
+<p><a href="http://www.rapaul.com/wp-content/uploads/2010/06/vim-with-gherkin1.png"><img src="http://www.rapaul.com/wp-content/uploads/2010/06/vim-with-gherkin1.png" alt="" /></a></p>
+
+<p>If anyone knows a more <em>vim</em> way of doing this feel free to add a comment.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Avoiding Brittle Tests with Mockito's ArgumentCaptor]]></title>
+    <link href="http://rapaul.github.com/blog/2010/06/11/avoiding-brittle-tests-with-mockitos-argument-captor/"/>
+    <updated>2010-06-11T11:28:49+12:00</updated>
+    <id>http://rapaul.github.com/blog/2010/06/11/avoiding-brittle-tests-with-mockitos-argument-captor</id>
+    <content type="html"><![CDATA[<p>One of the core principles behind my love of <a href="http://mockito.org">Mockito</a> is its ability to avoid brittle tests, by brittle tests I mean unit tests which fail when seemingly unrelated functionality changes.</p>
+
+<p>Below I will outline one of Mockito&#8217;s lesser known features, the <a href="http://mockito.googlecode.com/svn/branches/1.8.3/javadoc/org/mockito/ArgumentCaptor.html">ArgumentCaptor</a> that shines in certain use cases.</p>
+
+<p>A common requirement for a web application is to send emails to users. In this case our web application is a travel booking system.  If you make use of a templating language such as Velocity your email generation service might look similar to the following:</p>
+
+<p>[cc lang=&#8221;java&#8221;]
+interface Mailer {
+  void send(</p>
+
+<pre><code>String to,
+String templateName,
+Map&lt;String, Object&gt; model)
+</code></pre>
+
+<p>}
+[/cc]</p>
+
+<p>Note: All examples are shown in Groovy for brevity, but the examples apply perfectly well to Java.</p>
+
+<p>Imagine the email we send is simply welcoming the user to our web site upon registration</p>
+
+<p>`
+Welcome $name,</p>
+
+<p>Thanks for signing up!
+Book your holiday at http://example.com/
+`</p>
+
+<p>As you can see the only dynamic element required in the model map is the user&#8217;s name.  A unit test to define the behaviour of our registration service will simply verify that a map is passed with the user&#8217;s first name.</p>
+
+<p>[cc lang=&#8221;java&#8221; lines=&#8221;150&#8221;]
+private Mailer mailer
+private RegistrationService registrationService</p>
+
+<p>@Before
+void setUp() {
+  // Inject the mocked mailer
+  mailer = mock(Mailer)
+  registrationService = new RegistrationService(mailer)
+}</p>
+
+<p>@Test
+void shouldSendRegistrationEmailWelcomingUser() {
+  // given a new user
+  User user = new User(&#8220;Jim&#8221;, &#8220;jim@example.com&#8221;)</p>
+
+<p>  // when the user registers
+  registrationService.register(user)</p>
+
+<p>  // then an email should be sent welcoming the user
+  verify(mailer).send(&#8220;jim@example.com&#8221;, &#8220;welcome.vm&#8221;, [&#8220;name&#8221;:&#8221;Jim&#8221;])
+}
+[/cc]</p>
+
+<p>As you can see the test starts off simple, we are verifying the mailer&#8217;s send call was invoked with the correct email address, template name and model data.  In this case the model simply contains the name of the newly registered user.</p>
+
+<p>A new requirement arrives which states we want to include the latest holiday deals in the welcome email.</p>
+
+<p>`
+Welcome $name,</p>
+
+<p>Thanks for signing up!
+Book your holiday at http://example.com/</p>
+
+<p>Check out our latest travel offerings:</p>
+
+<h1>foreach($offer in $offers)</h1>
+
+<h1>end</h1>
+
+<p>`</p>
+
+<p>In order to test this requirement, a naive approach would be to simply add the travel offering assertions into the first test we created.  This has the downside that the test is no longer specific to a particular requirement, as we add more content to our email the test would continue to grow and become unwieldy (especially if any conditional logic exists).  We want to keep our tests focussed by limiting each test to a <a href="http://laribee.com/one-logical-assertion-per-test">single logical assert</a>.</p>
+
+<p>Below we create a second test specific to the inclusion of the latest offers.</p>
+
+<p>[cc lang=&#8221;java&#8221;]
+@Test
+void shouldSendRegistrationEmailWithLatestTravelOfferings() {
+  // given a new user
+  User user = new User(&#8220;Jim&#8221;, &#8220;jim@example.com&#8221;)
+  // and the latest travel offers
+  def offers = [&#8220;Offer 1&#8221;, &#8220;Offer 2&#8221;]
+  given(latestOffers.get()).willReturn(offers)</p>
+
+<p>  // when the user registers
+  registrationService.register(user)</p>
+
+<p>  // then an email should be sent with the latest travel offers
+  verify(mailer).send(&#8220;jim@example.com&#8221;, &#8220;welcome.vm&#8221;, [&#8220;offers&#8221;:offers])
+}
+[/cc]</p>
+
+<p>At first glance this looks like a good test, we are checking the latest offers are included in the model so they can be rendered in the email template.</p>
+
+<p>Unfortunately both tests will fail.</p>
+
+<p>In order to verify the correct calls are made, Mockito uses the equality (equals) method of the passed arguments.  In the above case we are checking the equality of two strings and a map.  It is of course the equality of the model map that is causing the test to fail.</p>
+
+<p>shouldSendRegistrationEmailWelcomingUser() fails as Mockito is expecting a map containing simply the user&#8217;s name [name:&#8221;Jim&#8221;], but due to the added travel offerings the map is actually [name:&#8221;Jim&#8221;, offers:offers].  The same failure applies to shouldSendRegistrationEmailWithLatestTravelOfferings() as it is verifying the map only contains offers.</p>
+
+<p>As mailer.send() has no return type (void) we have no simple way to access the model map in our test.  However Mockito offers a couple of ways around this, the first is the creation of a custom Matcher.  The second is to use an ArgumentCaptor which is the approach I will be using today.</p>
+
+<p><a href="http://www.rapaul.com/wp-content/uploads/2010/06/pokeball1.png"><img src="http://www.rapaul.com/wp-content/uploads/2010/06/pokeball1.png" alt="Gotta catch 'em all!" /></a></p>
+
+<p>The ArgumentCaptor is a specialised ArgumentMatcher that records the matched argument for later inspection.</p>
+
+<p>[cc lang=&#8221;java&#8221; lines=&#8221;150&#8221;]
+@Test
+void shouldSendRegistrationEmailWelcomingUser() {
+  // given a new user
+  User user = new User(&#8220;Jim&#8221;, &#8220;jim@example.com&#8221;)</p>
+
+<p>  // when the user registers
+  registrationService.register(user)</p>
+
+<p>  // then an email should be sent welcoming the user
+  ArgumentCaptor model = ArgumentCaptor.forClass(Map)
+  verify(mailer).send(eq(&#8220;jim@example.com&#8221;), eq(&#8220;welcome.vm&#8221;), model.capture())
+  assertThat(model.value.name, is(&#8220;Jim&#8221;))
+}
+[/cc]</p>
+
+<p>Firstly an ArgumentCaptor is created for the class, in this case Map, we wish to inspect.  The ArgumentCaptor is then used as an ArgumentMatcher in the verify call.  No matter what keys or values the model map contains, the ArgumentCaptor will always match thus allowing the verify call to succeed.  Now that we have captured the model we can inspect it by calling getValue() (simply value in Groovy) to access the original map that was passed to the Mailer service by our production code.  By verifying only the key/value pairs that are specific to our test (the user&#8217;s name) we can ensure that any other pieces of information that are added to the map in the future don&#8217;t affect any of the existing tests.</p>
+
+<p>The astute reader may have noticed the inclusion of equality matchers for both the email address eq(&#8220;jim@example.com&#8221;) and the template name.  While Mockito relies on the equality method of the arguments by default, if any of the arguments are an ArgumentMatcher, then all of the arguments must be a matcher.</p>
+
+<p>In summary, the ArgumentCaptor allows tests to remain focussed with a single logical assert, even when the object you wish to inspect is created in the code under test and passed to a collaborator via a void method call.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Cucumber World with Groovy]]></title>
+    <link href="http://rapaul.github.com/blog/2010/05/04/cucumber-world-with-groovy/"/>
+    <updated>2010-05-04T03:37:43+12:00</updated>
+    <id>http://rapaul.github.com/blog/2010/05/04/cucumber-world-with-groovy</id>
+    <content type="html"><![CDATA[<p><a href="http://cukes.info/">Cucumber</a> provides the ability to create a <em>world</em> in which you can expose useful methods for the testing environment.  This post briefly details how to expose these methods when using Groovy with <a href="http://wiki.github.com/aslakhellesoy/cuke4duke/">Cuke4Duke</a>.</p>
+
+<p>`
+Feature: World
+In order to make useful methods available
+As a tester
+I want the world to be full of wonderful methods</p>
+
+<p>Scenario: Greet
+When I greet
+&#8230;</p>
+
+<p>Scenario: Farewell
+When I farewell
+&#8230;
+`</p>
+
+<p>These scenarios capture the ability to greet and farewell our customers.  The matching step definitions are shown below.</p>
+
+<p>[cc lang=&#8221;java&#8221; lines=&#8221;150&#8221;]
+// hello_steps.groovy
+import static org.junit.Assert.<em>
+import static org.hamcrest.CoreMatchers.</em></p>
+
+<p>this.metaClass.mixin(cuke4duke.GroovyDsl)</p>
+
+<p>When(~&#8217;I greet&#8217;) {
+  assertThat(hello(), is(&#8216;hi&#8217;))
+}</p>
+
+<p>When(~&#8217;I farewell&#8217;) {
+  assertThat(goodbye(), is(&#8216;ciao&#8217;))
+}
+[/cc]</p>
+
+<p>You will notice that we haven&#8217;t defined the <em>hello()</em> or <em>goodbye()</em> methods anywhere in our step definition file.  We are assuming these methods are provided by the <em>world</em> environment that Cucumber provides.  This allows the <em>world</em> methods to be shared between many different step definition files.</p>
+
+<p>Next we define the <em>world</em> environment.  Instead of defining all methods in a single class, we can group the methods into individual classes and make them all available on the <em>world</em> class at runtime using <a href="http://groovy.codehaus.org/Runtime+mixins">Groovy&#8217;s mixin</a> support.</p>
+
+<p>[cc lang=&#8221;java&#8221; lines=&#8221;150&#8221;]
+// env.groovy
+this.metaClass.mixin(cuke4duke.GroovyDsl)</p>
+
+<p>class Greeter {
+  def hello() {</p>
+
+<pre><code>'hi'
+</code></pre>
+
+<p>  }
+}</p>
+
+<p>class Fareweller {
+  def goodbye() {</p>
+
+<pre><code>'ciao'
+</code></pre>
+
+<p>  }
+}</p>
+
+<p>class World {}</p>
+
+<p>World() {
+  World.mixin Greeter, Fareweller
+  new World()
+}
+[/cc]</p>
+
+<p>The <em>World()</em> call is part of Cucumber&#8217;s DSL, here we use it to publish an instance of our <em>World</em> class thus making both <em>hello()</em> and <em>goodbye()</em> available in the testing environment (note that the name of the <em>World</em> class is not important).</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A Cucumber Scenario for Session Fixation Attacks]]></title>
+    <link href="http://rapaul.github.com/blog/2010/03/17/cucumber-session-fixation/"/>
+    <updated>2010-03-17T10:13:29+13:00</updated>
+    <id>http://rapaul.github.com/blog/2010/03/17/cucumber-session-fixation</id>
+    <content type="html"><![CDATA[<p>When working on a Spring project I was alerted via the logs that my login handling was susceptible to <a href="http://en.wikipedia.org/wiki/Session_fixation">Session Fixation Attacks</a>.  It was nice of Spring to alert me of this, and it seems like the <a href="http://markmail.org/thread/o7f6d5gkle4kqqbt">problem</a> is due to the Apache httpd connection via mod_jk.  But before diving into a solution I decided to write a simple acceptance test using <a href="http://cukes.info/">Cucumber</a>.  This allows me to first prove the security hole is present, easily tell when I have fixed it and has the additional benefit of being able to add the check to a set of automated regression tests to ensure it never happens again.</p>
+
+<p>The countermeasure <a href="http://static.springsource.org/spring-security/site/docs/3.0.x/apidocs/org/springframework/security/web/authentication/session/SessionFixationProtectionStrategy.html">built into Spring</a> uses the <a href="http://en.wikipedia.org/wiki/Session_fixation#Best_solution:_Identity_Confirmation">Identity Confirmation</a> technique.  This basically involves invalidating a user&#8217;s session when they login and creating a new session with a different <em>JSESSIONID</em>.  It turns out to be fairly easy to write a test for this in Cucumber.  Firstly I wrote the plain text scenario:</p>
+
+<pre><code>Scenario: Avoiding Session Fixation Attacks through Identity Confirmation
+Given I have a session ID
+When I sign in
+Then I should have a different session ID
+</code></pre>
+
+<p>The next step is to write the step definitions.  <a href="http://wiki.github.com/aslakhellesoy/cuke4duke/">Cuke4Duke</a> provides Cucumber support for JVM languages and makes it easy to write reusable step definitions.  As I&#8217;m a fan of the expressiveness of Groovy I chose to write the step definitions using the <a href="http://wiki.github.com/aslakhellesoy/cuke4duke/groovy">GroovyDsl</a>.</p>
+
+<p>[cc lang=&#8221;java&#8221; lines=&#8221;150&#8221;]
+import org.openqa.selenium.By
+import static org.junit.Assert.<em>
+import static org.junit.matchers.JUnitMatchers.</em>
+import static org.hamcrest.CoreMatchers.*</p>
+
+<p>this.metaClass.mixin(cuke4duke.GroovyDsl)</p>
+
+<p>def sessionId</p>
+
+<p>Given(~&#8217;I have a session ID&#8217;) {
+  browser.get(&#8220;$host/signin&#8221;)
+  sessionId = getSessionId()
+}</p>
+
+<p>When(~&#8217;I sign in&#8217;) {
+  def signinForm = browser.findElement(By.name(&#8216;signin&#8217;))
+  signinForm.findElement(By.name(&#8216;j_username&#8217;)).sendKeys(&#8216;testing@example.com&#8217;)
+  signinForm.findElement(By.name(&#8216;j_password&#8217;)).sendKeys(&#8216;123456&#8217;)
+  signinForm.submit()
+}</p>
+
+<p>Then(~&#8217;I should have a different session ID&#8217;) {
+  assertThat(getSessionId(), is(not(sessionId)));
+}</p>
+
+<p>def getSessionId() {
+  browser.manage().cookies.find() { it.name == &#8216;JSESSIONID&#8217; }.value
+}
+[/cc]</p>
+
+<p>The <em>browser</em> variable is injected via <em>env.groovy</em> as an instance of <a href="http://webdriver.googlecode.com/svn/javadoc/org/openqa/selenium/WebDriver.html">WebDriver</a> which provides the methods to find elements and manage cookies.</p>
+
+<p><em>def sessionId</em> simply declares a variable allowing sharing of state between the steps so we can check the session ID has been changed.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Avoiding ambiguities when using @RequestMapping]]></title>
+    <link href="http://rapaul.github.com/blog/2010/02/15/request-mapping-ordering/"/>
+    <updated>2010-02-15T06:30:16+13:00</updated>
+    <id>http://rapaul.github.com/blog/2010/02/15/request-mapping-ordering</id>
+    <content type="html"><![CDATA[<p>I&#8217;ve recently been using the param attribute of the <a href="http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/web/bind/annotation/RequestMapping.html">@RequestMapping</a> annotation from Spring MVC.</p>
+
+<p>Take the case of a search feature for a website.  If a &#8216;refine&#8217; parameter is present, the user should be shown a search form to refine their criteria. However if the refine parameter is not present the user is shown the search results for the query.
+[cc lang=&#8221;java&#8221;]
+@RequestMapping(value=&#8221;/search&#8221;, method=RequestMethod.GET)
+public class SearchController {</p>
+
+<p>  // Handles search?query=dog&refine;=true
+  @RequestMapping(params=&#8221;refine=true&#8221;)
+  public void refine() { &#8230; }</p>
+
+<p>  // Handles search?query=dog
+  @RequestMapping
+  public void search() { &#8230; }</p>
+
+<p>}
+[/cc]</p>
+
+<p>While this code will initially work, there is some ambiguity in the way the URLs are matched.  The order in which the @RequestMapping mappings are defined in the class file is actually determining which method will be called.  If we were to define the search() method first, then a request to search?query=dog&refine;=true would satisfy the conditions for the search() method&#8217;s @RequestMapping and thus the params=&#8221;refine=true&#8221; on the refine() method has no bearing on the outcome of the request.</p>
+
+<p>To safeguard the controller against the potential reordering of methods in a class (which in usual Java programming has no affect on the outcome of running code), we need to ensure the parameter mapping is explicit.</p>
+
+<p>[cc lang=&#8221;java&#8221;]
+// Match if &#8216;refine&#8217; parameter is present
+@RequestMapping(params=&#8221;refine=true&#8221;)
+public void refine() { &#8230; }
+// Match if &#8216;refine&#8217; parameter is not present
+@RequestMapping(params=&#8221;!refine=true&#8221;)
+public void search() { &#8230; }
+[/cc]</p>
+
+<p>By explicitly checking the refine parameter is not present for the search method&#8217;s request mapping (!refine=true), the declaration order of our @RequestMapping annotations in the class file has no bearing on which method handles the request thus making our code robust to the reordering methods.  Similar precautions should be taken with the other attributes of @RequestMapping including method and headers.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[My git svn workflow]]></title>
+    <link href="http://rapaul.github.com/blog/2010/01/14/my-git-svn-workflow/"/>
+    <updated>2010-01-14T11:28:03+13:00</updated>
+    <id>http://rapaul.github.com/blog/2010/01/14/my-git-svn-workflow</id>
+    <content type="html"><![CDATA[<p>Below are the steps I use when working with Git &amp; SVN. Please note, I am in no way a Git or SVN expert, but these are the steps that seem to work for me.</p>
+
+<p><strong>1) Checkout codebase</strong>
+This step only needs to be done once, it will pull down a local copy of the entire history allowing for very fast nagivation of revisions and allow work to be down when no connection to a central repository is available.</p>
+
+<pre><code>git svn clone svn://path/to/code/ --stdlayout
+</code></pre>
+
+<p><strong>2) Create a topic branch to work on</strong>
+We now want to start work on our first story, so we create a local branch for it.  This allows us to keep all changes related to the first story out of the master branch.  By keeping the master branch clean we can create as many local branches as we wish from it allowing us to quickly fix a bug in a separate local branch to the story we are working on.  I&#8217;ll come to this later.  The <em>-b</em> option means checkout and create a branch, this is a shortcut to creating the branch then checking it out.</p>
+
+<pre><code>git checkout -b story1
+</code></pre>
+
+<p>.. implement the first story ..</p>
+
+<p><strong>3) Add all new/deleted/modified files to staging area</strong>
+With git you can stage just the files that are important, these staged items then make up the contents of your commit.</p>
+
+<pre><code>git add path/to/resource
+</code></pre>
+
+<p><strong>4) Create a commit</strong>
+We then create a commit of the staged files in our local branch, note this differs from SVN as a commit is only local.</p>
+
+<pre><code>git commit -m "My commit message"
+</code></pre>
+
+<p><strong>5) Merge changes from your topic branch into the master branch</strong>
+Ensure the master branch is up to date</p>
+
+<pre><code>git checkout master
+git svn rebase
+</code></pre>
+
+<p>Then merge your topic branch into master</p>
+
+<pre><code>git merge story1
+</code></pre>
+
+<p><strong>6) Merge conflicts</strong>
+Merge any conflicts either manually or using <em>mergetool</em> (I&#8217;m yet to figure out how to use the <em>mergetool</em> command)</p>
+
+<p><strong>7) Push to SVN</strong>
+This is the bridge that takes our Git commits and pushes them to SVN.  Each Git commit will be mapped to a respective SVN commit.</p>
+
+<pre><code>git svn dcommit
+</code></pre>
+
+<p><strong>Working with multiple branches</strong>
+As I mentioned earlier, one of the major advantages of Git over SVN is the ability to have multiple working branches locally, allowing you to switch between them with relative ease.  Take for example you are working on a story, it might take you a whole day to get it done.  At midday an urgent support request arrives for a bug in the live software.  Using SVN I would typically have to checkout the HEAD revision into a separate directory and import it into Eclipse as a new project.  With Git it is much simpler, I use the following steps to do the switching.</p>
+
+<h1>Commit all current work to the topic branch</h1>
+
+<pre><code>git add path/to/noncommited/work
+</code></pre>
+
+<h1>Switch to the master branch and make sure it is up to date</h1>
+
+<pre><code>git checkout master
+git svn rebase
+</code></pre>
+
+<h1>Create a new branch for the bug fix</h1>
+
+<pre><code>git checkout -b bugfix
+</code></pre>
+
+<h1>Fix the bug</h1>
+
+<h1>Follow steps 3-7 above</h1>
+
+<h1>Carry on working on the story</h1>
+
+<pre><code>git checkout story1
+</code></pre>
+
+<p><strong>Git GUI</strong>
+You can use the <a href="http://www.kernel.org/pub/software/scm/git/docs/git-gui.html">Git GUI</a> tool for most of the steps above, I find it particularly useful for steps 3 &amp; 4.
+You can also review the history and changes using gitk, this is useful for code reviews before you push your code into a master repo.</p>
+
+<p><strong>JGit (Eclipse Plugin)</strong>
+I use the <a href="http://www.jgit.org/">JGit Eclipse Plugin</a> when working in Eclipse, it provides a diff with the previous version which I find invaluable.
+Install in Eclipse using the update site: http://www.jgit.org/updates</p>
+
+<p><strong>References</strong>
+<a href="http://blog.tsunanet.net/2007/07/learning-git-svn-in-5min.html">http://blog.tsunanet.net/2007/07/learning-git-svn-in-5min.html</a>
+<a href="http://stackoverflow.com/questions/190431/is-git-svn-dcommit-after-merging-in-git-dangerous">http://stackoverflow.com/questions/190431/is-git-svn-dcommit-after-merging-in-git-dangerous</a>
+<a href="http://www.kernel.org/pub/software/scm/git/docs/user-manual.html#resolving-a-merge">http://www.kernel.org/pub/software/scm/git/docs/user-manual.html#resolving-a-merge</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[jQuery Behaviours]]></title>
+    <link href="http://rapaul.github.com/blog/2009/09/16/jquery-behaviours/"/>
+    <updated>2009-09-16T08:55:02+12:00</updated>
+    <id>http://rapaul.github.com/blog/2009/09/16/jquery-behaviours</id>
+    <content type="html"><![CDATA[<p>Below are slides from a short presentation I gave to my colleagues at f1000.  The slides contain a brief background on Javascript behaviours and provide a comparison between jQueries&#8217; <a href="http://docs.jquery.com/Events/bind">bind</a> and <a href="http://docs.jquery.com/Events/live">live</a> behaviours along with the <a href="http://docs.jquery.com/Plugins/livequery">liveQuery plugin</a>.</p>
+
+<p><a href="http://www.slideshare.net/rapaul/jquery-behaviours">jQuery Behaviours</a></p>
+
+<p>View more <a href="http://www.slideshare.net/">documents</a> from <a href="http://www.slideshare.net/rapaul">Richard Paul</a>.</p>
+
+<p>I have also created two little pages which demonstrate <a href="http://files.rapaul.com/behaviour/delegation.html">event bubbling</a> and how the different <a href="http://files.rapaul.com/behaviour/behaviour.html">behaviour mechanisms</a> work with form submission (hint: try using Internet Exploder with the &#8216;live&#8217; example).</p>
+
+<p>A <a href="http://www.rapaul.com/wp-content/uploads/2009/09/jquery_behaviours.pdf">PDF version</a> of the slides is available.</p>
+
+<p>Thanks to my manager Phil, for letting me post this on my personal blog.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A Behavioural World]]></title>
+    <link href="http://rapaul.github.com/blog/2009/09/14/a-behavioural-world/"/>
+    <updated>2009-09-14T05:16:49+12:00</updated>
+    <id>http://rapaul.github.com/blog/2009/09/14/a-behavioural-world</id>
+    <content type="html"><![CDATA[<p>Or at least a behavioural twitter world,</p>
+
+<p><a href="http://abehaviouralworld.rapaul.com/"><img src="http://www.rapaul.com/wp-content/uploads/2009/09/intro.png" alt="introduction" /></a></p>
+
+<p><a href="http://abehaviouralworld.rapaul.com/">http://abehaviouralworld.rapaul.com/</a> is a little project just launched which attempts to distill behaviours from twitter. Given my recent rapture in the world of <a href="http://en.wikipedia.org/wiki/Behaviour_driven_development">BDD</a>, the behaviours we are distilling are those that match the scenario format.</p>
+
+<pre><code>Given ...
+When ...
+Then ...
+</code></pre>
+
+<p>If you look carefully at the page source, you will notice a large portion of it is dedicated to an HTML comment containing the list of features and the breakdown into scenarios.  To keep things easily accessible, each time I thought of a scenario I added it to the page, once completed, it was marked with [Done].</p>
+
+<p>For example, starting with the most important feature:</p>
+
+<pre><code>  Feature 1)
+  In order to see how BDD syntax is being used on twitter
+  As a BDD zealot
+  I want to see tweets that contain 'given', 'when' &amp; 'then', in that order.
+</code></pre>
+
+<p>I then broke this feature down into scenarios:</p>
+
+<pre><code>  [Done]
+  Given the search returns more than matching 10 tweets
+  When the user views the page
+  Then the 10 most recent tweets should be displayed
+
+  ...
+</code></pre>
+
+<p>Each time a scenario was satisfied, I marked it with [Done]. Not all scenarios ended up being all that important, the following scenario is still pending.</p>
+
+<pre><code>  Given the search returns no matching tweets
+  When the user views the page
+  Then instead of showing any tweets a message should be shown
+</code></pre>
+
+<p>In fact, if we attempt to tie this scenario back into the vision of the website (distilling behaviours in twitter), then we realise it adds no value. If no one is tweeting about behaviours, then it is highly unlike that anyone will be visiting our behaviour distillery.</p>
+
+<p>There are a couple of features (3 &amp; 4) in the source which haven&#8217;t yet been implemented.</p>
+
+<pre><code>  Feature 3)
+  In order to emphasis the given/when/then syntax
+  As a BDD zealot
+  I want to see give/when/then highlighted in the displayed tweets
+
+  Feature 4)
+  In order to encourage BDD syntax usage on twitter
+  As a BDD zealot
+  I want to be able to tweet from this page using a BDD template
+</code></pre>
+
+<p>If anyone would like to work on these features, or even just break down some useful scenarios, please feel free to fork the <a href="http://github.com/rapaul/abehaviouralworld">code on github</a>, provide me with a diff or add a comment (note at the time of writing github looks to be having some caching issues on the &#8216;Source&#8217; tab).</p>
+
+<p><strong>What no executable scenarios?</strong>
+Oops, nope. I&#8217;m yet to get into the world of writing executable scenarios in Javascript. If someone has some knowledge in this area, please feel free to fork the <a href="http://github.com/rapaul/abehaviouralworld">github repository</a> and start automating the scenarios from the page source.</p>
+
+<p>PS: This idea was partially inspired by a <a href="http://twitter.com/soulnafein/status/3712851157">tweet by soulnafein</a> which read:
+<em>My girlfriend is taking the mickey out of me because recently I started explaining things using the Scenario format (Given When Then) :-)</em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Meetups in London]]></title>
+    <link href="http://rapaul.github.com/blog/2009/09/02/meetups-in-london/"/>
+    <updated>2009-09-02T11:04:50+12:00</updated>
+    <id>http://rapaul.github.com/blog/2009/09/02/meetups-in-london</id>
+    <content type="html"><![CDATA[<p>One of the great things about London, from a developer&#8217;s perspective, is the wealth of meetups going on.  Don&#8217;t get me wrong, in Auckland we had a few notable meetups including the <a href="http://www.meetup.com/auckland-jug/">Auckland JVM Group</a> and the <a href="http://www.meetup.com/aucklandweb/">Auckland Web Meetup</a>. But London has more people, more developers &amp; hence more meetups.</p>
+
+<p>Below is a live calendar of the meetups I&#8217;m planning on attending,</p>
+
+<p>I&#8217;ll try to keep this up to date, so feel free to subscribe to the calendar if you have similar interests (java, javascript, groovy, scala, testing, mocking, android, webOS, html5&#8230; anything you see in this blog&#8217;s tag cloud).</p>
+]]></content>
+  </entry>
   
 </feed>
