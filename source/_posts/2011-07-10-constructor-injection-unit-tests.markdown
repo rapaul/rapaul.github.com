@@ -23,7 +23,7 @@ I've recently been reading [Growing Object-Oriented Software Guided by Tests](ht
 
 I've included an illustrative example below using Mockito, the actual test isn't important but it proves this setup style works.
 
-{% codeblock lang:java %}
+``` java
 import static org.mockito.BDDMockito.*;
 import org.junit.Test;
 
@@ -44,7 +44,7 @@ public class ItemCheckerTest {
 
 	...
 }
-{% endcodeblock %}
+```
 
 For those unfamiliar with Mockito, the `given` call stubs a query, while the `verify` call uses a [test spy](http://xunitpatterns.com/Test%20Spy.html) to check a command call was made.
 
