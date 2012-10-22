@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Mocking in Java with Mockito - rapaul.com</title>
+  <title>Javascript & Ajax Basics (Slides + Console) - rapaul.com</title>
   <meta name="author" content="Richard Paul">
 
   
-  <meta name="description" content="A ran a session at the Auckland Java User Group on using Mockito.  Slides are embedded below using slideshare: Mocking in Java with Mockito View &hellip;">
+  <meta name="description" content="The following slides are from a presentation I gave at Kiwiplan (my employer). Javascript &amp; Ajax Basics View more presentations from Richard Paul &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/">
+  <link rel="canonical" href="http://www.rapaul.com/2009/02/02/javascript-ajax-basics-slides/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -67,7 +67,7 @@
   
   <header>
     
-      <h1 class="entry-title">Mocking in Java With Mockito</h1>
+      <h1 class="entry-title">Javascript & Ajax Basics (Slides + Console)</h1>
     
     
       <p class="meta">
@@ -83,20 +83,29 @@
   
 
 
-<time datetime="2008-11-19T00:00:00+13:00" pubdate data-updated="true">Nov 19<span>th</span>, 2008</time>
+<time datetime="2009-02-02T00:00:00+13:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2009</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>A ran a session at the <a href="http://www.meetup.com/auckland-jug/calendar/9081887/">Auckland Java User Group</a> on using <a href="http://mockito.org/">Mockito</a>.  Slides are embedded below using slideshare:</p>
+<div class="entry-content"><p>The following slides are from a presentation I gave at Kiwiplan (my employer).</p>
 
-<p><a href="http://www.slideshare.net/rapaul/mockito-presentation?type=powerpoint">Mocking in Java with Mockito</a></p>
+<p><a href="http://www.slideshare.net/rapaul/javascript-ajax-basics?type=presentation">Javascript &amp; Ajax Basics</a></p>
 
-<p>View SlideShare <a href="http://www.slideshare.net/rapaul/mockito-presentation?type=powerpoint">presentation</a> or <a href="http://www.slideshare.net/upload?type=powerpoint">Upload</a> your own.</p>
+<p>View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/rapaul">Richard Paul</a>. (tags: <a href="http://slideshare.net/tag/javascipt">javascipt</a> <a href="http://slideshare.net/tag/ajax">ajax</a>)</p>
 
-<p>As promised I&#8217;ve attached my <a href="http://www.rapaul.com/wp-content/uploads/2008/11/mockito.pdf">slides</a> and also included the example source files in a <a href="http://www.rapaul.com/wp-content/uploads/2008/11/mockito-example-code.zip">zip</a>.  To run the unit tests you will need <a href="http://sourceforge.net/project/showfiles.php?group_id=15278&amp;package_id=12472">JUnit 4.5</a> and <a href="http://mockito.googlecode.com/files/mockito-all-1.6.jar">Mockito 1.6</a>.</p>
+<p>I&#8217;ve also created a live Javascript console to play around with Javascript in a browser.  You can download the <a href="http://www.rapaul.com/wp-content/uploads/2009/02/ajaxservertutorial.zip">source</a> and play about with it on your local server.  You will need Java and <a href="http://grails.org">Grails</a> installed and can run the server using the usual grails command.</p>
+
+<pre><code>grails run-app
+</code></pre>
+
+<p>The console can then be accessed at <a href="http://localhost:8080/AjaxServer/">http://localhost:8080/AjaxServer/</a>  (only tested in Firefox).</p>
+
+<p><a href="http://www.rapaul.com/wp-content/uploads/2009/02/live-javascript-console.png"><img src="http://www.rapaul.com/wp-content/uploads/2009/02/live-javascript-console-300x232.png" alt="live-javascript-console" /></a></p>
+
+<p>Thanks <a href="http://twitter.com/cgarethc">@cgarethc</a> (development manager @ Kiwiplan) for allowing me to post this on my personal blog.</p>
 </div>
 
 
@@ -119,7 +128,7 @@
   
 
 
-<time datetime="2008-11-19T00:00:00+13:00" pubdate data-updated="true">Nov 19<span>th</span>, 2008</time>
+<time datetime="2009-02-02T00:00:00+13:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2009</time>
       
 
 
@@ -127,7 +136,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/" data-via="rapaul" data-counturl="http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.rapaul.com/2009/02/02/javascript-ajax-basics-slides/" data-via="rapaul" data-counturl="http://www.rapaul.com/2009/02/02/javascript-ajax-basics-slides/" >Tweet</a>
   
   
   
@@ -136,10 +145,10 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/2008/11/11/rockin-robin/" title="Previous Post: Rockin' Robin">&laquo; Rockin' Robin</a>
+        <a class="basic-alignment left" href="/2008/12/22/the-making-of-rockin-robin/" title="Previous Post: The making of Rockin' Robin">&laquo; The making of Rockin' Robin</a>
       
       
-        <a class="basic-alignment right" href="/2008/12/22/the-making-of-rockin-robin/" title="Next Post: The making of Rockin' Robin">The making of Rockin' Robin &raquo;</a>
+        <a class="basic-alignment right" href="/2009/02/15/using-dojo/" title="Next Post: Using Dojo">Using Dojo &raquo;</a>
       
     </p>
   </footer>
@@ -251,8 +260,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/';
-        var disqus_url = 'http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/';
+        var disqus_identifier = 'http://www.rapaul.com/2009/02/02/javascript-ajax-basics-slides/';
+        var disqus_url = 'http://www.rapaul.com/2009/02/02/javascript-ajax-basics-slides/';
         var disqus_script = 'embed.js';
       
     (function () {

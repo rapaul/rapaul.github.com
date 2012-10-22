@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Mocking in Java with Mockito - rapaul.com</title>
+  <title>A Cucumber Scenario for Session Fixation Attacks - rapaul.com</title>
   <meta name="author" content="Richard Paul">
 
   
-  <meta name="description" content="A ran a session at the Auckland Java User Group on using Mockito.  Slides are embedded below using slideshare: Mocking in Java with Mockito View &hellip;">
+  <meta name="description" content="When working on a Spring project I was alerted via the logs that my login handling was susceptible to Session Fixation Attacks. It was nice of Spring &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/">
+  <link rel="canonical" href="http://www.rapaul.com/2010/03/16/cucumber-session-fixation/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -67,7 +67,7 @@
   
   <header>
     
-      <h1 class="entry-title">Mocking in Java With Mockito</h1>
+      <h1 class="entry-title">A Cucumber Scenario for Session Fixation Attacks</h1>
     
     
       <p class="meta">
@@ -83,20 +83,59 @@
   
 
 
-<time datetime="2008-11-19T00:00:00+13:00" pubdate data-updated="true">Nov 19<span>th</span>, 2008</time>
+<time datetime="2010-03-16T00:00:00+13:00" pubdate data-updated="true">Mar 16<span>th</span>, 2010</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>A ran a session at the <a href="http://www.meetup.com/auckland-jug/calendar/9081887/">Auckland Java User Group</a> on using <a href="http://mockito.org/">Mockito</a>.  Slides are embedded below using slideshare:</p>
+<div class="entry-content"><p>When working on a Spring project I was alerted via the logs that my login handling was susceptible to <a href="http://en.wikipedia.org/wiki/Session_fixation">Session Fixation Attacks</a>.  It was nice of Spring to alert me of this, and it seems like the <a href="http://markmail.org/thread/o7f6d5gkle4kqqbt">problem</a> is due to the Apache httpd connection via mod_jk.  But before diving into a solution I decided to write a simple acceptance test using <a href="http://cukes.info/">Cucumber</a>.  This allows me to first prove the security hole is present, easily tell when I have fixed it and has the additional benefit of being able to add the check to a set of automated regression tests to ensure it never happens again.</p>
 
-<p><a href="http://www.slideshare.net/rapaul/mockito-presentation?type=powerpoint">Mocking in Java with Mockito</a></p>
+<p>The countermeasure <a href="http://static.springsource.org/spring-security/site/docs/3.0.x/apidocs/org/springframework/security/web/authentication/session/SessionFixationProtectionStrategy.html">built into Spring</a> uses the <a href="http://en.wikipedia.org/wiki/Session_fixation#Best_solution:_Identity_Confirmation">Identity Confirmation</a> technique.  This basically involves invalidating a user&#8217;s session when they login and creating a new session with a different <em>JSESSIONID</em>.  It turns out to be fairly easy to write a test for this in Cucumber.  Firstly I wrote the plain text scenario:</p>
 
-<p>View SlideShare <a href="http://www.slideshare.net/rapaul/mockito-presentation?type=powerpoint">presentation</a> or <a href="http://www.slideshare.net/upload?type=powerpoint">Upload</a> your own.</p>
+<pre><code>Scenario: Avoiding Session Fixation Attacks through Identity Confirmation
+Given I have a session ID
+When I sign in
+Then I should have a different session ID
+</code></pre>
 
-<p>As promised I&#8217;ve attached my <a href="http://www.rapaul.com/wp-content/uploads/2008/11/mockito.pdf">slides</a> and also included the example source files in a <a href="http://www.rapaul.com/wp-content/uploads/2008/11/mockito-example-code.zip">zip</a>.  To run the unit tests you will need <a href="http://sourceforge.net/project/showfiles.php?group_id=15278&amp;package_id=12472">JUnit 4.5</a> and <a href="http://mockito.googlecode.com/files/mockito-all-1.6.jar">Mockito 1.6</a>.</p>
+<p>The next step is to write the step definitions.  <a href="http://wiki.github.com/aslakhellesoy/cuke4duke/">Cuke4Duke</a> provides Cucumber support for JVM languages and makes it easy to write reusable step definitions.  As I&#8217;m a fan of the expressiveness of Groovy I chose to write the step definitions using the <a href="http://wiki.github.com/aslakhellesoy/cuke4duke/groovy">GroovyDsl</a>.</p>
+
+<p>[cc lang=&#8221;java&#8221; lines=&#8221;150&#8221;]
+import org.openqa.selenium.By
+import static org.junit.Assert.<em>
+import static org.junit.matchers.JUnitMatchers.</em>
+import static org.hamcrest.CoreMatchers.*</p>
+
+<p>this.metaClass.mixin(cuke4duke.GroovyDsl)</p>
+
+<p>def sessionId</p>
+
+<p>Given(~&#8217;I have a session ID&#8217;) {
+  browser.get(&#8220;$host/signin&#8221;)
+  sessionId = getSessionId()
+}</p>
+
+<p>When(~&#8217;I sign in&#8217;) {
+  def signinForm = browser.findElement(By.name(&#8216;signin&#8217;))
+  signinForm.findElement(By.name(&#8216;j_username&#8217;)).sendKeys(&#8216;testing@example.com&#8217;)
+  signinForm.findElement(By.name(&#8216;j_password&#8217;)).sendKeys(&#8216;123456&#8217;)
+  signinForm.submit()
+}</p>
+
+<p>Then(~&#8217;I should have a different session ID&#8217;) {
+  assertThat(getSessionId(), is(not(sessionId)));
+}</p>
+
+<p>def getSessionId() {
+  browser.manage().cookies.find() { it.name == &#8216;JSESSIONID&#8217; }.value
+}
+[/cc]</p>
+
+<p>The <em>browser</em> variable is injected via <em>env.groovy</em> as an instance of <a href="http://webdriver.googlecode.com/svn/javadoc/org/openqa/selenium/WebDriver.html">WebDriver</a> which provides the methods to find elements and manage cookies.</p>
+
+<p><em>def sessionId</em> simply declares a variable allowing sharing of state between the steps so we can check the session ID has been changed.</p>
 </div>
 
 
@@ -119,7 +158,7 @@
   
 
 
-<time datetime="2008-11-19T00:00:00+13:00" pubdate data-updated="true">Nov 19<span>th</span>, 2008</time>
+<time datetime="2010-03-16T00:00:00+13:00" pubdate data-updated="true">Mar 16<span>th</span>, 2010</time>
       
 
 
@@ -127,7 +166,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/" data-via="rapaul" data-counturl="http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.rapaul.com/2010/03/16/cucumber-session-fixation/" data-via="rapaul" data-counturl="http://www.rapaul.com/2010/03/16/cucumber-session-fixation/" >Tweet</a>
   
   
   
@@ -136,10 +175,10 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/2008/11/11/rockin-robin/" title="Previous Post: Rockin' Robin">&laquo; Rockin' Robin</a>
+        <a class="basic-alignment left" href="/2010/02/14/request-mapping-ordering/" title="Previous Post: Avoiding ambiguities when using @RequestMapping">&laquo; Avoiding ambiguities when using @RequestMapping</a>
       
       
-        <a class="basic-alignment right" href="/2008/12/22/the-making-of-rockin-robin/" title="Next Post: The making of Rockin' Robin">The making of Rockin' Robin &raquo;</a>
+        <a class="basic-alignment right" href="/2010/05/03/cucumber-world-with-groovy/" title="Next Post: Cucumber World with Groovy">Cucumber World with Groovy &raquo;</a>
       
     </p>
   </footer>
@@ -251,8 +290,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/';
-        var disqus_url = 'http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/';
+        var disqus_identifier = 'http://www.rapaul.com/2010/03/16/cucumber-session-fixation/';
+        var disqus_url = 'http://www.rapaul.com/2010/03/16/cucumber-session-fixation/';
         var disqus_script = 'embed.js';
       
     (function () {

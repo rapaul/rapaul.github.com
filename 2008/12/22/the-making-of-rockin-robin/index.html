@@ -1,0 +1,324 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>The making of Rockin' Robin - rapaul.com</title>
+  <meta name="author" content="Richard Paul">
+
+  
+  <meta name="description" content="This post details the making of Rockin&#8217; Robin, a client side mashup between last.fm and twitter.  If you missed my introduction to Rockin&#8217 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.rapaul.com/2008/12/22/the-making-of-rockin-robin/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="rapaul.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">rapaul.com</a></h1>
+  
+    <h2>A technical blog written by Richard Paul</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.rapaul.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">The Making of Rockin' Robin</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-12-22T00:00:00+13:00" pubdate data-updated="true">Dec 22<span>nd</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>This post details the making of Rockin&#8217; Robin, a client side mashup between last.fm and twitter.  If you missed my introduction to Rockin&#8217; Robin, you can read the post <a href="http://www.rapaul.com/2008/11/11/rockin-robin/">here</a>. Or you can try it out @ <a href="http://robin.rapaul.com/">http://robin.rapaul.com/</a></p>
+
+<p><strong>Querying</strong></p>
+
+<p>What makes this mashup special is that the entire mashup runs client side, all requests to the last.fm and twitter services are made in the user&#8217;s browser.  Being a purely in-browser mashup there are some restrictions as to what requests can be made, specifically current browsers do not support cross-site requests for regular XmlHttpRequests (XHR).  While this is a proposed feature for upcoming browsers, we need a solution that works with current browsers.</p>
+
+<p>Enter <a href="http://api.dojotoolkit.org/jsdoc/dojo/1.2/dojo.io.script.get">dojo.io.script.get()</a>, Dojo&#8217;s workaround for cross-domain requests.  The general gist of this hack is that it adds a script block to the page with the src attribute set to the query URL, the server then returns the JSON data as the content of the script block, this technique is known as <a href="http://en.wikipedia.org/wiki/JSONP#JSONP">JSONP</a>.  Fortunately Dojo hides the complexity of this hack behind a similar interface to the regular request (<a href="http://api.dojotoolkit.org/jsdoc/dojo/1.2/dojo.xhrGet">dojo.xhrGet()</a>).</p>
+
+<p><strong>Last.fm</strong></p>
+
+<p>Accessing last.fm&#8217;s API requires a registration key, which can bet set up on <a href="http://www.last.fm/api">http://www.last.fm/api</a> This page also details all the available API methods broken down into areas.  For the Rockin&#8217; Robin mashup we are concerned with finding the most recently scrobbled tracks which are accessible via the <a href="http://www.last.fm/api/show?service=278">user.getRecentTracks</a> method.  Below is a code snippet for making the request to load the data from the last.fm API.</p>
+
+<p>[gist id=&#8221;36396&#8221;]</p>
+
+<p>The data returned by this request includes that meta information for the last 5 tracks submitted to the user&#8217;s last.fm profile.  This information includes the artist, album (including cover art links), track name as well as when the track was played.  This information is used to build up the recent track HTML as shown below.</p>
+
+<p><img src="http://www.rapaul.com/wp-content/uploads/2008/12/lastfm-data-visualised.png" alt="lastfm-data-visualised" /></p>
+
+<p><strong>Twitter</strong></p>
+
+<p>The next step is to query twitter for tweets that contain the keyword artist and title combination.  Twitter&#8217;s API can be viewed at <a href="http://apiwiki.twitter.com/Search+API+Documentation">http://apiwiki.twitter.com/Search+API+Documentation</a>.  No registration key is required, simply make a call to their public search API, e.g.  <a href="http://search.twitter.com/search.json?q=MGMT+Kids">http://search.twitter.com/search.json?q=MGMT+Kids</a></p>
+
+<p>[gist id=&#8221;38897&#8221;]</p>
+
+<p>It is now simply a matter of extracting the required data to build the elements to add to the page.</p>
+
+<p><strong>Building the HTML</strong></p>
+
+<p>Dojo provides a handy method for setting attributes on nodes (<a href="http://api.dojotoolkit.org/jsdoc/dojo/1.2/dojo.NodeList.attr">attr</a>), the API was designed for existing nodes, however it can be used by passing in a newly created node. Here we use dojo.query to return a nodelist which gives access to the attr function then returns the first item (the node we just created).</p>
+
+<p>[gist id=&#8221;38917&#8221;]</p>
+
+<p>I&#8217;ve heard from <a href="http://twitter.com/amatix">@amatix</a> that a <a href="http://github.com/madrobby/scriptaculous/wikis/builder">Builder</a> equivalent is slated for a post 1.2 release of Dojo which will hopefully do away with the above build function and make element creation tasks simpler.</p>
+
+<p><strong>Bookmarking Support</strong></p>
+
+<p>To allow users to bookmark and link to their Rockin&#8217; Robin page, the username is stored in the URL hash. This is a two stage process, the first is to append the username to the URL, e.g. <a href="http://robin.rapaul.com/#GexNZ">http://robin.rapaul.com/#GexNZ</a> The below snippet strips off any existing hash and adds &#8216;#username&#8217; to URL.</p>
+
+<p>[gist id=&#8221;38909&#8221;]</p>
+
+<p>The username also needs to be extacted from the URL when the page is first loaded.  The username is then used to populate the username text box and kick off the mashup.</p>
+
+<p>[gist id=&#8221;38912&#8221;]</p>
+
+<p>That wraps up the major technical details of Rockin&#8217; Robin, you can browse the full source on <a href="http://github.com/rapaul/rockinrobin/tree/master">github</a>.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Richard Paul</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-12-22T00:00:00+13:00" pubdate data-updated="true">Dec 22<span>nd</span>, 2008</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.rapaul.com/2008/12/22/the-making-of-rockin-robin/" data-via="rapaul" data-counturl="http://www.rapaul.com/2008/12/22/the-making-of-rockin-robin/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2008/11/19/mocking-in-java-with-mockito/" title="Previous Post: Mocking in Java with Mockito">&laquo; Mocking in Java with Mockito</a>
+      
+      
+        <a class="basic-alignment right" href="/2009/02/02/javascript-ajax-basics-slides/" title="Next Post: Javascript & Ajax Basics (Slides + Console)">Javascript & Ajax Basics (Slides + Console) &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2011/07/10/constructor-injection-unit-tests/">Constructor injection, and how it simplifies unit test setup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/06/05/zero-to-headless-browser-tests-jenkins/">From zero to headless browser tests in Jenkins</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/04/12/specification-by-example-review/">Specification by Example, a review in snippets</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/03/24/cucumber-on-the-jvm-with-groovy/">Cucumber on the JVM with Groovy</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/02/27/vertical-slicing/">Vertical Slicing</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/rapaul">@rapaul</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'rapaul',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("rapaul", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/rapaul" class="twitter-follow-button" data-show-count="false">Follow @rapaul</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Richard Paul -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'rapaul';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.rapaul.com/2008/12/22/the-making-of-rockin-robin/';
+        var disqus_url = 'http://www.rapaul.com/2008/12/22/the-making-of-rockin-robin/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Mocking in Java with Mockito - rapaul.com</title>
+  <title>Checking Wordpress images are present with Groovy - rapaul.com</title>
   <meta name="author" content="Richard Paul">
 
   
-  <meta name="description" content="A ran a session at the Auckland Java User Group on using Mockito.  Slides are embedded below using slideshare: Mocking in Java with Mockito View &hellip;">
+  <meta name="description" content="Below is a little script I knocked up today to ensure all uploaded images referenced in a Wordpress XML export are present on your server. A useful &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/">
+  <link rel="canonical" href="http://www.rapaul.com/2010/10/26/checking-wordpress-images-are-present-with-groovy/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -67,7 +67,7 @@
   
   <header>
     
-      <h1 class="entry-title">Mocking in Java With Mockito</h1>
+      <h1 class="entry-title">Checking Wordpress Images Are Present With Groovy</h1>
     
     
       <p class="meta">
@@ -83,20 +83,33 @@
   
 
 
-<time datetime="2008-11-19T00:00:00+13:00" pubdate data-updated="true">Nov 19<span>th</span>, 2008</time>
+<time datetime="2010-10-26T00:00:00+13:00" pubdate data-updated="true">Oct 26<span>th</span>, 2010</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>A ran a session at the <a href="http://www.meetup.com/auckland-jug/calendar/9081887/">Auckland Java User Group</a> on using <a href="http://mockito.org/">Mockito</a>.  Slides are embedded below using slideshare:</p>
+<div class="entry-content"><p>Below is a little script I knocked up today to ensure all uploaded images referenced in a Wordpress XML export are present on your server.  A useful check when moving to a new Wordpress instance.</p>
 
-<p><a href="http://www.slideshare.net/rapaul/mockito-presentation?type=powerpoint">Mocking in Java with Mockito</a></p>
+<p>[cc lang=&#8221;java&#8221;]
+def imagePattern = ~&#8217;http://www.rapaul.com/wp-content/uploads/.+?/.+?/.+?(jpg|jpeg|png|gif)&#8217;
+new File(&#8216;./wordpress-export.xml&#8217;).text.findAll(imagePattern).each { address ->
+   try {</p>
 
-<p>View SlideShare <a href="http://www.slideshare.net/rapaul/mockito-presentation?type=powerpoint">presentation</a> or <a href="http://www.slideshare.net/upload?type=powerpoint">Upload</a> your own.</p>
+<pre><code>   new URL(address).openStream().close()
+</code></pre>
 
-<p>As promised I&#8217;ve attached my <a href="http://www.rapaul.com/wp-content/uploads/2008/11/mockito.pdf">slides</a> and also included the example source files in a <a href="http://www.rapaul.com/wp-content/uploads/2008/11/mockito-example-code.zip">zip</a>.  To run the unit tests you will need <a href="http://sourceforge.net/project/showfiles.php?group_id=15278&amp;package_id=12472">JUnit 4.5</a> and <a href="http://mockito.googlecode.com/files/mockito-all-1.6.jar">Mockito 1.6</a>.</p>
+<p>   } catch (FileNotFoundException e) {</p>
+
+<pre><code>   println "Could not find $address"
+</code></pre>
+
+<p>   }
+}
+[/cc]</p>
+
+<p>I&#8217;m sure a bash guru could hack together something similar but Groovy really does make it simple.</p>
 </div>
 
 
@@ -119,7 +132,7 @@
   
 
 
-<time datetime="2008-11-19T00:00:00+13:00" pubdate data-updated="true">Nov 19<span>th</span>, 2008</time>
+<time datetime="2010-10-26T00:00:00+13:00" pubdate data-updated="true">Oct 26<span>th</span>, 2010</time>
       
 
 
@@ -127,7 +140,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/" data-via="rapaul" data-counturl="http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.rapaul.com/2010/10/26/checking-wordpress-images-are-present-with-groovy/" data-via="rapaul" data-counturl="http://www.rapaul.com/2010/10/26/checking-wordpress-images-are-present-with-groovy/" >Tweet</a>
   
   
   
@@ -136,10 +149,10 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/2008/11/11/rockin-robin/" title="Previous Post: Rockin' Robin">&laquo; Rockin' Robin</a>
+        <a class="basic-alignment left" href="/2010/07/18/avoiding-brittle-element-selection-with-selenium2/" title="Previous Post: Avoiding Brittle Element Selection with Selenium2">&laquo; Avoiding Brittle Element Selection with Selenium2</a>
       
       
-        <a class="basic-alignment right" href="/2008/12/22/the-making-of-rockin-robin/" title="Next Post: The making of Rockin' Robin">The making of Rockin' Robin &raquo;</a>
+        <a class="basic-alignment right" href="/2010/11/26/failing-early-in-bash/" title="Next Post: Failing early in bash">Failing early in bash &raquo;</a>
       
     </p>
   </footer>
@@ -251,8 +264,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/';
-        var disqus_url = 'http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/';
+        var disqus_identifier = 'http://www.rapaul.com/2010/10/26/checking-wordpress-images-are-present-with-groovy/';
+        var disqus_url = 'http://www.rapaul.com/2010/10/26/checking-wordpress-images-are-present-with-groovy/';
         var disqus_script = 'embed.js';
       
     (function () {

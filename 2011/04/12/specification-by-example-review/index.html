@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Mocking in Java with Mockito - rapaul.com</title>
+  <title>Specification by Example, a review in snippets - rapaul.com</title>
   <meta name="author" content="Richard Paul">
 
   
-  <meta name="description" content="A ran a session at the Auckland Java User Group on using Mockito.  Slides are embedded below using slideshare: Mocking in Java with Mockito View &hellip;">
+  <meta name="description" content="I&#8217;ve just finished reading Specification by Example, a new book (currently in MEAP) by Gojko Adzic. Highly recommend to anyone involved in &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/">
+  <link rel="canonical" href="http://www.rapaul.com/2011/04/12/specification-by-example-review/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -67,7 +67,7 @@
   
   <header>
     
-      <h1 class="entry-title">Mocking in Java With Mockito</h1>
+      <h1 class="entry-title">Specification by Example, a Review in Snippets</h1>
     
     
       <p class="meta">
@@ -83,20 +83,34 @@
   
 
 
-<time datetime="2008-11-19T00:00:00+13:00" pubdate data-updated="true">Nov 19<span>th</span>, 2008</time>
+<time datetime="2011-04-12T00:00:00+12:00" pubdate data-updated="true">Apr 12<span>th</span>, 2011</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>A ran a session at the <a href="http://www.meetup.com/auckland-jug/calendar/9081887/">Auckland Java User Group</a> on using <a href="http://mockito.org/">Mockito</a>.  Slides are embedded below using slideshare:</p>
+<div class="entry-content"><p>I&#8217;ve just finished reading <a href="http://specificationbyexample.com/">Specification by Example</a>, a new book (currently in MEAP) by <a href="http://gojko.net/">Gojko Adzic</a>. Highly recommend to anyone involved in software creation (developers, testers, product owners, product managers, &#8230;). The book includes great insights into building the &#8216;right thing&#8217; and the &#8216;thing right&#8217;, drawing on experiences from many successful software projects and teams. These projects each have dedicated chapters providing real insight into how these teams work and the steps they took to get there.</p>
 
-<p><a href="http://www.slideshare.net/rapaul/mockito-presentation?type=powerpoint">Mocking in Java with Mockito</a></p>
+<p>But you don&#8217;t have to trust my vague recommendations, I&#8217;ve included a few key examples from the book below:</p>
 
-<p>View SlideShare <a href="http://www.slideshare.net/rapaul/mockito-presentation?type=powerpoint">presentation</a> or <a href="http://www.slideshare.net/upload?type=powerpoint">Upload</a> your own.</p>
+<blockquote><p>Like cheap wine, long paper documentation ages rapidly and leaves you with a bad headache if you try to use it a year after it was created.</p>
 
-<p>As promised I&#8217;ve attached my <a href="http://www.rapaul.com/wp-content/uploads/2008/11/mockito.pdf">slides</a> and also included the example source files in a <a href="http://www.rapaul.com/wp-content/uploads/2008/11/mockito-example-code.zip">zip</a>.  To run the unit tests you will need <a href="http://sourceforge.net/project/showfiles.php?group_id=15278&amp;package_id=12472">JUnit 4.5</a> and <a href="http://mockito.googlecode.com/files/mockito-all-1.6.jar">Mockito 1.6</a>.</p>
+<p>Working from the outputs ensures that there is always something that the business users can provide feedback on.</p>
+
+<p>Understanding why something is needed, and who needs it, is crucial to evaluating a suggested solution.</p>
+
+<p>Solve technical difficulties in the automation layer. Do not try to solve them in the test specifications.</p>
+
+<p>We automate specifications to get fast feedback, but our primary goal should create executable specifications that are easily accessible and human-readable&#8230;</p>
+
+<p>When each team worked to deliver a whole feature end to end, it was much easier for business users to collaborate with the team to specify the conditions of satisfaction and engage in illustrating them with examples.</p>
+
+<p>The biggest benefit from this is getting us to talk together so that we have a mutual understanding of the requirements. That’s more important than test automation.</p>
+
+<p>Long term value comes from living documentation</p></blockquote>
+
+<p>The <a href="http://manning.com/adzic/adzic_meapch1.pdf">first chapter</a> is free to get you started.</p>
 </div>
 
 
@@ -119,7 +133,7 @@
   
 
 
-<time datetime="2008-11-19T00:00:00+13:00" pubdate data-updated="true">Nov 19<span>th</span>, 2008</time>
+<time datetime="2011-04-12T00:00:00+12:00" pubdate data-updated="true">Apr 12<span>th</span>, 2011</time>
       
 
 
@@ -127,7 +141,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/" data-via="rapaul" data-counturl="http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.rapaul.com/2011/04/12/specification-by-example-review/" data-via="rapaul" data-counturl="http://www.rapaul.com/2011/04/12/specification-by-example-review/" >Tweet</a>
   
   
   
@@ -136,10 +150,10 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/2008/11/11/rockin-robin/" title="Previous Post: Rockin' Robin">&laquo; Rockin' Robin</a>
+        <a class="basic-alignment left" href="/2011/03/24/cucumber-on-the-jvm-with-groovy/" title="Previous Post: Cucumber on the JVM with Groovy">&laquo; Cucumber on the JVM with Groovy</a>
       
       
-        <a class="basic-alignment right" href="/2008/12/22/the-making-of-rockin-robin/" title="Next Post: The making of Rockin' Robin">The making of Rockin' Robin &raquo;</a>
+        <a class="basic-alignment right" href="/2011/06/05/zero-to-headless-browser-tests-jenkins/" title="Next Post: From zero to headless browser tests in Jenkins">From zero to headless browser tests in Jenkins &raquo;</a>
       
     </p>
   </footer>
@@ -251,8 +265,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/';
-        var disqus_url = 'http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/';
+        var disqus_identifier = 'http://www.rapaul.com/2011/04/12/specification-by-example-review/';
+        var disqus_url = 'http://www.rapaul.com/2011/04/12/specification-by-example-review/';
         var disqus_script = 'embed.js';
       
     (function () {
