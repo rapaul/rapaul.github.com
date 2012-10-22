@@ -1,137 +1,133 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://rapaul.github.com/2008/10/28/setting-up-rapaulcom/</loc>
+        <loc>http://rapaul.com/2008/10/28/setting-up-rapaulcom/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2008/11/12/rockin-robin/</loc>
+        <loc>http://rapaul.com/2008/11/12/rockin-robin/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2008/11/20/mocking-in-java-with-mockito/</loc>
+        <loc>http://rapaul.com/2008/11/20/mocking-in-java-with-mockito/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2008/12/23/the-making-of-rockin-robin/</loc>
+        <loc>http://rapaul.com/2008/12/23/the-making-of-rockin-robin/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2009/02/03/javascript-ajax-basics-slides/</loc>
+        <loc>http://rapaul.com/2009/02/03/javascript-ajax-basics-slides/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2009/02/16/using-dojo/</loc>
+        <loc>http://rapaul.com/2009/02/16/using-dojo/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2009/03/03/unit-testing-fundamentals/</loc>
+        <loc>http://rapaul.com/2009/03/03/unit-testing-fundamentals/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2009/03/30/springs-dependency-injection-mvc/</loc>
+        <loc>http://rapaul.com/2009/03/30/springs-dependency-injection-mvc/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2009/06/12/review-spring-web-flow-2/</loc>
+        <loc>http://rapaul.com/2009/06/12/review-spring-web-flow-2/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2009/08/09/bddmockito-eclipse/</loc>
+        <loc>http://rapaul.com/2009/08/09/bddmockito-eclipse/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2009/09/02/meetups-in-london/</loc>
+        <loc>http://rapaul.com/2009/09/02/meetups-in-london/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2009/09/14/a-behavioural-world/</loc>
+        <loc>http://rapaul.com/2009/09/14/a-behavioural-world/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2009/09/16/jquery-behaviours/</loc>
+        <loc>http://rapaul.com/2009/09/16/jquery-behaviours/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2010/01/14/my-git-svn-workflow/</loc>
+        <loc>http://rapaul.com/2010/01/14/my-git-svn-workflow/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2010/02/15/request-mapping-ordering/</loc>
+        <loc>http://rapaul.com/2010/02/15/request-mapping-ordering/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2010/03/17/cucumber-session-fixation/</loc>
+        <loc>http://rapaul.com/2010/03/17/cucumber-session-fixation/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2010/05/04/cucumber-world-with-groovy/</loc>
-        <lastmod>2012-10-22T12:52:24+13:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://rapaul.github.com/2010/06/11/avoiding-brittle-tests-with-mockitos-argument-captor/
-        </loc>
-        <lastmod>2012-10-22T12:52:24+13:00</lastmod>
-    </url>
-    <url>
-        <loc>http://rapaul.github.com/2010/06/22/gherkin-highlighting-for-vim/</loc>
-        <lastmod>2012-10-22T12:52:24+13:00</lastmod>
-    </url>
-    <url>
-        <loc>http://rapaul.github.com/2010/06/27/agile-acceptance-testing-slides/</loc>
+        <loc>http://rapaul.com/2010/05/04/cucumber-world-with-groovy/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
         <loc>
-            http://rapaul.github.com/2010/07/19/avoiding-brittle-element-selection-with-selenium2/
+            http://rapaul.com/2010/06/11/avoiding-brittle-tests-with-mockitos-argument-captor/
         </loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://rapaul.github.com/2010/10/27/checking-wordpress-images-are-present-with-groovy/
-        </loc>
+        <loc>http://rapaul.com/2010/06/22/gherkin-highlighting-for-vim/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2010/11/26/failing-early-in-bash/</loc>
+        <loc>http://rapaul.com/2010/06/27/agile-acceptance-testing-slides/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2010/12/18/cucumber-maven-teamcity/</loc>
+        <loc>http://rapaul.com/2010/07/19/avoiding-brittle-element-selection-with-selenium2/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2011/01/27/agile-acceptance-testing-with-geb/</loc>
+        <loc>http://rapaul.com/2010/10/27/checking-wordpress-images-are-present-with-groovy/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2011/02/28/vertical-slicing/</loc>
+        <loc>http://rapaul.com/2010/11/26/failing-early-in-bash/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2011/03/25/cucumber-on-the-jvm-with-groovy/</loc>
+        <loc>http://rapaul.com/2010/12/18/cucumber-maven-teamcity/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2011/04/13/specification-by-example-review/</loc>
+        <loc>http://rapaul.com/2011/01/27/agile-acceptance-testing-with-geb/</loc>
         <lastmod>2012-10-22T12:52:24+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2011/06/06/zero-to-headless-browser-tests-jenkins/</loc>
+        <loc>http://rapaul.com/2011/02/28/vertical-slicing/</loc>
+        <lastmod>2012-10-22T12:52:24+13:00</lastmod>
+    </url>
+    <url>
+        <loc>http://rapaul.com/2011/03/25/cucumber-on-the-jvm-with-groovy/</loc>
+        <lastmod>2012-10-22T12:52:24+13:00</lastmod>
+    </url>
+    <url>
+        <loc>http://rapaul.com/2011/04/13/specification-by-example-review/</loc>
+        <lastmod>2012-10-22T12:52:24+13:00</lastmod>
+    </url>
+    <url>
+        <loc>http://rapaul.com/2011/06/06/zero-to-headless-browser-tests-jenkins/</loc>
         <lastmod>2012-10-22T16:10:20+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/2011/07/11/constructor-injection-unit-tests/</loc>
+        <loc>http://rapaul.com/2011/07/11/constructor-injection-unit-tests/</loc>
         <lastmod>2012-10-22T13:30:38+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/</loc>
+        <loc>http://rapaul.com/</loc>
         <lastmod>2012-10-22T16:10:20+13:00</lastmod>
     </url>
     <url>
-        <loc>http://rapaul.github.com/blog/archives/</loc>
+        <loc>http://rapaul.com/blog/archives/</loc>
         <lastmod>2012-10-22T16:10:20+13:00</lastmod>
     </url>
 </urlset>
