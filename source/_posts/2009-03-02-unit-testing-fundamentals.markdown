@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2009-03-02 21:00:38
+date: 2009-03-02
 layout: post
 slug: unit-testing-fundamentals
 title: Unit Testing Fundamentals
-wordpress_id: 182
 tag:
 - coverage
 - dependency injection

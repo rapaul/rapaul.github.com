@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2009-03-29 14:20:57
+date: 2009-03-29
 layout: post
 slug: springs-dependency-injection-mvc
 title: Spring's Dependency Injection & MVC
-wordpress_id: 198
 tag:
 - annotation
 - controllers

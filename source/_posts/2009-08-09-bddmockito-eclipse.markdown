@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2009-08-09 09:32:49
+date: 2009-08-09
 layout: post
 slug: bddmockito-eclipse
 title: BDDMockito & Eclipse
-wordpress_id: 299
 tag:
 - Add new tag
 - bdd

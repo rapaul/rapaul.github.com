@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2010-03-16 21:13:29
+date: 2010-03-16
 layout: post
 slug: cucumber-session-fixation
 title: A Cucumber Scenario for Session Fixation Attacks
-wordpress_id: 470
 tag:
 - bdd
 - cucumber

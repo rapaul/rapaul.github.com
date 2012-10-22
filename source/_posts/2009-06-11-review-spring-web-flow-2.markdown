@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2009-06-11 21:19:39
+date: 2009-06-11
 layout: post
 slug: review-spring-web-flow-2
 title: 'Review: Spring Web Flow 2 Web Development'
-wordpress_id: 231
 tag:
 - java
 - jsf

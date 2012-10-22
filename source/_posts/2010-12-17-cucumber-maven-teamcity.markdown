@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2010-12-17 11:07:58
+date: 2010-12-17
 layout: post
 slug: cucumber-maven-teamcity
 title: Cucumber, Maven & TeamCity
-wordpress_id: 674
 tag:
 - bdd
 - ci

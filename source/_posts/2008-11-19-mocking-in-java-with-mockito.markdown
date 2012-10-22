@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2008-11-19 21:08:32
+date: 2008-11-19
 layout: post
 slug: mocking-in-java-with-mockito
 title: Mocking in Java with Mockito
-wordpress_id: 42
 tag:
 - java
 - mocking

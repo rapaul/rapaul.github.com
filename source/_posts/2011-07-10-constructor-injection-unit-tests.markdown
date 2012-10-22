@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2011-07-10 16:36:57
+date: 2011-07-10
 layout: post
 slug: constructor-injection-unit-tests
 title: Constructor injection, and how it simplifies unit test setup
-wordpress_id: 827
 tag:
 - collaborators
 - constructor

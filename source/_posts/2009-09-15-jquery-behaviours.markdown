@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2009-09-15 20:55:02
+date: 2009-09-15
 layout: post
 slug: jquery-behaviours
 title: jQuery Behaviours
-wordpress_id: 402
 tag:
 - behaviors
 - behaviours

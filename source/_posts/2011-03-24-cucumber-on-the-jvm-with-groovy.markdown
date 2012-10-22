@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2011-03-24 19:00:32
+date: 2011-03-24
 layout: post
 slug: cucumber-on-the-jvm-with-groovy
 title: Cucumber on the JVM with Groovy
-wordpress_id: 749
 tag:
 - bdd
 - cucumber

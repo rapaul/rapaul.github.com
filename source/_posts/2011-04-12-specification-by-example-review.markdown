@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2011-04-12 22:10:23
+date: 2011-04-12
 layout: post
 slug: specification-by-example-review
 title: Specification by Example, a review in snippets
-wordpress_id: 754
 tag:
 - bdd
 - living documentation

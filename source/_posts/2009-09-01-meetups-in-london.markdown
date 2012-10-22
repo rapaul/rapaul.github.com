@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2009-09-01 23:04:50
+date: 2009-09-01
 layout: post
 slug: meetups-in-london
 title: Meetups in London
-wordpress_id: 357
 tag:
 - calendar
 - java

@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2010-07-18 22:31:20
+date: 2010-07-18
 layout: post
 slug: avoiding-brittle-element-selection-with-selenium2
 title: Avoiding Brittle Element Selection with Selenium2
-wordpress_id: 608
 tag:
 - css
 - selenium

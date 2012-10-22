@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2009-02-15 21:44:00
+date: 2009-02-15
 layout: post
 slug: using-dojo
 title: Using Dojo
-wordpress_id: 128
 tag:
 - dojo
 - javascript

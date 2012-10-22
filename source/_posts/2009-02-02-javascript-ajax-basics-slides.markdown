@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2009-02-02 21:34:44
+date: 2009-02-02
 layout: post
 slug: javascript-ajax-basics-slides
 title: Javascript & Ajax Basics (Slides + Console)
-wordpress_id: 105
 tag:
 - ajax
 - basics

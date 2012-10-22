@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2010-10-26 19:16:15
+date: 2010-10-26
 layout: post
 slug: checking-wordpress-images-are-present-with-groovy
 title: Checking Wordpress images are present with Groovy
-wordpress_id: 653
 tag:
 - groovy
 - wordpress

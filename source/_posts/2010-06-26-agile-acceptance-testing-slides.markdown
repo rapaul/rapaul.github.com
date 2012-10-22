@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2010-06-26 13:59:50
+date: 2010-06-26
 layout: post
 slug: agile-acceptance-testing-slides
 title: Agile Acceptance Testing Slides
-wordpress_id: 601
 tag:
 - acceptance testing
 - agile

@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2010-02-14 17:30:16
+date: 2010-02-14
 layout: post
 slug: request-mapping-ordering
 title: Avoiding ambiguities when using @RequestMapping
-wordpress_id: 437
 tag:
 - annotation
 - java

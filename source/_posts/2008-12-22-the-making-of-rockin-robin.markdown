@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2008-12-22 22:30:34
+date: 2008-12-22
 layout: post
 slug: the-making-of-rockin-robin
 title: The making of Rockin' Robin
-wordpress_id: 27
 tag:
 - dojo
 - dojotoolkit

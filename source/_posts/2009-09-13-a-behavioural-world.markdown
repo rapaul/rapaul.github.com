@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2009-09-13 17:16:49
+date: 2009-09-13
 layout: post
 slug: a-behavioural-world
 title: A Behavioural World
-wordpress_id: 370
 tag:
 - bdd
 - features

@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2010-05-03 15:37:43
+date: 2010-05-03
 layout: post
 slug: cucumber-world-with-groovy
 title: Cucumber World with Groovy
-wordpress_id: 518
 tag:
 - bdd
 - cucumber

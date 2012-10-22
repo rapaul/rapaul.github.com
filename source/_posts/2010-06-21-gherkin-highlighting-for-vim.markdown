@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2010-06-21 20:28:34
+date: 2010-06-21
 layout: post
 slug: gherkin-highlighting-for-vim
 title: Gherkin Highlighting for VIM
-wordpress_id: 587
 tag:
 - bdd
 - cucumber

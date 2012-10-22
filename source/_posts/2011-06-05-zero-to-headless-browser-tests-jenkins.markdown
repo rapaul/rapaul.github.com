@@ -1,6 +1,6 @@
 ---
 comments: true
-date: 2011-06-05 23:34:09
+date: 2011-06-05
 layout: post
 slug: zero-to-headless-browser-tests-jenkins
 title: From zero to headless browser tests in Jenkins

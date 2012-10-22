@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2010-11-26 10:33:58
+date: 2010-11-26
 layout: post
 slug: failing-early-in-bash
 title: Failing early in bash
-wordpress_id: 662
 tag:
 - bash
 - deployment

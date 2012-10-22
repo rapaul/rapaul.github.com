@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2008-10-27 20:55:26
+date: 2008-10-27
 layout: post
 slug: setting-up-rapaulcom
 title: Setting up RAPaul.com
-wordpress_id: 10
 tag:
 - a small orange
 - aso

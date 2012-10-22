@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2010-01-13 22:28:03
+date: 2010-01-13
 layout: post
 slug: my-git-svn-workflow
 title: My git svn workflow
-wordpress_id: 417
 tag:
 - eclipse
 - git

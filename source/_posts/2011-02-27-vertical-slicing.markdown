@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2011-02-27 20:12:17
+date: 2011-02-27
 layout: post
 slug: vertical-slicing
 title: Vertical Slicing
-wordpress_id: 733
 tag:
 - bdd
 - cucumber

@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2008-11-11 21:59:20
+date: 2008-11-11
 layout: post
 slug: rockin-robin
 title: Rockin' Robin
-wordpress_id: 23
 tag:
 - last.fm
 - mashup

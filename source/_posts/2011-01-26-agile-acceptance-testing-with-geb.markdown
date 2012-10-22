@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2011-01-26 22:22:53
+date: 2011-01-26
 layout: post
 slug: agile-acceptance-testing-with-geb
 title: Acceptance Testing with Geb
-wordpress_id: 716
 tag:
 - bdd
 - cucumber
