@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Spring's Dependency Injection & MVC - rapaul.com</title>
+  <title>Avoiding ambiguities when using @RequestMapping - rapaul.com</title>
   <meta name="author" content="Richard Paul">
 
   
-  <meta name="description" content="Below are slides from a presentation I gave to colleagues at Kiwiplan. The presentation covered two Spring Framework topics, the first being a brief &hellip;">
+  <meta name="description" content="I&#8217;ve recently been using the param attribute of the @RequestMapping annotation from Spring MVC. Take the case of a search feature for a website &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.rapaul.com/2009/03/30/springs-dependency-injection-mvc/">
+  <link rel="canonical" href="http://www.rapaul.com/2010/02/14/request-mapping-ordering/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -67,7 +67,7 @@
   
   <header>
     
-      <h1 class="entry-title">Spring's Dependency Injection & MVC</h1>
+      <h1 class="entry-title">Avoiding Ambiguities When Using @RequestMapping</h1>
     
     
       <p class="meta">
@@ -83,22 +83,45 @@
   
 
 
-<time datetime="2009-03-30T03:20:57+13:00" pubdate data-updated="true">Mar 30<span>th</span>, 2009</time>
+<time datetime="2010-02-14T00:00:00+13:00" pubdate data-updated="true">Feb 14<span>th</span>, 2010</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Below are slides from a presentation I gave to colleagues at Kiwiplan. The presentation covered two <a href="http://www.springsource.org/">Spring Framework</a> topics, the first being a brief introduction to Spring&#8217;s Dependency Injection Container.  The second presentation was an introduction to Spring&#8217;s MVC (web) component, with a focus on the annotation style introduced in Spring 2.5.  PDF versions are available for both <a href="http://www.rapaul.com/wp-content/uploads/2009/03/spring_dependency_injection.pdf">Dependency Injection</a> and <a href="http://www.rapaul.com/wp-content/uploads/2009/03/spring_mvc.pdf">MVC</a>.</p>
+<div class="entry-content"><p>I&#8217;ve recently been using the param attribute of the <a href="http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/web/bind/annotation/RequestMapping.html">@RequestMapping</a> annotation from Spring MVC.</p>
 
-<p><a href="http://www.slideshare.net/rapaul/introduction-to-springs-dependency-injection?type=presentation">Introduction to Spring&#8217;s Dependency Injection</a></p>
+<p>Take the case of a search feature for a website.  If a &#8216;refine&#8217; parameter is present, the user should be shown a search form to refine their criteria. However if the refine parameter is not present the user is shown the search results for the query.
+[cc lang=&#8221;java&#8221;]
+@RequestMapping(value=&#8221;/search&#8221;, method=RequestMethod.GET)
+public class SearchController {</p>
 
-<p>View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/rapaul">Richard Paul</a>.</p>
+<p>  // Handles search?query=dog&refine;=true
+  @RequestMapping(params=&#8221;refine=true&#8221;)
+  public void refine() { &#8230; }</p>
 
-<p><a href="http://www.slideshare.net/rapaul/introduction-to-spring-mvc?type=presentation">Introduction to Spring MVC</a></p>
+<p>  // Handles search?query=dog
+  @RequestMapping
+  public void search() { &#8230; }</p>
 
-<p>View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/rapaul">Richard Paul</a>.</p>
+<p>}
+[/cc]</p>
+
+<p>While this code will initially work, there is some ambiguity in the way the URLs are matched.  The order in which the @RequestMapping mappings are defined in the class file is actually determining which method will be called.  If we were to define the search() method first, then a request to search?query=dog&refine;=true would satisfy the conditions for the search() method&#8217;s @RequestMapping and thus the params=&#8221;refine=true&#8221; on the refine() method has no bearing on the outcome of the request.</p>
+
+<p>To safeguard the controller against the potential reordering of methods in a class (which in usual Java programming has no affect on the outcome of running code), we need to ensure the parameter mapping is explicit.</p>
+
+<p>[cc lang=&#8221;java&#8221;]
+// Match if &#8216;refine&#8217; parameter is present
+@RequestMapping(params=&#8221;refine=true&#8221;)
+public void refine() { &#8230; }
+// Match if &#8216;refine&#8217; parameter is not present
+@RequestMapping(params=&#8221;!refine=true&#8221;)
+public void search() { &#8230; }
+[/cc]</p>
+
+<p>By explicitly checking the refine parameter is not present for the search method&#8217;s request mapping (!refine=true), the declaration order of our @RequestMapping annotations in the class file has no bearing on which method handles the request thus making our code robust to the reordering methods.  Similar precautions should be taken with the other attributes of @RequestMapping including method and headers.</p>
 </div>
 
 
@@ -121,7 +144,7 @@
   
 
 
-<time datetime="2009-03-30T03:20:57+13:00" pubdate data-updated="true">Mar 30<span>th</span>, 2009</time>
+<time datetime="2010-02-14T00:00:00+13:00" pubdate data-updated="true">Feb 14<span>th</span>, 2010</time>
       
 
 
@@ -129,7 +152,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.rapaul.com/2009/03/30/springs-dependency-injection-mvc/" data-via="rapaul" data-counturl="http://www.rapaul.com/2009/03/30/springs-dependency-injection-mvc/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.rapaul.com/2010/02/14/request-mapping-ordering/" data-via="rapaul" data-counturl="http://www.rapaul.com/2010/02/14/request-mapping-ordering/" >Tweet</a>
   
   
   
@@ -138,10 +161,10 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/2009/03/03/unit-testing-fundamentals/" title="Previous Post: Unit Testing Fundamentals">&laquo; Unit Testing Fundamentals</a>
+        <a class="basic-alignment left" href="/2010/01/13/my-git-svn-workflow/" title="Previous Post: My git svn workflow">&laquo; My git svn workflow</a>
       
       
-        <a class="basic-alignment right" href="/2009/06/12/review-spring-web-flow-2/" title="Next Post: Review: Spring Web Flow 2 Web Development">Review: Spring Web Flow 2 Web Development &raquo;</a>
+        <a class="basic-alignment right" href="/2010/03/17/cucumber-session-fixation/" title="Next Post: A Cucumber Scenario for Session Fixation Attacks">A Cucumber Scenario for Session Fixation Attacks &raquo;</a>
       
     </p>
   </footer>
@@ -166,7 +189,7 @@
       </li>
     
       <li class="post">
-        <a href="/2011/06/06/zero-to-headless-browser-tests-jenkins/">From zero to headless browser tests in Jenkins</a>
+        <a href="/2011/06/05/zero-to-headless-browser-tests-jenkins/">From zero to headless browser tests in Jenkins</a>
       </li>
     
       <li class="post">
@@ -253,8 +276,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.rapaul.com/2009/03/30/springs-dependency-injection-mvc/';
-        var disqus_url = 'http://www.rapaul.com/2009/03/30/springs-dependency-injection-mvc/';
+        var disqus_identifier = 'http://www.rapaul.com/2010/02/14/request-mapping-ordering/';
+        var disqus_url = 'http://www.rapaul.com/2010/02/14/request-mapping-ordering/';
         var disqus_script = 'embed.js';
       
     (function () {

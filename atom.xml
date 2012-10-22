@@ -4,7 +4,7 @@
   <title><![CDATA[rapaul.com]]></title>
   <link href="http://www.rapaul.com/atom.xml" rel="self"/>
   <link href="http://www.rapaul.com/"/>
-  <updated>2012-10-22T16:42:20+13:00</updated>
+  <updated>2012-10-22T16:48:49+13:00</updated>
   <id>http://www.rapaul.com/</id>
   <author>
     <name><![CDATA[Richard Paul]]></name>
@@ -95,9 +95,9 @@
   
   <entry>
     <title type="html"><![CDATA[From zero to headless browser tests in Jenkins]]></title>
-    <link href="http://www.rapaul.com/2011/06/06/zero-to-headless-browser-tests-jenkins/"/>
-    <updated>2011-06-06T11:34:09+12:00</updated>
-    <id>http://www.rapaul.com/2011/06/06/zero-to-headless-browser-tests-jenkins</id>
+    <link href="http://www.rapaul.com/2011/06/05/zero-to-headless-browser-tests-jenkins/"/>
+    <updated>2011-06-05T00:00:00+12:00</updated>
+    <id>http://www.rapaul.com/2011/06/05/zero-to-headless-browser-tests-jenkins</id>
     <content type="html"><![CDATA[<p>After spending a large portion of the day I can proudly say I have a working set of browser based tests that run on a headless Jenkins install. By headless I mean a server without any physical display installed, as is typical for server machines. This facilitates the execution of high level acceptance tests in much the same fashion as lower level unit and integration based tests, albeit at a slower rate.</p>
 
 <p><img class="right" src="http://www.rapaul.com/images/jenkins-headless.png" width="300" height="230"></p>
@@ -390,9 +390,9 @@ You will notice that the script sources the .rvmrc file directly for the project
   
   <entry>
     <title type="html"><![CDATA[Cucumber, Maven & TeamCity]]></title>
-    <link href="http://www.rapaul.com/2010/12/18/cucumber-maven-teamcity/"/>
-    <updated>2010-12-18T00:07:58+13:00</updated>
-    <id>http://www.rapaul.com/2010/12/18/cucumber-maven-teamcity</id>
+    <link href="http://www.rapaul.com/2010/12/17/cucumber-maven-teamcity/"/>
+    <updated>2010-12-17T00:00:00+13:00</updated>
+    <id>http://www.rapaul.com/2010/12/17/cucumber-maven-teamcity</id>
     <content type="html"><![CDATA[<p>Having a suite of acceptances tests is all well and good, but if they don&#8217;t run regularly they tend to rot.  Much like unit tests they should be part of your continuous integration configuration.  We use TeamCity, so it was a logical choice for running our Cucumber scenarios.</p>
 
 <p><strong>Running Cucumber with Maven</strong>
@@ -777,9 +777,9 @@ void shouldSendRegistrationEmailWelcomingUser() {
   
   <entry>
     <title type="html"><![CDATA[Cucumber World with Groovy]]></title>
-    <link href="http://www.rapaul.com/2010/05/04/cucumber-world-with-groovy/"/>
-    <updated>2010-05-04T03:37:43+12:00</updated>
-    <id>http://www.rapaul.com/2010/05/04/cucumber-world-with-groovy</id>
+    <link href="http://www.rapaul.com/2010/05/03/cucumber-world-with-groovy/"/>
+    <updated>2010-05-03T00:00:00+12:00</updated>
+    <id>http://www.rapaul.com/2010/05/03/cucumber-world-with-groovy</id>
     <content type="html"><![CDATA[<p><a href="http://cukes.info/">Cucumber</a> provides the ability to create a <em>world</em> in which you can expose useful methods for the testing environment.  This post briefly details how to expose these methods when using Groovy with <a href="http://wiki.github.com/aslakhellesoy/cuke4duke/">Cuke4Duke</a>.</p>
 
 <p>`
@@ -909,9 +909,9 @@ import static org.hamcrest.CoreMatchers.*</p>
   
   <entry>
     <title type="html"><![CDATA[Avoiding ambiguities when using @RequestMapping]]></title>
-    <link href="http://www.rapaul.com/2010/02/15/request-mapping-ordering/"/>
-    <updated>2010-02-15T06:30:16+13:00</updated>
-    <id>http://www.rapaul.com/2010/02/15/request-mapping-ordering</id>
+    <link href="http://www.rapaul.com/2010/02/14/request-mapping-ordering/"/>
+    <updated>2010-02-14T00:00:00+13:00</updated>
+    <id>http://www.rapaul.com/2010/02/14/request-mapping-ordering</id>
     <content type="html"><![CDATA[<p>I&#8217;ve recently been using the param attribute of the <a href="http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/web/bind/annotation/RequestMapping.html">@RequestMapping</a> annotation from Spring MVC.</p>
 
 <p>Take the case of a search feature for a website.  If a &#8216;refine&#8217; parameter is present, the user should be shown a search form to refine their criteria. However if the refine parameter is not present the user is shown the search results for the query.
@@ -949,9 +949,9 @@ public void search() { &#8230; }
   
   <entry>
     <title type="html"><![CDATA[My git svn workflow]]></title>
-    <link href="http://www.rapaul.com/2010/01/14/my-git-svn-workflow/"/>
-    <updated>2010-01-14T11:28:03+13:00</updated>
-    <id>http://www.rapaul.com/2010/01/14/my-git-svn-workflow</id>
+    <link href="http://www.rapaul.com/2010/01/13/my-git-svn-workflow/"/>
+    <updated>2010-01-13T00:00:00+13:00</updated>
+    <id>http://www.rapaul.com/2010/01/13/my-git-svn-workflow</id>
     <content type="html"><![CDATA[<p>Below are the steps I use when working with Git &amp; SVN. Please note, I am in no way a Git or SVN expert, but these are the steps that seem to work for me.</p>
 
 <p><strong>1) Checkout codebase</strong>

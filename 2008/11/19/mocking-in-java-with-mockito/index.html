@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Avoiding ambiguities when using @RequestMapping - rapaul.com</title>
+  <title>Mocking in Java with Mockito - rapaul.com</title>
   <meta name="author" content="Richard Paul">
 
   
-  <meta name="description" content="I&#8217;ve recently been using the param attribute of the @RequestMapping annotation from Spring MVC. Take the case of a search feature for a website &hellip;">
+  <meta name="description" content="A ran a session at the Auckland Java User Group on using Mockito.  Slides are embedded below using slideshare: Mocking in Java with Mockito View &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.rapaul.com/2010/02/15/request-mapping-ordering/">
+  <link rel="canonical" href="http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -67,7 +67,7 @@
   
   <header>
     
-      <h1 class="entry-title">Avoiding Ambiguities When Using @RequestMapping</h1>
+      <h1 class="entry-title">Mocking in Java With Mockito</h1>
     
     
       <p class="meta">
@@ -83,45 +83,20 @@
   
 
 
-<time datetime="2010-02-15T06:30:16+13:00" pubdate data-updated="true">Feb 15<span>th</span>, 2010</time>
+<time datetime="2008-11-19T00:00:00+13:00" pubdate data-updated="true">Nov 19<span>th</span>, 2008</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>I&#8217;ve recently been using the param attribute of the <a href="http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/web/bind/annotation/RequestMapping.html">@RequestMapping</a> annotation from Spring MVC.</p>
+<div class="entry-content"><p>A ran a session at the <a href="http://www.meetup.com/auckland-jug/calendar/9081887/">Auckland Java User Group</a> on using <a href="http://mockito.org/">Mockito</a>.  Slides are embedded below using slideshare:</p>
 
-<p>Take the case of a search feature for a website.  If a &#8216;refine&#8217; parameter is present, the user should be shown a search form to refine their criteria. However if the refine parameter is not present the user is shown the search results for the query.
-[cc lang=&#8221;java&#8221;]
-@RequestMapping(value=&#8221;/search&#8221;, method=RequestMethod.GET)
-public class SearchController {</p>
+<p><a href="http://www.slideshare.net/rapaul/mockito-presentation?type=powerpoint">Mocking in Java with Mockito</a></p>
 
-<p>  // Handles search?query=dog&refine;=true
-  @RequestMapping(params=&#8221;refine=true&#8221;)
-  public void refine() { &#8230; }</p>
+<p>View SlideShare <a href="http://www.slideshare.net/rapaul/mockito-presentation?type=powerpoint">presentation</a> or <a href="http://www.slideshare.net/upload?type=powerpoint">Upload</a> your own.</p>
 
-<p>  // Handles search?query=dog
-  @RequestMapping
-  public void search() { &#8230; }</p>
-
-<p>}
-[/cc]</p>
-
-<p>While this code will initially work, there is some ambiguity in the way the URLs are matched.  The order in which the @RequestMapping mappings are defined in the class file is actually determining which method will be called.  If we were to define the search() method first, then a request to search?query=dog&refine;=true would satisfy the conditions for the search() method&#8217;s @RequestMapping and thus the params=&#8221;refine=true&#8221; on the refine() method has no bearing on the outcome of the request.</p>
-
-<p>To safeguard the controller against the potential reordering of methods in a class (which in usual Java programming has no affect on the outcome of running code), we need to ensure the parameter mapping is explicit.</p>
-
-<p>[cc lang=&#8221;java&#8221;]
-// Match if &#8216;refine&#8217; parameter is present
-@RequestMapping(params=&#8221;refine=true&#8221;)
-public void refine() { &#8230; }
-// Match if &#8216;refine&#8217; parameter is not present
-@RequestMapping(params=&#8221;!refine=true&#8221;)
-public void search() { &#8230; }
-[/cc]</p>
-
-<p>By explicitly checking the refine parameter is not present for the search method&#8217;s request mapping (!refine=true), the declaration order of our @RequestMapping annotations in the class file has no bearing on which method handles the request thus making our code robust to the reordering methods.  Similar precautions should be taken with the other attributes of @RequestMapping including method and headers.</p>
+<p>As promised I&#8217;ve attached my <a href="http://www.rapaul.com/wp-content/uploads/2008/11/mockito.pdf">slides</a> and also included the example source files in a <a href="http://www.rapaul.com/wp-content/uploads/2008/11/mockito-example-code.zip">zip</a>.  To run the unit tests you will need <a href="http://sourceforge.net/project/showfiles.php?group_id=15278&amp;package_id=12472">JUnit 4.5</a> and <a href="http://mockito.googlecode.com/files/mockito-all-1.6.jar">Mockito 1.6</a>.</p>
 </div>
 
 
@@ -144,7 +119,7 @@ public void search() { &#8230; }
   
 
 
-<time datetime="2010-02-15T06:30:16+13:00" pubdate data-updated="true">Feb 15<span>th</span>, 2010</time>
+<time datetime="2008-11-19T00:00:00+13:00" pubdate data-updated="true">Nov 19<span>th</span>, 2008</time>
       
 
 
@@ -152,7 +127,7 @@ public void search() { &#8230; }
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.rapaul.com/2010/02/15/request-mapping-ordering/" data-via="rapaul" data-counturl="http://www.rapaul.com/2010/02/15/request-mapping-ordering/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/" data-via="rapaul" data-counturl="http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/" >Tweet</a>
   
   
   
@@ -161,10 +136,10 @@ public void search() { &#8230; }
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/2010/01/14/my-git-svn-workflow/" title="Previous Post: My git svn workflow">&laquo; My git svn workflow</a>
+        <a class="basic-alignment left" href="/2008/11/12/rockin-robin/" title="Previous Post: Rockin' Robin">&laquo; Rockin' Robin</a>
       
       
-        <a class="basic-alignment right" href="/2010/03/17/cucumber-session-fixation/" title="Next Post: A Cucumber Scenario for Session Fixation Attacks">A Cucumber Scenario for Session Fixation Attacks &raquo;</a>
+        <a class="basic-alignment right" href="/2008/12/23/the-making-of-rockin-robin/" title="Next Post: The making of Rockin' Robin">The making of Rockin' Robin &raquo;</a>
       
     </p>
   </footer>
@@ -189,7 +164,7 @@ public void search() { &#8230; }
       </li>
     
       <li class="post">
-        <a href="/2011/06/06/zero-to-headless-browser-tests-jenkins/">From zero to headless browser tests in Jenkins</a>
+        <a href="/2011/06/05/zero-to-headless-browser-tests-jenkins/">From zero to headless browser tests in Jenkins</a>
       </li>
     
       <li class="post">
@@ -276,8 +251,8 @@ public void search() { &#8230; }
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.rapaul.com/2010/02/15/request-mapping-ordering/';
-        var disqus_url = 'http://www.rapaul.com/2010/02/15/request-mapping-ordering/';
+        var disqus_identifier = 'http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/';
+        var disqus_url = 'http://www.rapaul.com/2008/11/19/mocking-in-java-with-mockito/';
         var disqus_script = 'embed.js';
       
     (function () {
