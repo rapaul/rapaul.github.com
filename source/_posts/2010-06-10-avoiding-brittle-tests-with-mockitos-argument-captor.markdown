@@ -1,10 +1,9 @@
 ---
 comments: true
-date: 2010-06-10 23:28:49
+date: 2010-06-10
 layout: post
 slug: avoiding-brittle-tests-with-mockitos-argument-captor
 title: Avoiding Brittle Tests with Mockito's ArgumentCaptor
-wordpress_id: 536
 tag:
 - argumentcaptor
 - groovy
