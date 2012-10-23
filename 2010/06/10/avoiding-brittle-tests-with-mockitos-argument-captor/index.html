@@ -96,93 +96,140 @@
 
 <p>A common requirement for a web application is to send emails to users. In this case our web application is a travel booking system.  If you make use of a templating language such as Velocity your email generation service might look similar to the following:</p>
 
-<p>[cc lang=&#8221;java&#8221;]
-interface Mailer {
-  void send(</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">interface</span> <span class="nc">Mailer</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="nf">send</span><span class="o">(</span>
+</span><span class='line'>    <span class="n">String</span> <span class="n">to</span><span class="o">,</span>
+</span><span class='line'>    <span class="n">String</span> <span class="n">templateName</span><span class="o">,</span>
+</span><span class='line'>    <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">model</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<pre><code>String to,
-String templateName,
-Map&lt;String, Object&gt; model)
-</code></pre>
-
-<p>}
-[/cc]</p>
 
 <p>Note: All examples are shown in Groovy for brevity, but the examples apply perfectly well to Java.</p>
 
 <p>Imagine the email we send is simply welcoming the user to our web site upon registration</p>
 
-<p>`
-Welcome $name,</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Welcome $name,
+</span><span class='line'>
+</span><span class='line'>Thanks for signing up!
+</span><span class='line'>Book your holiday at http://example.com/</span></code></pre></td></tr></table></div></figure>
 
-<p>Thanks for signing up!
-Book your holiday at http://example.com/
-`</p>
 
 <p>As you can see the only dynamic element required in the model map is the user&#8217;s name.  A unit test to define the behaviour of our registration service will simply verify that a map is passed with the user&#8217;s first name.</p>
 
-<p>[cc lang=&#8221;java&#8221; lines=&#8221;150&#8221;]
-private Mailer mailer
-private RegistrationService registrationService</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">private</span> <span class="n">Mailer</span> <span class="n">mailer</span>
+</span><span class='line'><span class="kd">private</span> <span class="n">RegistrationService</span> <span class="n">registrationService</span>
+</span><span class='line'>
+</span><span class='line'><span class="nd">@Before</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">setUp</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  <span class="c1">// Inject the mocked mailer</span>
+</span><span class='line'>  <span class="n">mailer</span> <span class="o">=</span> <span class="n">mock</span><span class="o">(</span><span class="n">Mailer</span><span class="o">)</span>
+</span><span class='line'>  <span class="n">registrationService</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RegistrationService</span><span class="o">(</span><span class="n">mailer</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nd">@Test</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">shouldSendRegistrationEmailWelcomingUser</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  <span class="c1">// given a new user</span>
+</span><span class='line'>  <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="k">new</span> <span class="n">User</span><span class="o">(</span><span class="s">&quot;Jim&quot;</span><span class="o">,</span> <span class="s">&quot;jim@example.com&quot;</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// when the user registers</span>
+</span><span class='line'>  <span class="n">registrationService</span><span class="o">.</span><span class="na">register</span><span class="o">(</span><span class="n">user</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// then an email should be sent welcoming the user</span>
+</span><span class='line'>  <span class="n">verify</span><span class="o">(</span><span class="n">mailer</span><span class="o">).</span><span class="na">send</span><span class="o">(</span><span class="s">&quot;jim@example.com&quot;</span><span class="o">,</span> <span class="s">&quot;welcome.vm&quot;</span><span class="o">,</span> <span class="o">[</span><span class="s">&quot;name&quot;</span><span class="o">:</span><span class="s">&quot;Jim&quot;</span><span class="o">])</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>@Before
-void setUp() {
-  // Inject the mocked mailer
-  mailer = mock(Mailer)
-  registrationService = new RegistrationService(mailer)
-}</p>
-
-<p>@Test
-void shouldSendRegistrationEmailWelcomingUser() {
-  // given a new user
-  User user = new User(&#8220;Jim&#8221;, &#8220;jim@example.com&#8221;)</p>
-
-<p>  // when the user registers
-  registrationService.register(user)</p>
-
-<p>  // then an email should be sent welcoming the user
-  verify(mailer).send(&#8220;jim@example.com&#8221;, &#8220;welcome.vm&#8221;, [&#8220;name&#8221;:&#8221;Jim&#8221;])
-}
-[/cc]</p>
 
 <p>As you can see the test starts off simple, we are verifying the mailer&#8217;s send call was invoked with the correct email address, template name and model data.  In this case the model simply contains the name of the newly registered user.</p>
 
 <p>A new requirement arrives which states we want to include the latest holiday deals in the welcome email.</p>
 
-<p>`
-Welcome $name,</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Welcome $name,
+</span><span class='line'>
+</span><span class='line'>Thanks for signing up!
+</span><span class='line'>Book your holiday at http://example.com/
+</span><span class='line'>
+</span><span class='line'>Check out our latest travel offerings:
+</span><span class='line'>#foreach($offer in $offers)
+</span><span class='line'>  &lt;!-- Print out the offer details --&gt; 
+</span><span class='line'>#end</span></code></pre></td></tr></table></div></figure>
 
-<p>Thanks for signing up!
-Book your holiday at http://example.com/</p>
-
-<p>Check out our latest travel offerings:</p>
-
-<h1>foreach($offer in $offers)</h1>
-
-<h1>end</h1>
-
-<p>`</p>
 
 <p>In order to test this requirement, a naive approach would be to simply add the travel offering assertions into the first test we created.  This has the downside that the test is no longer specific to a particular requirement, as we add more content to our email the test would continue to grow and become unwieldy (especially if any conditional logic exists).  We want to keep our tests focussed by limiting each test to a <a href="http://laribee.com/one-logical-assertion-per-test">single logical assert</a>.</p>
 
 <p>Below we create a second test specific to the inclusion of the latest offers.</p>
 
-<p>[cc lang=&#8221;java&#8221;]
-@Test
-void shouldSendRegistrationEmailWithLatestTravelOfferings() {
-  // given a new user
-  User user = new User(&#8220;Jim&#8221;, &#8220;jim@example.com&#8221;)
-  // and the latest travel offers
-  def offers = [&#8220;Offer 1&#8221;, &#8220;Offer 2&#8221;]
-  given(latestOffers.get()).willReturn(offers)</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Test</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">shouldSendRegistrationEmailWithLatestTravelOfferings</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  <span class="c1">// given a new user</span>
+</span><span class='line'>  <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="k">new</span> <span class="n">User</span><span class="o">(</span><span class="s">&quot;Jim&quot;</span><span class="o">,</span> <span class="s">&quot;jim@example.com&quot;</span><span class="o">)</span>
+</span><span class='line'>  <span class="c1">// and the latest travel offers</span>
+</span><span class='line'>  <span class="n">def</span> <span class="n">offers</span> <span class="o">=</span> <span class="o">[</span><span class="s">&quot;Offer 1&quot;</span><span class="o">,</span> <span class="s">&quot;Offer 2&quot;</span><span class="o">]</span>
+</span><span class='line'>  <span class="n">given</span><span class="o">(</span><span class="n">latestOffers</span><span class="o">.</span><span class="na">get</span><span class="o">()).</span><span class="na">willReturn</span><span class="o">(</span><span class="n">offers</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// when the user registers</span>
+</span><span class='line'>  <span class="n">registrationService</span><span class="o">.</span><span class="na">register</span><span class="o">(</span><span class="n">user</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// then an email should be sent with the latest travel offers</span>
+</span><span class='line'>  <span class="n">verify</span><span class="o">(</span><span class="n">mailer</span><span class="o">).</span><span class="na">send</span><span class="o">(</span><span class="s">&quot;jim@example.com&quot;</span><span class="o">,</span> <span class="s">&quot;welcome.vm&quot;</span><span class="o">,</span> <span class="o">[</span><span class="s">&quot;offers&quot;</span><span class="o">:</span><span class="n">offers</span><span class="o">])</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>  // when the user registers
-  registrationService.register(user)</p>
-
-<p>  // then an email should be sent with the latest travel offers
-  verify(mailer).send(&#8220;jim@example.com&#8221;, &#8220;welcome.vm&#8221;, [&#8220;offers&#8221;:offers])
-}
-[/cc]</p>
 
 <p>At first glance this looks like a good test, we are checking the latest offers are included in the model so they can be rendered in the email template.</p>
 
@@ -190,33 +237,44 @@ void shouldSendRegistrationEmailWithLatestTravelOfferings() {
 
 <p>In order to verify the correct calls are made, Mockito uses the equality (equals) method of the passed arguments.  In the above case we are checking the equality of two strings and a map.  It is of course the equality of the model map that is causing the test to fail.</p>
 
-<p>shouldSendRegistrationEmailWelcomingUser() fails as Mockito is expecting a map containing simply the user&#8217;s name [name:&#8221;Jim&#8221;], but due to the added travel offerings the map is actually [name:&#8221;Jim&#8221;, offers:offers].  The same failure applies to shouldSendRegistrationEmailWithLatestTravelOfferings() as it is verifying the map only contains offers.</p>
+<p><code>shouldSendRegistrationEmailWelcomingUser()</code> fails as Mockito is expecting a map containing simply the user&#8217;s name <code>[name:"Jim"]</code>, but due to the added travel offerings the map is actually <code>[name:"Jim", offers:offers]</code>.  The same failure applies to <code>shouldSendRegistrationEmailWithLatestTravelOfferings()</code> as it is verifying the map only contains offers.</p>
 
-<p>As mailer.send() has no return type (void) we have no simple way to access the model map in our test.  However Mockito offers a couple of ways around this, the first is the creation of a custom Matcher.  The second is to use an ArgumentCaptor which is the approach I will be using today.</p>
-
-<p><a href="http://www.rapaul.com/wp-content/uploads/2010/06/pokeball1.png"><img src="http://www.rapaul.com/wp-content/uploads/2010/06/pokeball1.png" alt="Gotta catch 'em all!" /></a></p>
+<p>As <code>mailer.send()</code> has no return type (void) we have no simple way to access the model map in our test.  However Mockito offers a couple of ways around this, the first is the creation of a custom Matcher.  The second is to use an ArgumentCaptor which is the approach I will be using today.</p>
 
 <p>The ArgumentCaptor is a specialised ArgumentMatcher that records the matched argument for later inspection.</p>
 
-<p>[cc lang=&#8221;java&#8221; lines=&#8221;150&#8221;]
-@Test
-void shouldSendRegistrationEmailWelcomingUser() {
-  // given a new user
-  User user = new User(&#8220;Jim&#8221;, &#8220;jim@example.com&#8221;)</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Test</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">shouldSendRegistrationEmailWelcomingUser</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  <span class="c1">// given a new user</span>
+</span><span class='line'>  <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="k">new</span> <span class="n">User</span><span class="o">(</span><span class="s">&quot;Jim&quot;</span><span class="o">,</span> <span class="s">&quot;jim@example.com&quot;</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// when the user registers</span>
+</span><span class='line'>  <span class="n">registrationService</span><span class="o">.</span><span class="na">register</span><span class="o">(</span><span class="n">user</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// then an email should be sent welcoming the user</span>
+</span><span class='line'>  <span class="n">ArgumentCaptor</span> <span class="n">model</span> <span class="o">=</span> <span class="n">ArgumentCaptor</span><span class="o">.</span><span class="na">forClass</span><span class="o">(</span><span class="n">Map</span><span class="o">)</span>
+</span><span class='line'>  <span class="n">verify</span><span class="o">(</span><span class="n">mailer</span><span class="o">).</span><span class="na">send</span><span class="o">(</span><span class="n">eq</span><span class="o">(</span><span class="s">&quot;jim@example.com&quot;</span><span class="o">),</span> <span class="n">eq</span><span class="o">(</span><span class="s">&quot;welcome.vm&quot;</span><span class="o">),</span> <span class="n">model</span><span class="o">.</span><span class="na">capture</span><span class="o">())</span>
+</span><span class='line'>  <span class="n">assertThat</span><span class="o">(</span><span class="n">model</span><span class="o">.</span><span class="na">value</span><span class="o">.</span><span class="na">name</span><span class="o">,</span> <span class="n">is</span><span class="o">(</span><span class="s">&quot;Jim&quot;</span><span class="o">))</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>  // when the user registers
-  registrationService.register(user)</p>
 
-<p>  // then an email should be sent welcoming the user
-  ArgumentCaptor model = ArgumentCaptor.forClass(Map)
-  verify(mailer).send(eq(&#8220;jim@example.com&#8221;), eq(&#8220;welcome.vm&#8221;), model.capture())
-  assertThat(model.value.name, is(&#8220;Jim&#8221;))
-}
-[/cc]</p>
+<p>Firstly an ArgumentCaptor is created for the class, in this case Map, we wish to inspect.  The ArgumentCaptor is then used as an ArgumentMatcher in the verify call.  No matter what keys or values the model map contains, the ArgumentCaptor will always match thus allowing the verify call to succeed.  Now that we have captured the model we can inspect it by calling <code>getValue()</code> (simply value in Groovy) to access the original map that was passed to the Mailer service by our production code.  By verifying only the key/value pairs that are specific to our test (the user&#8217;s name) we can ensure that any other pieces of information that are added to the map in the future don&#8217;t affect any of the existing tests.</p>
 
-<p>Firstly an ArgumentCaptor is created for the class, in this case Map, we wish to inspect.  The ArgumentCaptor is then used as an ArgumentMatcher in the verify call.  No matter what keys or values the model map contains, the ArgumentCaptor will always match thus allowing the verify call to succeed.  Now that we have captured the model we can inspect it by calling getValue() (simply value in Groovy) to access the original map that was passed to the Mailer service by our production code.  By verifying only the key/value pairs that are specific to our test (the user&#8217;s name) we can ensure that any other pieces of information that are added to the map in the future don&#8217;t affect any of the existing tests.</p>
-
-<p>The astute reader may have noticed the inclusion of equality matchers for both the email address eq(&#8220;jim@example.com&#8221;) and the template name.  While Mockito relies on the equality method of the arguments by default, if any of the arguments are an ArgumentMatcher, then all of the arguments must be a matcher.</p>
+<p>The astute reader may have noticed the inclusion of equality matchers for both the email address <code>eq("jim@example.com")</code> and the template name.  While Mockito relies on the equality method of the arguments by default, if any of the arguments are an ArgumentMatcher, then all of the arguments must be a matcher.</p>
 
 <p>In summary, the ArgumentCaptor allows tests to remain focussed with a single logical assert, even when the object you wish to inspect is created in the code under test and passed to a collaborator via a void method call.</p>
 </div>
