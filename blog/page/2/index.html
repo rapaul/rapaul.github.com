@@ -409,72 +409,111 @@ au! Syntax gherkin source ~/.vim/cucumber.vim
 
   <div class="entry-content"><p><a href="http://cukes.info/">Cucumber</a> provides the ability to create a <em>world</em> in which you can expose useful methods for the testing environment.  This post briefly details how to expose these methods when using Groovy with <a href="http://wiki.github.com/aslakhellesoy/cuke4duke/">Cuke4Duke</a>.</p>
 
-<p>`
-Feature: World
-In order to make useful methods available
-As a tester
-I want the world to be full of wonderful methods</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Feature: World
+</span><span class='line'>In order to make useful methods available
+</span><span class='line'>As a tester
+</span><span class='line'>I want the world to be full of wonderful methods
+</span><span class='line'>
+</span><span class='line'>Scenario: Greet
+</span><span class='line'>When I greet
+</span><span class='line'>...
+</span><span class='line'>
+</span><span class='line'>Scenario: Farewell
+</span><span class='line'>When I farewell
+</span><span class='line'>...</span></code></pre></td></tr></table></div></figure>
 
-<p>Scenario: Greet
-When I greet
-&#8230;</p>
-
-<p>Scenario: Farewell
-When I farewell
-&#8230;
-`</p>
 
 <p>These scenarios capture the ability to greet and farewell our customers.  The matching step definitions are shown below.</p>
 
-<p>[cc lang=&#8221;java&#8221; lines=&#8221;150&#8221;]
-// hello_steps.groovy
-import static org.junit.Assert.<em>
-import static org.hamcrest.CoreMatchers.</em></p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="c1">// hello_steps.groovy</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">junit</span><span class="o">.</span><span class="na">Assert</span><span class="o">.*</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">hamcrest</span><span class="o">.</span><span class="na">CoreMatchers</span><span class="o">.*</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">this</span><span class="o">.</span><span class="na">metaClass</span><span class="o">.</span><span class="na">mixin</span><span class="o">(</span><span class="n">cuke4duke</span><span class="o">.</span><span class="na">GroovyDsl</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">When</span><span class="o">(~</span><span class="s1">&#39;I greet&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">assertThat</span><span class="o">(</span><span class="n">hello</span><span class="o">(),</span> <span class="n">is</span><span class="o">(</span><span class="s1">&#39;hi&#39;</span><span class="o">))</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">When</span><span class="o">(~</span><span class="s1">&#39;I farewell&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">assertThat</span><span class="o">(</span><span class="n">goodbye</span><span class="o">(),</span> <span class="n">is</span><span class="o">(</span><span class="s1">&#39;ciao&#39;</span><span class="o">))</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>this.metaClass.mixin(cuke4duke.GroovyDsl)</p>
-
-<p>When(~&#8217;I greet&#8217;) {
-  assertThat(hello(), is(&#8216;hi&#8217;))
-}</p>
-
-<p>When(~&#8217;I farewell&#8217;) {
-  assertThat(goodbye(), is(&#8216;ciao&#8217;))
-}
-[/cc]</p>
 
 <p>You will notice that we haven&#8217;t defined the <em>hello()</em> or <em>goodbye()</em> methods anywhere in our step definition file.  We are assuming these methods are provided by the <em>world</em> environment that Cucumber provides.  This allows the <em>world</em> methods to be shared between many different step definition files.</p>
 
 <p>Next we define the <em>world</em> environment.  Instead of defining all methods in a single class, we can group the methods into individual classes and make them all available on the <em>world</em> class at runtime using <a href="http://groovy.codehaus.org/Runtime+mixins">Groovy&#8217;s mixin</a> support.</p>
 
-<p>[cc lang=&#8221;java&#8221; lines=&#8221;150&#8221;]
-// env.groovy
-this.metaClass.mixin(cuke4duke.GroovyDsl)</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="c1">// env.groovy</span>
+</span><span class='line'><span class="k">this</span><span class="o">.</span><span class="na">metaClass</span><span class="o">.</span><span class="na">mixin</span><span class="o">(</span><span class="n">cuke4duke</span><span class="o">.</span><span class="na">GroovyDsl</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">class</span> <span class="nc">Greeter</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kt">def</span> <span class="nf">hello</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="s1">&#39;hi&#39;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">class</span> <span class="nc">Fareweller</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kt">def</span> <span class="nf">goodbye</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="s1">&#39;ciao&#39;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">class</span> <span class="nc">World</span> <span class="o">{}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">World</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">World</span><span class="o">.</span><span class="na">mixin</span> <span class="n">Greeter</span><span class="o">,</span> <span class="n">Fareweller</span>
+</span><span class='line'>  <span class="k">new</span> <span class="nf">World</span><span class="o">()</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>class Greeter {
-  def hello() {</p>
-
-<pre><code>'hi'
-</code></pre>
-
-<p>  }
-}</p>
-
-<p>class Fareweller {
-  def goodbye() {</p>
-
-<pre><code>'ciao'
-</code></pre>
-
-<p>  }
-}</p>
-
-<p>class World {}</p>
-
-<p>World() {
-  World.mixin Greeter, Fareweller
-  new World()
-}
-[/cc]</p>
 
 <p>The <em>World()</em> call is part of Cucumber&#8217;s DSL, here we use it to publish an instance of our <em>World</em> class thus making both <em>hello()</em> and <em>goodbye()</em> available in the testing environment (note that the name of the <em>World</em> class is not important).</p>
 </div>
