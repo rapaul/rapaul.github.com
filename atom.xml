@@ -4,7 +4,7 @@
   <title><![CDATA[rapaul.com]]></title>
   <link href="http://www.rapaul.com/atom.xml" rel="self"/>
   <link href="http://www.rapaul.com/"/>
-  <updated>2012-10-24T20:50:08+13:00</updated>
+  <updated>2012-10-24T20:58:26+13:00</updated>
   <id>http://www.rapaul.com/</id>
   <author>
     <name><![CDATA[Richard Paul]]></name>
@@ -972,36 +972,55 @@ import static org.hamcrest.CoreMatchers.*</p>
     <id>http://www.rapaul.com/2010/02/14/request-mapping-ordering</id>
     <content type="html"><![CDATA[<p>I&#8217;ve recently been using the param attribute of the <a href="http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/web/bind/annotation/RequestMapping.html">@RequestMapping</a> annotation from Spring MVC.</p>
 
-<p>Take the case of a search feature for a website.  If a &#8216;refine&#8217; parameter is present, the user should be shown a search form to refine their criteria. However if the refine parameter is not present the user is shown the search results for the query.
-[cc lang=&#8221;java&#8221;]
-@RequestMapping(value=&#8221;/search&#8221;, method=RequestMethod.GET)
-public class SearchController {</p>
+<p>Take the case of a search feature for a website.  If a &#8216;refine&#8217; parameter is present, the user should be shown a search form to refine their criteria. However if the refine parameter is not present the user is shown the search results for the query.</p>
 
-<p>  // Handles search?query=dog&refine;=true
-  @RequestMapping(params=&#8221;refine=true&#8221;)
-  public void refine() { &#8230; }</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span><span class="o">=</span><span class="s">&quot;/search&quot;</span><span class="o">,</span> <span class="n">method</span><span class="o">=</span><span class="n">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">)</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SearchController</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Handles search?query=dog&amp;refine=true</span>
+</span><span class='line'>  <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">params</span><span class="o">=</span><span class="s">&quot;refine=true&quot;</span><span class="o">)</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">refine</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Handles search?query=dog</span>
+</span><span class='line'>  <span class="nd">@RequestMapping</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">search</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>  // Handles search?query=dog
-  @RequestMapping
-  public void search() { &#8230; }</p>
 
-<p>}
-[/cc]</p>
-
-<p>While this code will initially work, there is some ambiguity in the way the URLs are matched.  The order in which the @RequestMapping mappings are defined in the class file is actually determining which method will be called.  If we were to define the search() method first, then a request to search?query=dog&refine;=true would satisfy the conditions for the search() method&#8217;s @RequestMapping and thus the params=&#8221;refine=true&#8221; on the refine() method has no bearing on the outcome of the request.</p>
+<p>While this code will initially work, there is some ambiguity in the way the URLs are matched.  The order in which the <code>@RequestMapping</code> mappings are defined in the class file is actually determining which method will be called.  If we were to define the search() method first, then a request to <code>search?query=dog&amp;refine=true</code> would satisfy the conditions for the search() method&#8217;s <code>@RequestMapping</code> and thus the <code>params="refine=true"</code> on the refine() method has no bearing on the outcome of the request.</p>
 
 <p>To safeguard the controller against the potential reordering of methods in a class (which in usual Java programming has no affect on the outcome of running code), we need to ensure the parameter mapping is explicit.</p>
 
-<p>[cc lang=&#8221;java&#8221;]
-// Match if &#8216;refine&#8217; parameter is present
-@RequestMapping(params=&#8221;refine=true&#8221;)
-public void refine() { &#8230; }
-// Match if &#8216;refine&#8217; parameter is not present
-@RequestMapping(params=&#8221;!refine=true&#8221;)
-public void search() { &#8230; }
-[/cc]</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="c1">// Match if &#39;refine&#39; parameter is present</span>
+</span><span class='line'><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">params</span><span class="o">=</span><span class="s">&quot;refine=true&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">refine</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</span><span class='line'><span class="c1">// Match if &#39;refine&#39; parameter is not present</span>
+</span><span class='line'><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">params</span><span class="o">=</span><span class="s">&quot;!refine=true&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">search</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>By explicitly checking the refine parameter is not present for the search method&#8217;s request mapping (!refine=true), the declaration order of our @RequestMapping annotations in the class file has no bearing on which method handles the request thus making our code robust to the reordering methods.  Similar precautions should be taken with the other attributes of @RequestMapping including method and headers.</p>
+
+<p>By explicitly checking the refine parameter is not present for the search method&#8217;s request mapping <code>(!refine=true)</code>, the declaration order of our <code>@RequestMapping</code> annotations in the class file has no bearing on which method handles the request thus making our code robust to the reordering methods.  Similar precautions should be taken with the other attributes of <code>@RequestMapping</code> including method and headers.</p>
 ]]></content>
   </entry>
   
