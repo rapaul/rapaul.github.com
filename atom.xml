@@ -4,7 +4,7 @@
   <title><![CDATA[rapaul.com]]></title>
   <link href="http://www.rapaul.com/atom.xml" rel="self"/>
   <link href="http://www.rapaul.com/"/>
-  <updated>2012-10-24T20:38:18+13:00</updated>
+  <updated>2012-10-24T20:50:08+13:00</updated>
   <id>http://www.rapaul.com/</id>
   <author>
     <name><![CDATA[Richard Paul]]></name>
@@ -1012,34 +1012,39 @@ public void search() { &#8230; }
     <id>http://www.rapaul.com/2010/01/13/my-git-svn-workflow</id>
     <content type="html"><![CDATA[<p>Below are the steps I use when working with Git &amp; SVN. Please note, I am in no way a Git or SVN expert, but these are the steps that seem to work for me.</p>
 
-<p><strong>1) Checkout codebase</strong>
-This step only needs to be done once, it will pull down a local copy of the entire history allowing for very fast nagivation of revisions and allow work to be down when no connection to a central repository is available.</p>
+<p><strong>1) Checkout codebase</strong></p>
+
+<p>This step only needs to be done once, it will pull down a local copy of the entire history allowing for very fast nagivation of revisions and allow work to be down when no connection to a central repository is available.</p>
 
 <pre><code>git svn clone svn://path/to/code/ --stdlayout
 </code></pre>
 
-<p><strong>2) Create a topic branch to work on</strong>
-We now want to start work on our first story, so we create a local branch for it.  This allows us to keep all changes related to the first story out of the master branch.  By keeping the master branch clean we can create as many local branches as we wish from it allowing us to quickly fix a bug in a separate local branch to the story we are working on.  I&#8217;ll come to this later.  The <em>-b</em> option means checkout and create a branch, this is a shortcut to creating the branch then checking it out.</p>
+<p><strong>2) Create a topic branch to work on</strong></p>
+
+<p>We now want to start work on our first story, so we create a local branch for it.  This allows us to keep all changes related to the first story out of the master branch.  By keeping the master branch clean we can create as many local branches as we wish from it allowing us to quickly fix a bug in a separate local branch to the story we are working on.  I&#8217;ll come to this later.  The <em>-b</em> option means checkout and create a branch, this is a shortcut to creating the branch then checking it out.</p>
 
 <pre><code>git checkout -b story1
 </code></pre>
 
 <p>.. implement the first story ..</p>
 
-<p><strong>3) Add all new/deleted/modified files to staging area</strong>
-With git you can stage just the files that are important, these staged items then make up the contents of your commit.</p>
+<p><strong>3) Add all new/deleted/modified files to staging area</strong></p>
+
+<p>With git you can stage just the files that are important, these staged items then make up the contents of your commit.</p>
 
 <pre><code>git add path/to/resource
 </code></pre>
 
-<p><strong>4) Create a commit</strong>
-We then create a commit of the staged files in our local branch, note this differs from SVN as a commit is only local.</p>
+<p><strong>4) Create a commit</strong></p>
+
+<p>We then create a commit of the staged files in our local branch, note this differs from SVN as a commit is only local.</p>
 
 <pre><code>git commit -m "My commit message"
 </code></pre>
 
-<p><strong>5) Merge changes from your topic branch into the master branch</strong>
-Ensure the master branch is up to date</p>
+<p><strong>5) Merge changes from your topic branch into the master branch</strong></p>
+
+<p>Ensure the master branch is up to date</p>
 
 <pre><code>git checkout master
 git svn rebase
@@ -1050,53 +1055,64 @@ git svn rebase
 <pre><code>git merge story1
 </code></pre>
 
-<p><strong>6) Merge conflicts</strong>
-Merge any conflicts either manually or using <em>mergetool</em> (I&#8217;m yet to figure out how to use the <em>mergetool</em> command)</p>
+<p><strong>6) Merge conflicts</strong></p>
 
-<p><strong>7) Push to SVN</strong>
-This is the bridge that takes our Git commits and pushes them to SVN.  Each Git commit will be mapped to a respective SVN commit.</p>
+<p>Merge any conflicts either manually or using <em>mergetool</em> (I&#8217;m yet to figure out how to use the <em>mergetool</em> command)</p>
+
+<p><strong>7) Push to SVN</strong></p>
+
+<p>This is the bridge that takes our Git commits and pushes them to SVN.  Each Git commit will be mapped to a respective SVN commit.</p>
 
 <pre><code>git svn dcommit
 </code></pre>
 
-<p><strong>Working with multiple branches</strong>
-As I mentioned earlier, one of the major advantages of Git over SVN is the ability to have multiple working branches locally, allowing you to switch between them with relative ease.  Take for example you are working on a story, it might take you a whole day to get it done.  At midday an urgent support request arrives for a bug in the live software.  Using SVN I would typically have to checkout the HEAD revision into a separate directory and import it into Eclipse as a new project.  With Git it is much simpler, I use the following steps to do the switching.</p>
+<p><strong>Working with multiple branches</strong></p>
 
-<h1>Commit all current work to the topic branch</h1>
+<p>As I mentioned earlier, one of the major advantages of Git over SVN is the ability to have multiple working branches locally, allowing you to switch between them with relative ease.  Take for example you are working on a story, it might take you a whole day to get it done.  At midday an urgent support request arrives for a bug in the live software.  Using SVN I would typically have to checkout the HEAD revision into a separate directory and import it into Eclipse as a new project.  With Git it is much simpler, I use the following steps to do the switching.</p>
 
-<pre><code>git add path/to/noncommited/work
-</code></pre>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Commit all current work to the topic branch
+</span><span class='line'>git add path/to/noncommited/work
+</span><span class='line'>
+</span><span class='line'># Switch to the master branch and make sure it is up to date
+</span><span class='line'>git checkout master
+</span><span class='line'>git svn rebase
+</span><span class='line'>
+</span><span class='line'># Create a new branch for the bug fix
+</span><span class='line'>git checkout -b bugfix
+</span><span class='line'>
+</span><span class='line'># Fix the bug
+</span><span class='line'># Follow steps 3-7 above
+</span><span class='line'># Carry on working on the story
+</span><span class='line'>git checkout story1</span></code></pre></td></tr></table></div></figure>
 
-<h1>Switch to the master branch and make sure it is up to date</h1>
 
-<pre><code>git checkout master
-git svn rebase
-</code></pre>
+<p><strong>Git GUI</strong></p>
 
-<h1>Create a new branch for the bug fix</h1>
-
-<pre><code>git checkout -b bugfix
-</code></pre>
-
-<h1>Fix the bug</h1>
-
-<h1>Follow steps 3-7 above</h1>
-
-<h1>Carry on working on the story</h1>
-
-<pre><code>git checkout story1
-</code></pre>
-
-<p><strong>Git GUI</strong>
-You can use the <a href="http://www.kernel.org/pub/software/scm/git/docs/git-gui.html">Git GUI</a> tool for most of the steps above, I find it particularly useful for steps 3 &amp; 4.
+<p>You can use the <a href="http://www.kernel.org/pub/software/scm/git/docs/git-gui.html">Git GUI</a> tool for most of the steps above, I find it particularly useful for steps 3 &amp; 4.
 You can also review the history and changes using gitk, this is useful for code reviews before you push your code into a master repo.</p>
 
-<p><strong>JGit (Eclipse Plugin)</strong>
-I use the <a href="http://www.jgit.org/">JGit Eclipse Plugin</a> when working in Eclipse, it provides a diff with the previous version which I find invaluable.
+<p><strong>JGit (Eclipse Plugin)</strong></p>
+
+<p>I use the <a href="http://www.jgit.org/">JGit Eclipse Plugin</a> when working in Eclipse, it provides a diff with the previous version which I find invaluable.
 Install in Eclipse using the update site: http://www.jgit.org/updates</p>
 
-<p><strong>References</strong>
-<a href="http://blog.tsunanet.net/2007/07/learning-git-svn-in-5min.html">http://blog.tsunanet.net/2007/07/learning-git-svn-in-5min.html</a>
+<p><strong>References</strong></p>
+
+<p><a href="http://blog.tsunanet.net/2007/07/learning-git-svn-in-5min.html">http://blog.tsunanet.net/2007/07/learning-git-svn-in-5min.html</a>
 <a href="http://stackoverflow.com/questions/190431/is-git-svn-dcommit-after-merging-in-git-dangerous">http://stackoverflow.com/questions/190431/is-git-svn-dcommit-after-merging-in-git-dangerous</a>
 <a href="http://www.kernel.org/pub/software/scm/git/docs/user-manual.html#resolving-a-merge">http://www.kernel.org/pub/software/scm/git/docs/user-manual.html#resolving-a-merge</a></p>
 ]]></content>
