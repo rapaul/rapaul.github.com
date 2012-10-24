@@ -95,23 +95,38 @@
 
   <div class="entry-content"><p>On the 23rd of July, <a href="http://mockito.org/">Mockito</a> 1.8.0 was released, you can see a full listing of changes in their <a href="http://code.google.com/p/mockito/wiki/ReleaseNotes">release notes</a>.  One feature that took my fancy was the inclusion of <a href="http://en.wikipedia.org/wiki/Behavior_Driven_Development">BDD</a> aliases for stubbing an API, instead of using when, the Mockito team now encourage the use of given to bring your tests inline with the BDD style. To illustrate this, here is an example taken from the <a href="http://mockito.googlecode.com/svn/branches/1.8.0/javadoc/org/mockito/BDDMockito.html">BDDMockito javadoc</a>.</p>
 
-<p>[cc lang=&#8221;java&#8221; lines=&#8221;50&#8221;]
-import static org.mockito.BDDMockito.*;</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">mockito</span><span class="o">.</span><span class="na">BDDMockito</span><span class="o">.*;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Seller</span> <span class="n">seller</span> <span class="o">=</span> <span class="n">mock</span><span class="o">(</span><span class="n">Seller</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'><span class="n">Shop</span> <span class="n">shop</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Shop</span><span class="o">(</span><span class="n">seller</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">shouldBuyBread</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class='line'>  <span class="c1">//given  </span>
+</span><span class='line'>  <span class="n">given</span><span class="o">(</span><span class="n">seller</span><span class="o">.</span><span class="na">askForBread</span><span class="o">()).</span><span class="na">willReturn</span><span class="o">(</span><span class="k">new</span> <span class="n">Bread</span><span class="o">());</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">//when</span>
+</span><span class='line'>  <span class="n">Goods</span> <span class="n">goods</span> <span class="o">=</span> <span class="n">shop</span><span class="o">.</span><span class="na">buyBread</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">//then</span>
+</span><span class='line'>  <span class="n">assertThat</span><span class="o">(</span><span class="n">goods</span><span class="o">,</span> <span class="n">containBread</span><span class="o">());</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>Seller seller = mock(Seller.class);
-Shop shop = new Shop(seller);</p>
-
-<p>public void shouldBuyBread() throws Exception {
-  //given<br/>
-  given(seller.askForBread()).willReturn(new Bread());</p>
-
-<p>  //when
-  Goods goods = shop.buyBread();</p>
-
-<p>  //then
-  assertThat(goods, containBread());
-}<br/>
-[/cc]</p>
 
 <p>By breaking the test into given, when &amp; then, future maintainers of the tests will more quickly understand which parts of the test relate to setup, exercising the SUT and asserting.</p>
 
@@ -119,27 +134,38 @@ Shop shop = new Shop(seller);</p>
 
 <p>To minimise keystrokes and encourage the use of this style, you can modify the existing Test template as shown below to automatically generate the BDD style comments &amp; statically import the BDDMockito members.  To modify the template, navigate to Window > Preferences > Java > Editor > Templates.  Click on Test (the JUnit 4 test template) and click edit.  Paste in the follow template:</p>
 
-<p>[cc lang=&#8221;java&#8221; lines=&#8221;50&#8221;]
-@${testType:newType(org.junit.Test)}</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="err">@</span><span class="n">$</span><span class="o">{</span><span class="nl">testType:</span><span class="n">newType</span><span class="o">(</span><span class="n">org</span><span class="o">.</span><span class="na">junit</span><span class="o">.</span><span class="na">Test</span><span class="o">)}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="n">$</span><span class="o">{</span><span class="n">testname</span><span class="o">}()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class='line'>  <span class="c1">// given ${cursor}</span>
+</span><span class='line'>  <span class="n">$</span><span class="o">{</span><span class="nl">staticImport:</span><span class="n">importStatic</span><span class="o">(</span><span class="err">&#39;</span><span class="n">org</span><span class="o">.</span><span class="na">junit</span><span class="o">.</span><span class="na">Assert</span><span class="o">.*</span><span class="err">&#39;</span><span class="o">,</span> <span class="err">&#39;</span><span class="n">org</span><span class="o">.</span><span class="na">mockito</span><span class="o">.</span><span class="na">BDDMockito</span><span class="o">.*</span><span class="err">&#39;</span><span class="o">)}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// when</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// then</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>public void ${testname}() throws Exception {
-  // given ${cursor}
-  ${staticImport:importStatic(&#8216;org.junit.Assert.<em>&#8217;, &#8216;org.mockito.BDDMockito.</em>&#8217;)}</p>
-
-<p>  // when</p>
-
-<p>  // then</p>
-
-<p>}
-[/cc]</p>
 
 <p>You are now ready to start writing BDDMockito style unit tests using Eclipse&#8217;s template, simply type Test, hit Ctrl+Space and you will be given the following option.</p>
 
-<p><img src="http://www.rapaul.com/wp-content/uploads/2009/08/ctrl-space.png" alt="ctrl-space" /></p>
+<p><img src="/images/blog/ctrl-space.png" width="476" height="227"></p>
 
-<p>Selecting the option will generate the test method, focus first given to the test name, then to the blank line after // given.</p>
+<p>Selecting the option will generate the test method, focus first given to the test name, then to the blank line after <code>// given</code>.</p>
 
-<p><img src="http://www.rapaul.com/wp-content/uploads/2009/08/created-template.jpg" alt="created-template" /></p>
+<p><img src="/images/blog/created-template.jpg" width="355" height="198"></p>
 
 <p>There you have it, a simple Eclipse template to generate your BDDMockito style tests.</p>
 </div>
