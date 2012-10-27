@@ -94,71 +94,99 @@
 
 <p>But fear not, there are steps you can take to ensure your tests are flexible to change.  The rest of this post will give examples using <a href="http://code.google.com/p/selenium/">Selenium2</a>, however most of these suggestions can be applied to any browser automation framework.</p>
 
-<h3>Naming Elements</h3>
+<h2>Naming Elements</h2>
 
 <p>Selenium2 provides an API for selecting elements on the page for inspection, for example you can find the first element with a given class using the following syntax:</p>
 
-<p>[cc lang=&#8221;java&#8221;]browser.findElementByClassName(&#8216;theClassName&#8217;)[/cc]</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">browser</span><span class="o">.</span><span class="na">findElementByClassName</span><span class="o">(</span><span class="err">&#39;</span><span class="n">theClassName</span><span class="err">&#39;</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>Similarly finding multiple elements with the same class is done by simply calling [cci]findElements[/cci]</p>
+
+<p>Similarly finding multiple elements with the same class is done by simply calling <code>findElements</code>.</p>
 
 <p>These methods provide convenient access to elements on the page but we need to ensure the classes or IDs are semantic to ensure our selenium tests continue to function if the layout of the page changes.  Below is an example of how to build a navigational element and highlights semantic and brittle IDs for the elements.</p>
 
-<p><a href="http://www.rapaul.com/wp-content/uploads/2010/07/navigation.png"><img src="http://www.rapaul.com/wp-content/uploads/2010/07/navigation.png" alt="" /></a></p>
+<p><img src="/attachments/navigation.png"></p>
 
-<p>As you can see the navigation is broken down into a left and a right side. In order to select these sides a naïve approach would be to assign IDs of [cci]leftNav[/cci] and [cci]rightNav[/cci].  While these two navigational elements can be easily selected using [cci lang=&#8221;java&#8221;]browser.findElementById(&#8216;leftNav&#8217;)[/cci] and [cci lang=&#8221;java&#8221;]browser.findElementById(&#8216;rightNav&#8217;)[/cci], using these names can have a negative impact further down the line.</p>
+<p>As you can see the navigation is broken down into a left and a right side. In order to select these sides a naïve approach would be to assign IDs of <code>leftNav</code> and <code>rightNav</code>.  While these two navigational elements can be easily selected using <code>browser.findElementById('leftNav')</code> and <code>browser.findElementById('rightNav')</code>, using these names can have a negative impact further down the line.</p>
 
-<p>First off imagine a new requirement is added whereby the right navigation should now be shown below the left navigation, this is already becoming confusing.  As a result any tests we have that needed to locate the right navigation now need to be updated to locate the [cci]bottomNav[/cci].  Similarly any stylesheets will need to be updated to reflect this same change.  We can see that by choosing a name that is related to how the navigation looks rather than what it represents becomes a maintenance nightmare.</p>
+<p>First off imagine a new requirement is added whereby the right navigation should now be shown below the left navigation, this is already becoming confusing.  As a result any tests we have that needed to locate the right navigation now need to be updated to locate the <code>bottomNav</code>.  Similarly any stylesheets will need to be updated to reflect this same change.  We can see that by choosing a name that is related to how the navigation looks rather than what it represents becomes a maintenance nightmare.</p>
 
-<p>If in the first place we chose an ID that reflected the intention of the element, our tests would continue to work regardless of the layout of the page.  So how do we go about choosing an appropriate ID for the element?  By thinking of the purpose of the element we can come up with a more semantic name.  In this case all of the elements in the right navigation are related to the user, so we can simply assign an ID of [cci]userNavigation[/cci], no matter where the user navigation resides, be it on the right or in the footer our Selenium tests will continue to locate the element correctly. A huge save on the maintenance effort.</p>
+<p>If in the first place we chose an ID that reflected the intention of the element, our tests would continue to work regardless of the layout of the page.  So how do we go about choosing an appropriate ID for the element?  By thinking of the purpose of the element we can come up with a more semantic name.  In this case all of the elements in the right navigation are related to the user, so we can simply assign an ID of <code>userNavigation</code>, no matter where the user navigation resides, be it on the right or in the footer our Selenium tests will continue to locate the element correctly. A huge save on the maintenance effort.</p>
 
 <p>Another important factor to consider when naming an ID or class for an element is how your users and other stakeholders refer to the element.  By ensuring all stakeholders refer to the element in the same way &#8216;the user navigation&#8217; we can reduce translation between user, developers, testers and the code base (selenium, view templates, stylesheets, domain model, etc).  This kind of controlled vocabulary is known in Domain Driven Design as a <a href="http://domaindrivendesign.org/node/132">Ubiquitous Language</a>.</p>
 
-<h3>Selecting Options</h3>
+<h2>Selecting Options</h2>
 
-<p>A common task when filling out a form is to select an option from a drop down list. For example you may need to select your favourite country and the list contains UK, USA, NZ.  There are number of ways to select New Zealand.
-[cc lang=&#8221;html&#8221;]</p>
+<p>A common task when filling out a form is to select an option from a drop down list. For example you may need to select your favourite country and the list contains UK, USA, NZ.  There are number of ways to select New Zealand.</p>
 
-<p>  United Kingdom
-  USA
-  New Zealand</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;select&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">&quot;UK&quot;</span><span class="nt">&gt;</span>United Kingdom<span class="nt">&lt;/option&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">&quot;US&quot;</span><span class="nt">&gt;</span>USA<span class="nt">&lt;/option&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">&quot;NZ&quot;</span><span class="nt">&gt;</span>New Zealand<span class="nt">&lt;/option&gt;</span>
+</span><span class='line'><span class="nt">&lt;/select&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>[/cc]</p>
 
-<p>The worst possible solution is to grab all the options and select the country based on its position in the list.
-[cc lang=&#8221;java&#8221;]
-browser.findElementByTagName(&#8220;option&#8221;)[2].setSelected() // select NZ
-[/cc]
-This check is likely to break if any number of small changes are made, for example the sorting may be changed to alphabetical where NZ would be the first option.  If Australia were to be added to the list NZ could be bumped to the 4th option.</p>
+<p>The worst possible solution is to grab all the options and select the country based on its position in the list.</p>
 
-<p>To ensure our automation is not tied to the number of elements nor the ordering of the list we can make use of CSS&#8217;s <a href="http://www.w3.org/TR/CSS2/selector.html#attribute-selectors">attribute selector</a>.
-[cc lang=&#8221;java&#8221;]
-browser.findElementByCssSelector(&#8220;option[value=NZ]&#8221;).setSelected()
-[/cc]
-As you can see the code snippet shows the intent of the action much better, no comment is needed to qualify which option is actually being selected. As long as one of the options in this list has a value of &#8220;NZ&#8221;.</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">browser</span><span class="o">.</span><span class="na">findElementByTagName</span><span class="o">(</span><span class="s">&quot;option&quot;</span><span class="o">)[</span><span class="mi">2</span><span class="o">].</span><span class="na">setSelected</span><span class="o">()</span> <span class="c1">// select NZ</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>If the labels for the options are the same as the submitted parameters the value attribute is often left off, in this cases we do not have an attribute to target with our attribute selector.  Instead we have to check the actual text of the options.
-[cc lang=&#8221;java&#8221;]
-browser.findElementsByTagName(&#8216;option&#8217;).find { it.text == &#8216;New Zealand&#8217; }.setSelected()
-[/cc]
-A little more code but at least we aren&#8217;t selecting based on the position in the list. Note that we now need to find all elements and further refine with Groovy&#8217;s [cci]find[/cci] method.</p>
 
-<h3>A Note on XPath</h3>
+<p>This check is likely to break if any number of small changes are made, for example the sorting may be changed to alphabetical where NZ would be the first option.  If Australia were to be added to the list NZ could be bumped to the 4th option.</p>
 
-<p>Selenium supports XPath for selecting elements, e.g.
-[cc lang=&#8221;java&#8221;]
-browser.findElementByXPath(&#8216;/html/body/div/div[2]/div/ul&#8217;)
-[/cc]
-The above example is the XPath Firefox will give you when you select the trending topic element on Twitter&#8217;s homepage.  This is exactly the type of XPath selector you want to avoid, at no point in the selector string is there a mention of the meaning of any of the elements we are selecting.  In fact if a [cci]div[/cci] were to be added or removed anywhere between the trending topics and the root of the homepage the selection would fail.  Of course XPath can be written much better.
-[cc lang=&#8221;java&#8221;]
-browser.findElementByXPath(&#8216;//*[@class=&#8221;trendscontent&#8221;]&#8217;)
-[/cc]
-However I would argue that the CSS selector is simpler to read and is more inline with the standard for web pages.  The fact that the element may already have appropriate IDs and classes to allow CSS selectors to work for styling purposes is a bonus.
-[cc lang=&#8221;java&#8221;]
-browser.findElementByCssSelector(&#8216;.trendscontent&#8217;)
-// or
-browser.findElementByClassName(&#8216;trendscontent&#8217;)
-[/cc]</p>
+<p>To ensure our automation is not tied to the number of elements nor the ordering of the list we can make use of CSS&#8217;s <a href="http://www.w3.org/TR/CSS2/selector.html#attribute-selectors">attribute selector</a>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">browser</span><span class="o">.</span><span class="na">findElementByCssSelector</span><span class="o">(</span><span class="s">&quot;option[value=NZ]&quot;</span><span class="o">).</span><span class="na">setSelected</span><span class="o">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see the code snippet shows the intent of the action much better, no comment is needed to qualify which option is actually being selected. As long as one of the options in this list has a value of &#8220;NZ&#8221;.</p>
+
+<p>If the labels for the options are the same as the submitted parameters the value attribute is often left off, in this cases we do not have an attribute to target with our attribute selector.  Instead we have to check the actual text of the options.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">browser</span><span class="o">.</span><span class="na">findElementsByTagName</span><span class="o">(</span><span class="err">&#39;</span><span class="n">option</span><span class="err">&#39;</span><span class="o">).</span><span class="na">find</span> <span class="o">{</span> <span class="n">it</span><span class="o">.</span><span class="na">text</span> <span class="o">==</span> <span class="err">&#39;</span><span class="n">New</span> <span class="n">Zealand</span><span class="err">&#39;</span> <span class="o">}.</span><span class="na">setSelected</span><span class="o">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A little more code but at least we aren&#8217;t selecting based on the position in the list. Note that we now need to find all elements and further refine with Groovy&#8217;s <code>find</code> method.</p>
+
+<h2>A Note on XPath</h2>
+
+<p>Selenium supports XPath for selecting elements, e.g.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">browser</span><span class="o">.</span><span class="na">findElementByXPath</span><span class="o">(</span><span class="err">&#39;</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">body</span><span class="o">/</span><span class="n">div</span><span class="o">/</span><span class="n">div</span><span class="o">[</span><span class="mi">2</span><span class="o">]/</span><span class="n">div</span><span class="o">/</span><span class="n">ul</span><span class="err">&#39;</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The above example is the XPath Firefox will give you when you select the trending topic element on Twitter&#8217;s homepage.  This is exactly the type of XPath selector you want to avoid, at no point in the selector string is there a mention of the meaning of any of the elements we are selecting.  In fact if a <code>div</code> were to be added or removed anywhere between the trending topics and the root of the homepage the selection would fail.  Of course XPath can be written much better.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">browser</span><span class="o">.</span><span class="na">findElementByXPath</span><span class="o">(</span><span class="err">&#39;</span><span class="c1">//*[@class=&quot;trendscontent&quot;]&#39;)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>However I would argue that the CSS selector is simpler to read and is more inline with the standard for web pages.  The fact that the element may already have appropriate IDs and classes to allow CSS selectors to work for styling purposes is a bonus.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">browser</span><span class="o">.</span><span class="na">findElementByCssSelector</span><span class="o">(</span><span class="err">&#39;</span><span class="o">.</span><span class="na">trendscontent</span><span class="err">&#39;</span><span class="o">)</span>
+</span><span class='line'><span class="c1">// or</span>
+</span><span class='line'><span class="n">browser</span><span class="o">.</span><span class="na">findElementByClassName</span><span class="o">(</span><span class="err">&#39;</span><span class="n">trendscontent</span><span class="err">&#39;</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
 </div>
 
 
