@@ -4,7 +4,7 @@
   <title><![CDATA[rapaul.com]]></title>
   <link href="http://www.rapaul.com/atom.xml" rel="self"/>
   <link href="http://www.rapaul.com/"/>
-  <updated>2012-10-28T09:05:32+13:00</updated>
+  <updated>2012-10-28T09:25:49+13:00</updated>
   <id>http://www.rapaul.com/</id>
   <author>
     <name><![CDATA[Richard Paul]]></name>
@@ -395,70 +395,86 @@ You will notice that the script sources the .rvmrc file directly for the project
     <id>http://www.rapaul.com/2010/12/17/cucumber-maven-teamcity</id>
     <content type="html"><![CDATA[<p>Having a suite of acceptances tests is all well and good, but if they don&#8217;t run regularly they tend to rot.  Much like unit tests they should be part of your continuous integration configuration.  We use TeamCity, so it was a logical choice for running our Cucumber scenarios.</p>
 
-<p><strong>Running Cucumber with Maven</strong>
-As we predominantly use Java/Groovy all our Cucumber tests are written in Groovy and run automatically through Maven as part of the integration test phase.  Checkout the <a href="https://github.com/aslakhellesoy/cuke4duke/wiki">Cuke4Duke</a> project if you want to see more details about using Cucumber on the JVM.  In particular there is a page dedicated to running <a href="https://github.com/aslakhellesoy/cuke4duke/wiki/Maven">Cuke4Duke with Maven</a>.  Once your pom has been configured its simply a matter of calling the integration phase:
-[cc]
-mvn integration-test                              # Run all features/scenarios
-mvn integration-test -DcukeArgs=&#8221;&#8211;tags @search&#8221;  # Run only scenarios tagged with @search
-[/cc]
-Locally I have a bash script that lets me simply type cuke @search to achieve the same result.
-[cc]</p>
+<h2>Running Cucumber with Maven</h2>
 
-<h1>!/bin/bash</h1>
+<p>As we predominantly use Java/Groovy all our Cucumber tests are written in Groovy and run automatically through Maven as part of the integration test phase.  Checkout the <a href="https://github.com/aslakhellesoy/cuke4duke/wiki">Cuke4Duke</a> project if you want to see more details about using Cucumber on the JVM.  In particular there is a page dedicated to running <a href="https://github.com/aslakhellesoy/cuke4duke/wiki/Maven">Cuke4Duke with Maven</a>.  Once your pom has been configured its simply a matter of calling the integration phase:</p>
 
-<p>mvn integration-test -DcukeArgs=&#8221;&#8211;tags $1&#8221;
-[/cc]</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mvn integration-test                              <span class="c"># Run all features/scenarios</span>
+</span><span class='line'>mvn integration-test -DcukeArgs<span class="o">=</span><span class="s2">&quot;--tags @search&quot;</span>  <span class="c"># Run only scenarios tagged with @search</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p><strong>Adding to TeamCity</strong>
-TeamCity has built in support for running Maven goals, as such it&#8217;s relatively trivial to get the Cucumber scenarios running.</p>
+
+<p>Locally I have a bash script that lets me simply type <code>cuke @search</code> to achieve the same result.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>mvn integration-test -DcukeArgs<span class="o">=</span><span class="s2">&quot;--tags $1&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Adding to TeamCity</h2>
+
+<p>TeamCity has built in support for running Maven goals, as such it&#8217;s relatively trivial to get the Cucumber scenarios running.</p>
 
 <ol>
-<li><p>Create a new build configuration, on the build step select Maven2 as the runner type.</p></li>
-<li><p>Set the goal to integration-test</p></li>
-<li><p>Skip most of the remaining fields.</p></li>
-<li><p>In the JVM command line parameters enter:  -DcukeArgs=&#8221;&#8211;strict -DcukeMaxHeapSize=&#8221;-Xmx4000m&#8221; -DcukeMaxPermSize=&#8221;-XX:MaxPermSize=2000m&#8221;</p></li>
+<li>Create a new build configuration, on the build step select Maven2 as the runner type.</li>
+<li>Set the goal to integration-test</li>
+<li>Skip most of the remaining fields.</li>
+<li>In the JVM command line parameters enter: <code>-DcukeArgs="--strict -DcukeMaxHeapSize="-Xmx4000m" -DcukeMaxPermSize="-XX:MaxPermSize=2000m"</code></li>
 </ol>
 
 
-<p>This should be all that is required to get the build running.  &#8211;strict tells Cucumber not to guess when a step doesn&#8217;t exactly match a step definition (optional but recommended).  The max heap size and max perm size are properties configured in the pom to boost the memory allocations.  These are required by our build, but I have a sneaking suspicion it&#8217;s to do with the parsing of the step definition closures (Groovy specific).</p>
+<p>This should be all that is required to get the build running.  <code>--strict</code> tells Cucumber not to guess when a step doesn&#8217;t exactly match a step definition (optional but recommended).  The max heap size and max perm size are properties configured in the pom to boost the memory allocations.  These are required by our build, but I have a sneaking suspicion it&#8217;s to do with the parsing of the step definition closures (Groovy specific).</p>
 
 <p>Currently we have a dedicated desktop box (Win7) registered as a TeamCity agent, this allows Cucumber to run the scenarios through the browser (via Selenium/WebDriver).</p>
 
-<p><strong>Adding Reporting to TeamCity</strong>
-As the build configuration stands, Cucumber will output using its normal coloured terminal format.  So while you will be getting feedback on whether the build was successful from TeamCity, drilling in to see any failures will involve reading the raw Cucumber output.  Fortunately Cucumber allows us to specify the output format we require, including JUnit XML reports.</p>
+<h2>Adding Reporting to TeamCity</h2>
+
+<p>As the build configuration stands, Cucumber will output using its normal coloured terminal format.  So while you will be getting feedback on whether the build was successful from TeamCity, drilling in to see any failures will involve reading the raw Cucumber output.  Fortunately Cucumber allows us to specify the output format we require, including JUnit XML reports.</p>
 
 <ol>
-<li><p>Update the JVM command line parameters to include &#8211;format junit &#8211;out target/junit.xml</p></li>
-<li><p>Add an Ant JUnit report type with the reports directory set to %system.teamcity.build.checkoutDir%/target/<em>*/</em>.xml</p></li>
+<li>Update the JVM command line parameters to include <code>--format junit --out target/junit.xml</code></li>
+<li>Add an Ant JUnit report type with the reports directory set to <code>%system.teamcity.build.checkoutDir%/target/**/*.xml</code></li>
 </ol>
 
 
-<p><a href="http://www.rapaul.com/wp-content/uploads/2010/12/test-passed.png"><img src="http://www.rapaul.com/wp-content/uploads/2010/12/test-passed.png" alt="" /></a></p>
+<p><img src="http://www.rapaul.com/attachments/test-passed.png"></p>
 
 <p>You now get individual scenarios reported as tests in TeamCity, you can then monitor for long running tests, check stacktraces and get notified immediately via a TeamCity notifier as soon as a single scenario fails (no need to wait until the entire suite finishes).</p>
 
-<p><a href="http://www.rapaul.com/wp-content/uploads/2010/12/stack.png"><img src="http://www.rapaul.com/wp-content/uploads/2010/12/stack.png" alt="" /></a></p>
+<p><img src="http://www.rapaul.com/attachments/stack.png"></p>
 
-<p><strong>Triggering Cucumber</strong>
-Each time we deploy a new version of our application to the testing/dev box we want to automatically run the Cucumber tests.  Deployment is handled via TeamCity so we have a single click to push the latest code onto the server.  Once the application has been deployed the Cucumber build is automatically trigger, this can be set on the Build Triggering step of the configuration.  Should the testing deployment not be manually trigger, the nightly build will push the latest code and run the Cucumber tests.</p>
+<h2>Triggering Cucumber</h2>
 
-<p><strong>Key Features</strong>
-<a href="http://www.rapaul.com/wp-content/uploads/2010/12/in-the-green.png"><img src="http://www.rapaul.com/wp-content/uploads/2010/12/in-the-green.png" alt="" /></a></p>
+<p>Each time we deploy a new version of our application to the testing/dev box we want to automatically run the Cucumber tests.  Deployment is handled via TeamCity so we have a single click to push the latest code onto the server.  Once the application has been deployed the Cucumber build is automatically trigger, this can be set on the Build Triggering step of the configuration.  Should the testing deployment not be manually trigger, the nightly build will push the latest code and run the Cucumber tests.</p>
+
+<h2>Key Features</h2>
+
+<p><img src="http://www.rapaul.com/attachments/in-the-green.png"></p>
 
 <p>The above screenshot shows the various builds we have related to our product.  The Continuous Integration is our unit tests, these run quickly after every commit.  Next we break the Cucumber build down into 3 discrete builds. Key Features is a tag (@keyfeature) we use against features and scenarios the business identifies as being the most important, the idea being that these are run first to give us quick feedback, in this case there are 75 key features which run in just under 10 minutes.  The remaining scenarios are run in the non-key features build which runs automatically immediately after the key features have completed.  These currently take just under 50 minutes.  So the total feedback loop is roughly 1 hour.</p>
 
-<p><strong>Work in Progress (WIP)</strong>
-The last Cucumber build is the WIP (work in progress) build, these are features and stories that are currently being worked on.  TeamCity is configured slightly differently in this case, any scenarios that pass will fail the build.  The idea being that either the scenario was written wrongly (it should fail first) or the scenario is now complete and the @wip tag should be removed.  To make Cucumber fail when any scenarios pass we we need to pass a special flag &#8211;wip in the JVM parameters.
-[cc]
--DcukeArgs=&#8221;&#8211;format junit &#8211;out target/junit.xml &#8211;tags @wip &#8211;wip&#8221;
-[/cc]
-The current value of 17 work in progress scenarios seems a bit high, ideally we&#8217;d like to eliminate waste by keeping our WIP down.  Cucumber supports such limits as a <a href="https://rspec.lighthouseapp.com/projects/16211/tickets/353-limiting-number-of-feature-elements-in-tagged-state">command line argument</a>.</p>
+<h2>Work in Progress (WIP)</h2>
 
-<p><strong>Experience Report</strong>
-If you&#8217;d like to hear more about Cucumber, Cuke4Duke, Groovy, Selenium &amp; Geb I&#8217;m giving an experience report at <a href="http://skillsmatter.com/event/agile-testing/acceptance-testing-with-geb">SkillsMatter on the 26th of Jan</a>.</p>
+<p>The last Cucumber build is the WIP (work in progress) build, these are features and stories that are currently being worked on.  TeamCity is configured slightly differently in this case, any scenarios that pass will fail the build.  The idea being that either the scenario was written wrongly (it should fail first) or the scenario is now complete and the @wip tag should be removed.  To make Cucumber fail when any scenarios pass we we need to pass a special flag <code>--wip</code> in the JVM parameters.</p>
 
-<p><strong>Related reading</strong>
-<a href="http://gojko.net/2010/01/01/bdd-in-net-with-cucumber-cuke4nuke-and-teamcity/">http://gojko.net/2010/01/01/bdd-in-net-with-cucumber-cuke4nuke-and-teamcity/</a></p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>-DcukeArgs<span class="o">=</span><span class="s2">&quot;--format junit --out target/junit.xml --tags @wip --wip&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The current value of 17 work in progress scenarios seems a bit high, ideally we&#8217;d like to eliminate waste by keeping our WIP down.  Cucumber supports such limits as a <a href="https://rspec.lighthouseapp.com/projects/16211/tickets/353-limiting-number-of-feature-elements-in-tagged-state">command line argument</a>.</p>
+
+<h2>Experience Report</h2>
+
+<p>If you&#8217;d like to hear more about Cucumber, Cuke4Duke, Groovy, Selenium &amp; Geb I&#8217;m giving an experience report at <a href="http://skillsmatter.com/event/agile-testing/acceptance-testing-with-geb">SkillsMatter on the 26th of Jan</a>.</p>
+
+<h2>Related reading</h2>
+
+<p><a href="http://gojko.net/2010/01/01/bdd-in-net-with-cucumber-cuke4nuke-and-teamcity/">http://gojko.net/2010/01/01/bdd-in-net-with-cucumber-cuke4nuke-and-teamcity/</a></p>
 ]]></content>
   </entry>
   
