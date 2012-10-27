@@ -1,7 +1,5 @@
 * Fix up formatting of posts
 * Download all images into assets from wp-content
-* Get disqus working
-* Set up blog on rapaul.com (CNAME)
 * Google analytics
 * Kill off old blog
 * Ensure rapaul.com redirects to www.rapaul.com
