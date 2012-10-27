@@ -4,7 +4,7 @@
   <title><![CDATA[rapaul.com]]></title>
   <link href="http://www.rapaul.com/atom.xml" rel="self"/>
   <link href="http://www.rapaul.com/"/>
-  <updated>2012-10-28T09:43:09+13:00</updated>
+  <updated>2012-10-28T09:48:17+13:00</updated>
   <id>http://www.rapaul.com/</id>
   <author>
     <name><![CDATA[Richard Paul]]></name>
@@ -374,17 +374,16 @@ You will notice that the script sources the .rvmrc file directly for the project
     <link href="http://www.rapaul.com/2011/01/26/agile-acceptance-testing-with-geb/"/>
     <updated>2011-01-26T00:00:00+13:00</updated>
     <id>http://www.rapaul.com/2011/01/26/agile-acceptance-testing-with-geb</id>
-    <content type="html"><![CDATA[<p>Below are the slides and video of a presentation I gave at <a href="http://skillsmatter.com/podcast/agile-testing/acceptance-testing-with-geb">SkillsMatter</a> on Acceptance Testing with Geb. Fast forward to 1:30 when I start the presentation.</p>
+    <content type="html"><![CDATA[<p>Below are the slides and <a href="http://skillsmatter.com/podcast/agile-testing/acceptance-testing-with-geb">video of a presentation I gave at SkillsMatter</a> on Acceptance Testing with Geb. Fast forward to 1:30 when I start the presentation.</p>
 
-<blockquote><p>This talk will cover the basics of using Geb <a href="http://geb.codehaus.org">http://geb.codehaus.org</a> to automate browser testing.</p></blockquote>
+<p>This talk will cover the basics of using <a href="http://geb.codehaus.org">Geb</a> to automate browser testing.</p>
 
 <p>It will compare Geb with raw WebDriver/Selenium showing Geb&#8217;s expressive Groovy API.It will also demonstrate how to integrate Geb with acceptance testing frameworks, namely Cucumber via Cuke4Duke.</p>
 
-<p>It also cover an experience report on how and why we transitioned from raw WebDriver to Geb and how existing WebDriver projects can be ported across to Geb with minimal initial effort due to its underlying use of WebDriver.</p>
+<p>It also covers an experience report on how and why we transitioned from raw WebDriver to Geb and how existing WebDriver projects can be ported across to Geb with minimal initial effort due to its underlying use of WebDriver.</p>
 
-<p><strong><a href="http://www.slideshare.net/rapaul/acceptance-testing-with-geb">Acceptance testing with Geb</a></strong></p>
+<iframe src="http://www.slideshare.net/slideshow/embed_code/6713585?rel=0" width="512" height="421" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen> </iframe>
 
-<p>View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/rapaul">Richard Paul</a>.</p>
 ]]></content>
   </entry>
   
