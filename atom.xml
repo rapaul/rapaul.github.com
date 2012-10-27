@@ -4,7 +4,7 @@
   <title><![CDATA[rapaul.com]]></title>
   <link href="http://www.rapaul.com/atom.xml" rel="self"/>
   <link href="http://www.rapaul.com/"/>
-  <updated>2012-10-28T10:12:24+13:00</updated>
+  <updated>2012-10-28T10:16:57+13:00</updated>
   <id>http://www.rapaul.com/</id>
   <author>
     <name><![CDATA[Richard Paul]]></name>
@@ -1006,52 +1006,85 @@ new File(&#8216;./wordpress-export.xml&#8217;).text.findAll(imagePattern).each {
     <link href="http://www.rapaul.com/2010/03/16/cucumber-session-fixation/"/>
     <updated>2010-03-16T00:00:00+13:00</updated>
     <id>http://www.rapaul.com/2010/03/16/cucumber-session-fixation</id>
-    <content type="html"><![CDATA[<p>When working on a Spring project I was alerted via the logs that my login handling was susceptible to <a href="http://en.wikipedia.org/wiki/Session_fixation">Session Fixation Attacks</a>.  It was nice of Spring to alert me of this, and it seems like the <a href="http://markmail.org/thread/o7f6d5gkle4kqqbt">problem</a> is due to the Apache httpd connection via mod_jk.  But before diving into a solution I decided to write a simple acceptance test using <a href="http://cukes.info/">Cucumber</a>.  This allows me to first prove the security hole is present, easily tell when I have fixed it and has the additional benefit of being able to add the check to a set of automated regression tests to ensure it never happens again.</p>
+    <content type="html"><![CDATA[<p>When working on a Spring project I was alerted via the logs that my login handling was susceptible to <a href="http://en.wikipedia.org/wiki/Session_fixation">Session Fixation Attacks</a>.  It was nice of Spring to alert me of this, and it seems like the <a href="http://markmail.org/thread/o7f6d5gkle4kqqbt">problem</a> is due to the Apache httpd connection via modjk.  But before diving into a solution I decided to write a simple acceptance test using <a href="http://cukes.info/">Cucumber</a>.  This allows me to first prove the security hole is present, easily tell when I have fixed it and has the additional benefit of being able to add the check to a set of automated regression tests to ensure it never happens again.</p>
 
 <p>The countermeasure <a href="http://static.springsource.org/spring-security/site/docs/3.0.x/apidocs/org/springframework/security/web/authentication/session/SessionFixationProtectionStrategy.html">built into Spring</a> uses the <a href="http://en.wikipedia.org/wiki/Session_fixation#Best_solution:_Identity_Confirmation">Identity Confirmation</a> technique.  This basically involves invalidating a user&#8217;s session when they login and creating a new session with a different <em>JSESSIONID</em>.  It turns out to be fairly easy to write a test for this in Cucumber.  Firstly I wrote the plain text scenario:</p>
 
-<pre><code>Scenario: Avoiding Session Fixation Attacks through Identity Confirmation
-Given I have a session ID
-When I sign in
-Then I should have a different session ID
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='gherkin'><span class='line'><span class="k">Scenario:</span><span class="nf"> Avoiding Session Fixation Attacks through Identity Confirmation</span>
+</span><span class='line'><span class="k">Given </span><span class="nf">I have a session ID</span>
+</span><span class='line'><span class="k">When </span><span class="nf">I sign in</span>
+</span><span class='line'><span class="k">Then </span><span class="nf">I should have a different session ID</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>The next step is to write the step definitions.  <a href="http://wiki.github.com/aslakhellesoy/cuke4duke/">Cuke4Duke</a> provides Cucumber support for JVM languages and makes it easy to write reusable step definitions.  As I&#8217;m a fan of the expressiveness of Groovy I chose to write the step definitions using the <a href="http://wiki.github.com/aslakhellesoy/cuke4duke/groovy">GroovyDsl</a>.</p>
 
-<p>[cc lang=&#8221;java&#8221; lines=&#8221;150&#8221;]
-import org.openqa.selenium.By
-import static org.junit.Assert.<em>
-import static org.junit.matchers.JUnitMatchers.</em>
-import static org.hamcrest.CoreMatchers.*</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="kn">import</span> <span class="nn">org.openqa.selenium.By</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">junit</span><span class="o">.</span><span class="na">Assert</span><span class="o">.*</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">junit</span><span class="o">.</span><span class="na">matchers</span><span class="o">.</span><span class="na">JUnitMatchers</span><span class="o">.*</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">hamcrest</span><span class="o">.</span><span class="na">CoreMatchers</span><span class="o">.*</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">this</span><span class="o">.</span><span class="na">metaClass</span><span class="o">.</span><span class="na">mixin</span><span class="o">(</span><span class="n">cuke4duke</span><span class="o">.</span><span class="na">GroovyDsl</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">def</span> <span class="n">sessionId</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">Given</span><span class="o">(~</span><span class="s1">&#39;I have a session ID&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">browser</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s2">&quot;$host/signin&quot;</span><span class="o">)</span>
+</span><span class='line'>  <span class="n">sessionId</span> <span class="o">=</span> <span class="n">getSessionId</span><span class="o">()</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">When</span><span class="o">(~</span><span class="s1">&#39;I sign in&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kt">def</span> <span class="n">signinForm</span> <span class="o">=</span> <span class="n">browser</span><span class="o">.</span><span class="na">findElement</span><span class="o">(</span><span class="n">By</span><span class="o">.</span><span class="na">name</span><span class="o">(</span><span class="s1">&#39;signin&#39;</span><span class="o">))</span>
+</span><span class='line'>  <span class="n">signinForm</span><span class="o">.</span><span class="na">findElement</span><span class="o">(</span><span class="n">By</span><span class="o">.</span><span class="na">name</span><span class="o">(</span><span class="s1">&#39;j_username&#39;</span><span class="o">)).</span><span class="na">sendKeys</span><span class="o">(</span><span class="s1">&#39;testing@example.com&#39;</span><span class="o">)</span>
+</span><span class='line'>  <span class="n">signinForm</span><span class="o">.</span><span class="na">findElement</span><span class="o">(</span><span class="n">By</span><span class="o">.</span><span class="na">name</span><span class="o">(</span><span class="s1">&#39;j_password&#39;</span><span class="o">)).</span><span class="na">sendKeys</span><span class="o">(</span><span class="s1">&#39;123456&#39;</span><span class="o">)</span>
+</span><span class='line'>  <span class="n">signinForm</span><span class="o">.</span><span class="na">submit</span><span class="o">()</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Then</span><span class="o">(~</span><span class="s1">&#39;I should have a different session ID&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">assertThat</span><span class="o">(</span><span class="n">getSessionId</span><span class="o">(),</span> <span class="n">is</span><span class="o">(</span><span class="n">not</span><span class="o">(</span><span class="n">sessionId</span><span class="o">)));</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">def</span> <span class="nf">getSessionId</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">browser</span><span class="o">.</span><span class="na">manage</span><span class="o">().</span><span class="na">cookies</span><span class="o">.</span><span class="na">find</span><span class="o">()</span> <span class="o">{</span> <span class="n">it</span><span class="o">.</span><span class="na">name</span> <span class="o">==</span> <span class="s1">&#39;JSESSIONID&#39;</span> <span class="o">}.</span><span class="na">value</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>this.metaClass.mixin(cuke4duke.GroovyDsl)</p>
-
-<p>def sessionId</p>
-
-<p>Given(~&#8217;I have a session ID&#8217;) {
-  browser.get(&#8220;$host/signin&#8221;)
-  sessionId = getSessionId()
-}</p>
-
-<p>When(~&#8217;I sign in&#8217;) {
-  def signinForm = browser.findElement(By.name(&#8216;signin&#8217;))
-  signinForm.findElement(By.name(&#8216;j_username&#8217;)).sendKeys(&#8216;testing@example.com&#8217;)
-  signinForm.findElement(By.name(&#8216;j_password&#8217;)).sendKeys(&#8216;123456&#8217;)
-  signinForm.submit()
-}</p>
-
-<p>Then(~&#8217;I should have a different session ID&#8217;) {
-  assertThat(getSessionId(), is(not(sessionId)));
-}</p>
-
-<p>def getSessionId() {
-  browser.manage().cookies.find() { it.name == &#8216;JSESSIONID&#8217; }.value
-}
-[/cc]</p>
 
 <p>The <em>browser</em> variable is injected via <em>env.groovy</em> as an instance of <a href="http://webdriver.googlecode.com/svn/javadoc/org/openqa/selenium/WebDriver.html">WebDriver</a> which provides the methods to find elements and manage cookies.</p>
 
-<p><em>def sessionId</em> simply declares a variable allowing sharing of state between the steps so we can check the session ID has been changed.</p>
+<p><code>def sessionId</code> simply declares a variable allowing sharing of state between the steps so we can check the session ID has been changed.</p>
 ]]></content>
   </entry>
   
