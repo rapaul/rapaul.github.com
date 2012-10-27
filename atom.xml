@@ -4,7 +4,7 @@
   <title><![CDATA[rapaul.com]]></title>
   <link href="http://www.rapaul.com/atom.xml" rel="self"/>
   <link href="http://www.rapaul.com/"/>
-  <updated>2012-10-28T09:25:49+13:00</updated>
+  <updated>2012-10-28T09:33:29+13:00</updated>
   <id>http://www.rapaul.com/</id>
   <author>
     <name><![CDATA[Richard Paul]]></name>
@@ -1199,13 +1199,10 @@ Install in Eclipse using the update site: http://www.jgit.org/updates</p>
     <id>http://www.rapaul.com/2009/09/15/jquery-behaviours</id>
     <content type="html"><![CDATA[<p>Below are slides from a short presentation I gave to my colleagues at f1000.  The slides contain a brief background on Javascript behaviours and provide a comparison between jQueries&#8217; <a href="http://docs.jquery.com/Events/bind">bind</a> and <a href="http://docs.jquery.com/Events/live">live</a> behaviours along with the <a href="http://docs.jquery.com/Plugins/livequery">liveQuery plugin</a>.</p>
 
-<p><a href="http://www.slideshare.net/rapaul/jquery-behaviours">jQuery Behaviours</a></p>
+<iframe src="http://www.slideshare.net/slideshow/embed_code/2002204?rel=0" width="512" height="421" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen> </iframe>
 
-<p>View more <a href="http://www.slideshare.net/">documents</a> from <a href="http://www.slideshare.net/rapaul">Richard Paul</a>.</p>
 
-<p>I have also created two little pages which demonstrate <a href="http://files.rapaul.com/behaviour/delegation.html">event bubbling</a> and how the different <a href="http://files.rapaul.com/behaviour/behaviour.html">behaviour mechanisms</a> work with form submission (hint: try using Internet Exploder with the &#8216;live&#8217; example).</p>
-
-<p>A <a href="http://www.rapaul.com/wp-content/uploads/2009/09/jquery_behaviours.pdf">PDF version</a> of the slides is available.</p>
+<p>A <a href="http://www.rapaul.com/attachments/jquery_behaviours.pdf">PDF version</a> of the slides is available.</p>
 
 <p>Thanks to my manager Phil, for letting me post this on my personal blog.</p>
 ]]></content>
