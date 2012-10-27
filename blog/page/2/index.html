@@ -131,23 +131,31 @@
   </header>
 
 
-  <div class="entry-content"><p>UPDATE: Check the comments, people have had more success with Brent&#8217;s suggestion.</p>
+  <div class="entry-content"><p><strong>UPDATE</strong>: Check the comments, people have had more success with Brent&#8217;s suggestion.</p>
 
 <p>I really wanted some highlighting on my .feature files in vim, I&#8217;m no vim expert so I did a bit of googling and came up with the following:</p>
 
 <ul>
-<li><p>Download cucumber.vim from http://github.com/tpope/vim-cucumber/blob/master/syntax/cucumber.vim</p></li>
-<li><p>Save the file to ~/.vim/cucumber.vim (creating the directory if required)</p></li>
-<li><p>vim ~/.vimrc and add the following lines
-[cc]au Bufread,BufNewFile *.feature set filetype=gherkin
-au! Syntax gherkin source ~/.vim/cucumber.vim
-[/cc]</p></li>
-<li><p>Make sure [cc]syntax on[/cc] is also present</p></li>
-<li><p>Open your feature file</p></li>
+<li>Download cucumber.vim from <a href="http://github.com/tpope/vim-cucumber/blob/master/syntax/cucumber.vim">http://github.com/tpope/vim-cucumber/blob/master/syntax/cucumber.vim</a></li>
+<li>Save the file to ~/.vim/cucumber.vim (creating the directory if required)</li>
+<li>vim ~/.vimrc and add the following lines</li>
 </ul>
 
 
-<p><a href="http://www.rapaul.com/wp-content/uploads/2010/06/vim-with-gherkin1.png"><img src="http://www.rapaul.com/wp-content/uploads/2010/06/vim-with-gherkin1.png" alt="" /></a></p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='vim'><span class='line'><span class="k">au</span> Bufread<span class="p">,</span><span class="nb">BufNewFile</span> *.feature <span class="k">set</span> <span class="k">filetype</span><span class="p">=</span>gherkin
+</span><span class='line'><span class="k">au</span><span class="p">!</span> <span class="nb">Syntax</span> gherkin source <span class="p">~</span><span class="sr">/.vim/</span>cucumber.<span class="k">vim</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Make sure <code>syntax on</code> is also present</li>
+<li>Open your feature file</li>
+</ul>
+
+
+<p><img src="/attachments/vim-with-gherkin.png"></p>
 
 <p>If anyone knows a more <em>vim</em> way of doing this feel free to add a comment.</p>
 </div>
