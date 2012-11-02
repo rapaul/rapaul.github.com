@@ -9,7 +9,7 @@
   <meta name="author" content="Richard Paul">
 
   
-  <meta name="description" content="Or at least a behavioural twitter world, http://abehaviouralworld.rapaul.com/ is a little project just launched which attempts to distill behaviours &hellip;">
+  <meta name="description" content="Or at least a behavioural twitter world, http://github.com/rapaul/abehaviouralworld is a little project just launched which attempts to distill &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -92,56 +92,84 @@
 
 <div class="entry-content"><p>Or at least a behavioural twitter world,</p>
 
-<p><a href="http://abehaviouralworld.rapaul.com/"><img src="http://www.rapaul.com/wp-content/uploads/2009/09/intro.png" alt="introduction" /></a></p>
+<p><img src="/attachments/abehaviouralworldintro.png"></p>
 
-<p><a href="http://abehaviouralworld.rapaul.com/">http://abehaviouralworld.rapaul.com/</a> is a little project just launched which attempts to distill behaviours from twitter. Given my recent rapture in the world of <a href="http://en.wikipedia.org/wiki/Behaviour_driven_development">BDD</a>, the behaviours we are distilling are those that match the scenario format.</p>
+<p><a href="http://github.com/rapaul/abehaviouralworld">http://github.com/rapaul/abehaviouralworld</a> is a little project just launched which attempts to distill behaviours from twitter. Given my recent rapture in the world of <a href="http://en.wikipedia.org/wiki/Behaviour_driven_development">BDD</a>, the behaviours we are distilling are those that match the scenario format.</p>
 
-<pre><code>Given ...
-When ...
-Then ...
-</code></pre>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Given ...
+</span><span class='line'>When ...
+</span><span class='line'>Then ...</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
 
 <p>If you look carefully at the page source, you will notice a large portion of it is dedicated to an HTML comment containing the list of features and the breakdown into scenarios.  To keep things easily accessible, each time I thought of a scenario I added it to the page, once completed, it was marked with [Done].</p>
 
 <p>For example, starting with the most important feature:</p>
 
-<pre><code>  Feature 1)
-  In order to see how BDD syntax is being used on twitter
-  As a BDD zealot
-  I want to see tweets that contain 'given', 'when' &amp; 'then', in that order.
-</code></pre>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Feature 1)
+</span><span class='line'>In order to see how BDD syntax is being used on twitter
+</span><span class='line'>As a BDD zealot
+</span><span class='line'>I want to see tweets that contain 'given', 'when' & 'then', in that order.</span></code></pre></td></tr></table></div></figure>
 
-<p>I then broke this feature down into scenarios:</p>
 
-<pre><code>  [Done]
-  Given the search returns more than matching 10 tweets
-  When the user views the page
-  Then the 10 most recent tweets should be displayed
+<p>
+I then broke this feature down into scenarios:</p>
 
-  ...
-</code></pre>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[Done]
+</span><span class='line'>Given the search returns more than matching 10 tweets
+</span><span class='line'>When the user views the page
+</span><span class='line'>Then the 10 most recent tweets should be displayed
+</span><span class='line'>...</span></code></pre></td></tr></table></div></figure>
+
 
 <p>Each time a scenario was satisfied, I marked it with [Done]. Not all scenarios ended up being all that important, the following scenario is still pending.</p>
 
-<pre><code>  Given the search returns no matching tweets
-  When the user views the page
-  Then instead of showing any tweets a message should be shown
-</code></pre>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Given the search returns no matching tweets
+</span><span class='line'>When the user views the page
+</span><span class='line'>Then instead of showing any tweets a message should be shown</span></code></pre></td></tr></table></div></figure>
+
 
 <p>In fact, if we attempt to tie this scenario back into the vision of the website (distilling behaviours in twitter), then we realise it adds no value. If no one is tweeting about behaviours, then it is highly unlike that anyone will be visiting our behaviour distillery.</p>
 
 <p>There are a couple of features (3 &amp; 4) in the source which haven&#8217;t yet been implemented.</p>
 
-<pre><code>  Feature 3)
-  In order to emphasis the given/when/then syntax
-  As a BDD zealot
-  I want to see give/when/then highlighted in the displayed tweets
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Feature 3)
+</span><span class='line'>In order to emphasis the given/when/then syntax
+</span><span class='line'>As a BDD zealot
+</span><span class='line'>I want to see give/when/then highlighted in the displayed tweets
+</span><span class='line'>
+</span><span class='line'>Feature 4)
+</span><span class='line'>In order to encourage BDD syntax usage on twitter
+</span><span class='line'>As a BDD zealot
+</span><span class='line'>I want to be able to tweet from this page using a BDD template</span></code></pre></td></tr></table></div></figure>
 
-  Feature 4)
-  In order to encourage BDD syntax usage on twitter
-  As a BDD zealot
-  I want to be able to tweet from this page using a BDD template
-</code></pre>
+
+<p></p>
 
 <p>If anyone would like to work on these features, or even just break down some useful scenarios, please feel free to fork the <a href="http://github.com/rapaul/abehaviouralworld">code on github</a>, provide me with a diff or add a comment (note at the time of writing github looks to be having some caching issues on the &#8216;Source&#8217; tab).</p>
 
