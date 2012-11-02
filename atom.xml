@@ -4,7 +4,7 @@
   <title><![CDATA[rapaul.com]]></title>
   <link href="http://www.rapaul.com/atom.xml" rel="self"/>
   <link href="http://www.rapaul.com/"/>
-  <updated>2012-10-28T10:16:57+13:00</updated>
+  <updated>2012-11-03T10:12:23+13:00</updated>
   <id>http://www.rapaul.com/</id>
   <author>
     <name><![CDATA[Richard Paul]]></name>
@@ -648,9 +648,10 @@ new File(&#8216;./wordpress-export.xml&#8217;).text.findAll(imagePattern).each {
     <link href="http://www.rapaul.com/2010/06/26/agile-acceptance-testing-slides/"/>
     <updated>2010-06-26T00:00:00+12:00</updated>
     <id>http://www.rapaul.com/2010/06/26/agile-acceptance-testing-slides</id>
-    <content type="html"><![CDATA[<p>Below are slides I presented at the LJC Unconference on Agile Acceptance Testing with Cucumber, Cuke4Duke, Groovy &amp; Selenium.  Download in <a href="http://www.rapaul.com/wp-content/uploads/2010/06/Acceptance_Tests.pdf">PDF</a> format.</p>
+    <content type="html"><![CDATA[<p>Below are slides I presented at the LJC Unconference on Agile Acceptance Testing with Cucumber, Cuke4Duke, Groovy &amp; Selenium.  Download in <a href="http://www.rapaul.com/attachments/Acceptance_Tests.pdf">PDF</a> format.</p>
 
-<p>View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/rapaul">Richard Paul</a>.</p>
+<iframe src="http://www.slideshare.net/slideshow/embed_code/4620282" width="512" height="421" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen> </iframe>
+
 ]]></content>
   </entry>
   
