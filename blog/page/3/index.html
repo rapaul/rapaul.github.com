@@ -476,7 +476,7 @@ Sample Chapter: <a href="http://www.packtpub.com/files/spring-web-flow-2-web-dev
   </header>
 
 
-  <div class="entry-content"><p>This post details the making of Rockin&#8217; Robin, a client side mashup between last.fm and twitter.  If you missed my introduction to Rockin&#8217; Robin, you can read the post <a href="http://www.rapaul.com/2008/11/11/rockin-robin/">here</a>. Or you can try it out @ <a href="http://robin.rapaul.com/">http://robin.rapaul.com/</a></p>
+  <div class="entry-content"><p>This post details the making of Rockin&#8217; Robin, a client side mashup between last.fm and twitter.  If you missed my introduction to Rockin&#8217; Robin, you can read the post <a href="http://www.rapaul.com/2008/11/11/rockin-robin/">here</a>. Or you can try it out @ <a href="http://robin.rapaul.com/">http://robin.rapaul.com/</a> (no longer running)</p>
 
 <p><strong>Querying</strong></p>
 
@@ -488,17 +488,19 @@ Sample Chapter: <a href="http://www.packtpub.com/files/spring-web-flow-2-web-dev
 
 <p>Accessing last.fm&#8217;s API requires a registration key, which can bet set up on <a href="http://www.last.fm/api">http://www.last.fm/api</a> This page also details all the available API methods broken down into areas.  For the Rockin&#8217; Robin mashup we are concerned with finding the most recently scrobbled tracks which are accessible via the <a href="http://www.last.fm/api/show?service=278">user.getRecentTracks</a> method.  Below is a code snippet for making the request to load the data from the last.fm API.</p>
 
-<p>[gist id=&#8221;36396&#8221;]</p>
+<script src="https://gist.github.com/36396.js?file=gistfile1.js"></script>
+
 
 <p>The data returned by this request includes that meta information for the last 5 tracks submitted to the user&#8217;s last.fm profile.  This information includes the artist, album (including cover art links), track name as well as when the track was played.  This information is used to build up the recent track HTML as shown below.</p>
 
-<p><img src="http://www.rapaul.com/wp-content/uploads/2008/12/lastfm-data-visualised.png" alt="lastfm-data-visualised" /></p>
+<p><img src="/attachments/lastfm-data-visualised.png"></p>
 
 <p><strong>Twitter</strong></p>
 
 <p>The next step is to query twitter for tweets that contain the keyword artist and title combination.  Twitter&#8217;s API can be viewed at <a href="http://apiwiki.twitter.com/Search+API+Documentation">http://apiwiki.twitter.com/Search+API+Documentation</a>.  No registration key is required, simply make a call to their public search API, e.g.  <a href="http://search.twitter.com/search.json?q=MGMT+Kids">http://search.twitter.com/search.json?q=MGMT+Kids</a></p>
 
-<p>[gist id=&#8221;38897&#8221;]</p>
+<script src="https://gist.github.com/38897.js?file=gistfile1.js"></script>
+
 
 <p>It is now simply a matter of extracting the required data to build the elements to add to the page.</p>
 
@@ -506,7 +508,8 @@ Sample Chapter: <a href="http://www.packtpub.com/files/spring-web-flow-2-web-dev
 
 <p>Dojo provides a handy method for setting attributes on nodes (<a href="http://api.dojotoolkit.org/jsdoc/dojo/1.2/dojo.NodeList.attr">attr</a>), the API was designed for existing nodes, however it can be used by passing in a newly created node. Here we use dojo.query to return a nodelist which gives access to the attr function then returns the first item (the node we just created).</p>
 
-<p>[gist id=&#8221;38917&#8221;]</p>
+<script src="https://gist.github.com/38917.js?file=gistfile1.js"></script>
+
 
 <p>I&#8217;ve heard from <a href="http://twitter.com/amatix">@amatix</a> that a <a href="http://github.com/madrobby/scriptaculous/wikis/builder">Builder</a> equivalent is slated for a post 1.2 release of Dojo which will hopefully do away with the above build function and make element creation tasks simpler.</p>
 
@@ -514,11 +517,13 @@ Sample Chapter: <a href="http://www.packtpub.com/files/spring-web-flow-2-web-dev
 
 <p>To allow users to bookmark and link to their Rockin&#8217; Robin page, the username is stored in the URL hash. This is a two stage process, the first is to append the username to the URL, e.g. <a href="http://robin.rapaul.com/#GexNZ">http://robin.rapaul.com/#GexNZ</a> The below snippet strips off any existing hash and adds &#8216;#username&#8217; to URL.</p>
 
-<p>[gist id=&#8221;38909&#8221;]</p>
+<script src="https://gist.github.com/38909.js?file=gistfile1.js"></script>
+
 
 <p>The username also needs to be extacted from the URL when the page is first loaded.  The username is then used to populate the username text box and kick off the mashup.</p>
 
-<p>[gist id=&#8221;38912&#8221;]</p>
+<script src="https://gist.github.com/38912.js?file=gistfile1.js"></script>
+
 
 <p>That wraps up the major technical details of Rockin&#8217; Robin, you can browse the full source on <a href="http://github.com/rapaul/rockinrobin/tree/master">github</a>.</p>
 </div>
