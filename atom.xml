@@ -4,7 +4,7 @@
   <title><![CDATA[rapaul.com]]></title>
   <link href="http://www.rapaul.com/atom.xml" rel="self"/>
   <link href="http://www.rapaul.com/"/>
-  <updated>2012-11-03T10:42:00+13:00</updated>
+  <updated>2012-11-03T10:45:05+13:00</updated>
   <id>http://www.rapaul.com/</id>
   <author>
     <name><![CDATA[Richard Paul]]></name>
@@ -486,23 +486,32 @@ You will notice that the script sources the .rvmrc file directly for the project
 
 <p>Bash provides a handy feature which will stop the script if any of the commands fail (return a non-zero value).</p>
 
-<p>[cc lang=&#8221;bash&#8221;]set -o errexit[/cc]</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">set</span> -o errexit
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>Here you can see a simple example</p>
 
-<p>[cc lang=&#8221;bash&#8221;]
-set -o errexit  ## exit after any error (non-zero statement)
-echo before failing command
-mkdir a/b
-echo after failing command
-[/cc]</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">set</span> -o errexit  <span class="c">## exit after any error (non-zero statement) </span>
+</span><span class='line'><span class="nb">echo </span>before failing <span class="nb">command</span>
+</span><span class='line'>mkdir a/b
+</span><span class='line'><span class="nb">echo </span>after failing <span class="nb">command</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>Without this toggle enabled the script would have quite happily failed to create directory a/b then continued on with the rest of the script printing out <em>after failing command</em>.  With the toggle enabled the script stops after it fails to create the directory.</p>
 
-<p>[cc]
-before failing command
-mkdir: cannot create directory `a/b&#8217;: No such file or directory
-[/cc]</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>before failing <span class="nb">command</span>
+</span><span class='line'>mkdir: cannot create directory <span class="sb">`</span>a/b<span class="err">&#39;</span>: No such file or directory
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>Obviously in this trivial example it doesn&#8217;t seem important, but when an essential part of your deployment fails you want to know about it immediately.</p>
 
