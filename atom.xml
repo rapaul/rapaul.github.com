@@ -4,7 +4,7 @@
   <title><![CDATA[rapaul.com]]></title>
   <link href="http://www.rapaul.com/atom.xml" rel="self"/>
   <link href="http://www.rapaul.com/"/>
-  <updated>2012-11-03T10:22:41+13:00</updated>
+  <updated>2012-11-03T10:28:24+13:00</updated>
   <id>http://www.rapaul.com/</id>
   <author>
     <name><![CDATA[Richard Paul]]></name>
@@ -1350,9 +1350,14 @@ Oops, nope. I&#8217;m yet to get into the world of writing executable scenarios 
     <link href="http://www.rapaul.com/2009/09/01/meetups-in-london/"/>
     <updated>2009-09-01T00:00:00+12:00</updated>
     <id>http://www.rapaul.com/2009/09/01/meetups-in-london</id>
-    <content type="html"><![CDATA[<p>One of the great things about London, from a developer&#8217;s perspective, is the wealth of meetups going on.  Don&#8217;t get me wrong, in Auckland we had a few notable meetups including the <a href="http://www.meetup.com/auckland-jug/">Auckland JVM Group</a> and the <a href="http://www.meetup.com/aucklandweb/">Auckland Web Meetup</a>. But London has more people, more developers &amp; hence more meetups.</p>
+    <content type="html"><![CDATA[<p><strong>Update</strong>, I&#8217;m now back in Auckland and the meetup scene is alive and well.</p>
+
+<p>One of the great things about London, from a developer&#8217;s perspective, is the wealth of meetups going on.  Don&#8217;t get me wrong, in Auckland we had a few notable meetups including the <a href="http://www.meetup.com/auckland-jug/">Auckland JVM Group</a> and the <a href="http://www.meetup.com/aucklandweb/">Auckland Web Meetup</a>. But London has more people, more developers &amp; hence more meetups.</p>
 
 <p>Below is a live calendar of the meetups I&#8217;m planning on attending,</p>
+
+<iframe src="https://www.google.com/calendar/embed?showTitle=0&amp;showNav=0&amp;showDate=0&amp;showPrint=0&amp;showTabs=0&amp;showCalendars=0&amp;mode=AGENDA&amp;height=300&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=rc4b7dar1o2em74lj0c3omdvv8%40group.calendar.google.com&amp;color=%23A32929&amp;ctz=Pacific%2FAuckland" style=" border-width:0 " width="600" height="300" frameborder="0" scrolling="no"></iframe>
+
 
 <p>I&#8217;ll try to keep this up to date, so feel free to subscribe to the calendar if you have similar interests (java, javascript, groovy, scala, testing, mocking, android, webOS, html5&#8230; anything you see in this blog&#8217;s tag cloud).</p>
 ]]></content>
