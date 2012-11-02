@@ -16,24 +16,11 @@ Vertical slicing is one of the key features I see in being able to deliver featu
 
 The benefits of this approach are plenty,
 
-
-
-
-  * Each story delivers value, no matter how small.
-
-
-  * Work in progress (WIP) is reduced as tasks such as 'create a schema' are not left floating around until the tasks that utilise them are completed.
-
-
-  * You can focus your development effort on purely delivering just enough code to satisfy the story, without adding code you think you may need (YAGNI).
-
-
-  * Tight feedback loop.
-
-
-  * Reduced merge conflicts - your local code diverges from master for shorter spans.
-
-
+* Each story delivers value, no matter how small.
+* Work in progress (WIP) is reduced as tasks such as 'create a schema' are not left floating around until the tasks that utilise them are completed.
+* You can focus your development effort on purely delivering just enough code to satisfy the story, without adding code you think you may need (YAGNI).
+* Tight feedback loop.
+* Reduced merge conflicts - your local code diverges from master for shorter spans.
 
 Slicing stories vertically fits well with the Outside-In approach favoured by Behaviour Driven Development. Using an Outside-In approach you take a user story, build some acceptance criteria around it (potentially automated with a tool like [Cucumber](http://cukes.info/)), then work from the outside in to complete the story. e.g In a web application I like to  start with the view layer, building in enough of the view to satisfy the acceptance criteria.  The view layer now defines the acceptance criteria for the layer beneath it, in this case the controller.  This process continues with each layer creating a pull signal to write more code at a lower level. Development continues in a Test Driven style until the acceptance criteria for the story is met.
 
