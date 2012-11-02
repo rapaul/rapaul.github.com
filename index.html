@@ -817,22 +817,24 @@ You will notice that the script sources the .rvmrc file directly for the project
 
   <div class="entry-content"><p>Below is a little script I knocked up today to ensure all uploaded images referenced in a Wordpress XML export are present on your server.  A useful check when moving to a new Wordpress instance.</p>
 
-<p>[cc lang=&#8221;java&#8221;]
-def imagePattern = ~&#8217;http://www.rapaul.com/wp-content/uploads/.+?/.+?/.+?(jpg|jpeg|png|gif)&#8217;
-new File(&#8216;./wordpress-export.xml&#8217;).text.findAll(imagePattern).each { address ->
-   try {</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">def</span> <span class="n">imagePattern</span> <span class="o">=</span> <span class="o">~</span><span class="err">&#39;</span><span class="nl">http:</span><span class="c1">//www.rapaul.com/wp-content/uploads/.+?/.+?/.+?(jpg|jpeg|png|gif)&#39;</span>
+</span><span class='line'><span class="k">new</span> <span class="nf">File</span><span class="o">(</span><span class="err">&#39;</span><span class="o">./</span><span class="n">wordpress</span><span class="o">-</span><span class="n">export</span><span class="o">.</span><span class="na">xml</span><span class="err">&#39;</span><span class="o">).</span><span class="na">text</span><span class="o">.</span><span class="na">findAll</span><span class="o">(</span><span class="n">imagePattern</span><span class="o">).</span><span class="na">each</span> <span class="o">{</span> <span class="n">address</span> <span class="o">-&gt;</span>
+</span><span class='line'>   <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>       <span class="k">new</span> <span class="nf">URL</span><span class="o">(</span><span class="n">address</span><span class="o">).</span><span class="na">openStream</span><span class="o">().</span><span class="na">close</span><span class="o">()</span>
+</span><span class='line'>   <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">FileNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>       <span class="n">println</span> <span class="s">&quot;Could not find $address&quot;</span>
+</span><span class='line'>   <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<pre><code>   new URL(address).openStream().close()
-</code></pre>
-
-<p>   } catch (FileNotFoundException e) {</p>
-
-<pre><code>   println "Could not find $address"
-</code></pre>
-
-<p>   }
-}
-[/cc]</p>
 
 <p>I&#8217;m sure a bash guru could hack together something similar but Groovy really does make it simple.</p>
 </div>
