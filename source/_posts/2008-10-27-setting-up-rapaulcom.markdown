@@ -17,10 +17,9 @@ tag:
 - wordpress
 ---
 
+**Update**, I've since ported my blog over to [Octopress](http://octopress.org/docs/). Thanks to the post by [dinduks](http://www.dinduks.com/yet-another-blog-that-migrates-to-octopress/), it wasn't too tricky.
+
 Setting up RAPaul.com has been a breeze.  Especially easy with recommendations from [Rob](http://robfe.com).
-
-
-
 	
   1. **Set up a web host** - This was done using [A Small Orange](http://www.asmallorange.com) (ASO) - yes that's the name of the hosting provider.
 
@@ -44,16 +43,9 @@ All in all, the process has been very simple and painless.
 If you're thinking of setting up an account with A Small Orange, here is my [referrer url](http://refer.asmallorange.com/19824).
 
 There are some additional configuration options I haven't had time to play with yet, including:
-
-
-
 	
   * Install the google sitemap plugin
-
-	
   * Install the google code syntax highlighter
-
-	
   * Install google analytics
 
 
