@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[rapaul.com]]></title>
-  <link href="http://www.rapaul.com/atom.xml" rel="self"/>
-  <link href="http://www.rapaul.com/"/>
-  <updated>2012-11-11T19:13:30+13:00</updated>
-  <id>http://www.rapaul.com/</id>
+  <link href="http://rapaul.com/atom.xml" rel="self"/>
+  <link href="http://rapaul.com/"/>
+  <updated>2012-11-12T22:04:59+13:00</updated>
+  <id>http://rapaul.com/</id>
   <author>
     <name><![CDATA[Richard Paul]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Constructor injection, and how it simplifies unit test setup]]></title>
-    <link href="http://www.rapaul.com/2011/07/10/constructor-injection-unit-tests/"/>
+    <link href="http://rapaul.com/2011/07/10/constructor-injection-unit-tests/"/>
     <updated>2011-07-10T00:00:00+12:00</updated>
-    <id>http://www.rapaul.com/2011/07/10/constructor-injection-unit-tests</id>
+    <id>http://rapaul.com/2011/07/10/constructor-injection-unit-tests</id>
     <content type="html"><![CDATA[<p>I&#8217;ve recently been reading <a href="http://www.growing-object-oriented-software.com/">Growing Object-Oriented Software Guided by Tests</a> (GOOS), and one (of the many) aha moments was a piece of test code that mocked the collaborators and instantiated the object under test - all in the declaration of the test&#8217;s private fields.  I am particularly fond of this approach for two reasons:</p>
 
 <ul>
@@ -95,12 +95,12 @@
   
   <entry>
     <title type="html"><![CDATA[From zero to headless browser tests in Jenkins]]></title>
-    <link href="http://www.rapaul.com/2011/06/05/zero-to-headless-browser-tests-jenkins/"/>
+    <link href="http://rapaul.com/2011/06/05/zero-to-headless-browser-tests-jenkins/"/>
     <updated>2011-06-05T00:00:00+12:00</updated>
-    <id>http://www.rapaul.com/2011/06/05/zero-to-headless-browser-tests-jenkins</id>
+    <id>http://rapaul.com/2011/06/05/zero-to-headless-browser-tests-jenkins</id>
     <content type="html"><![CDATA[<p>After spending a large portion of the day I can proudly say I have a working set of browser based tests that run on a headless Jenkins install. By headless I mean a server without any physical display installed, as is typical for server machines. This facilitates the execution of high level acceptance tests in much the same fashion as lower level unit and integration based tests, albeit at a slower rate.</p>
 
-<p><img class="right" src="http://www.rapaul.com/images/jenkins-headless.png" width="300" height="230"></p>
+<p><img class="right" src="http://rapaul.com/images/jenkins-headless.png" width="300" height="230"></p>
 
 <p>The problem I am trying to solve here is a quick feedback loop on acceptance test level behaviour. This blog post will be talking about getting Cucumber scenarios running for a single browser (Firefox). Cross browser testing is a different problem, for which think <a href="http://saucelabs.com/">Sauce Labs</a> would be a better solution as they take the hassle out of provisioning and maintaining a wide range of operating system and browser combinations.</p>
 
@@ -300,9 +300,9 @@ You will notice that the script sources the .rvmrc file directly for the project
   
   <entry>
     <title type="html"><![CDATA[Specification by Example, a review in snippets]]></title>
-    <link href="http://www.rapaul.com/2011/04/12/specification-by-example-review/"/>
+    <link href="http://rapaul.com/2011/04/12/specification-by-example-review/"/>
     <updated>2011-04-12T00:00:00+12:00</updated>
-    <id>http://www.rapaul.com/2011/04/12/specification-by-example-review</id>
+    <id>http://rapaul.com/2011/04/12/specification-by-example-review</id>
     <content type="html"><![CDATA[<p>I&#8217;ve just finished reading <a href="http://specificationbyexample.com/">Specification by Example</a>, a new book (currently in MEAP) by <a href="http://gojko.net/">Gojko Adzic</a>. Highly recommend to anyone involved in software creation (developers, testers, product owners, product managers, &#8230;). The book includes great insights into building the &#8216;right thing&#8217; and the &#8216;thing right&#8217;, drawing on experiences from many successful software projects and teams. These projects each have dedicated chapters providing real insight into how these teams work and the steps they took to get there.</p>
 
 <p>But you don&#8217;t have to trust my vague recommendations, I&#8217;ve included a few key examples from the book below:</p>
@@ -329,9 +329,9 @@ You will notice that the script sources the .rvmrc file directly for the project
   
   <entry>
     <title type="html"><![CDATA[Cucumber on the JVM with Groovy]]></title>
-    <link href="http://www.rapaul.com/2011/03/24/cucumber-on-the-jvm-with-groovy/"/>
+    <link href="http://rapaul.com/2011/03/24/cucumber-on-the-jvm-with-groovy/"/>
     <updated>2011-03-24T00:00:00+13:00</updated>
-    <id>http://www.rapaul.com/2011/03/24/cucumber-on-the-jvm-with-groovy</id>
+    <id>http://rapaul.com/2011/03/24/cucumber-on-the-jvm-with-groovy</id>
     <content type="html"><![CDATA[<p>Below is the presentation on Cucumber on the JVM with Groovy I presented at the <a href="http://skillsmatter.com/event/agile-scrum/cukeup">CukeUp</a> Cucumber conference at Skills Matter.</p>
 
 <p>You can catch a video of the full presentation over on the Skills Matter website: <a href="http://skillsmatter.com/podcast/agile-scrum/cuke-groovy">http://skillsmatter.com/podcast/agile-scrum/cuke-groovy</a></p>
@@ -342,9 +342,9 @@ You will notice that the script sources the .rvmrc file directly for the project
   
   <entry>
     <title type="html"><![CDATA[Vertical Slicing]]></title>
-    <link href="http://www.rapaul.com/2011/02/27/vertical-slicing/"/>
+    <link href="http://rapaul.com/2011/02/27/vertical-slicing/"/>
     <updated>2011-02-27T00:00:00+13:00</updated>
-    <id>http://www.rapaul.com/2011/02/27/vertical-slicing</id>
+    <id>http://rapaul.com/2011/02/27/vertical-slicing</id>
     <content type="html"><![CDATA[<p>Vertical slicing is one of the key features I see in being able to deliver features rapidly, with the code developed being clean and simple to extend to future requirements. The basic premise is that instead of dividing work into horizontal slices where a task is something like <em>create a database schema</em>.  You instead slice your work into small user stories where each story is something that can be demonstrated to a stakeholder on its own.  These stories will often touch multiple &#8216;layers&#8217; of the application such as the view layer, service layer and persistence layer.</p>
 
 <p>The benefits of this approach are plenty,</p>
@@ -371,9 +371,9 @@ You will notice that the script sources the .rvmrc file directly for the project
   
   <entry>
     <title type="html"><![CDATA[Acceptance Testing with Geb]]></title>
-    <link href="http://www.rapaul.com/2011/01/26/agile-acceptance-testing-with-geb/"/>
+    <link href="http://rapaul.com/2011/01/26/agile-acceptance-testing-with-geb/"/>
     <updated>2011-01-26T00:00:00+13:00</updated>
-    <id>http://www.rapaul.com/2011/01/26/agile-acceptance-testing-with-geb</id>
+    <id>http://rapaul.com/2011/01/26/agile-acceptance-testing-with-geb</id>
     <content type="html"><![CDATA[<p>Below are the slides and <a href="http://skillsmatter.com/podcast/agile-testing/acceptance-testing-with-geb">video of a presentation I gave at SkillsMatter</a> on Acceptance Testing with Geb. Fast forward to 1:30 when I start the presentation.</p>
 
 <p>This talk will cover the basics of using <a href="http://geb.codehaus.org">Geb</a> to automate browser testing.</p>
@@ -389,9 +389,9 @@ You will notice that the script sources the .rvmrc file directly for the project
   
   <entry>
     <title type="html"><![CDATA[Cucumber, Maven & TeamCity]]></title>
-    <link href="http://www.rapaul.com/2010/12/17/cucumber-maven-teamcity/"/>
+    <link href="http://rapaul.com/2010/12/17/cucumber-maven-teamcity/"/>
     <updated>2010-12-17T00:00:00+13:00</updated>
-    <id>http://www.rapaul.com/2010/12/17/cucumber-maven-teamcity</id>
+    <id>http://rapaul.com/2010/12/17/cucumber-maven-teamcity</id>
     <content type="html"><![CDATA[<p>Having a suite of acceptances tests is all well and good, but if they don&#8217;t run regularly they tend to rot.  Much like unit tests they should be part of your continuous integration configuration.  We use TeamCity, so it was a logical choice for running our Cucumber scenarios.</p>
 
 <h2>Running Cucumber with Maven</h2>
@@ -440,11 +440,11 @@ You will notice that the script sources the .rvmrc file directly for the project
 </ol>
 
 
-<p><img src="http://www.rapaul.com/attachments/test-passed.png"></p>
+<p><img src="http://rapaul.com/attachments/test-passed.png"></p>
 
 <p>You now get individual scenarios reported as tests in TeamCity, you can then monitor for long running tests, check stacktraces and get notified immediately via a TeamCity notifier as soon as a single scenario fails (no need to wait until the entire suite finishes).</p>
 
-<p><img src="http://www.rapaul.com/attachments/stack.png"></p>
+<p><img src="http://rapaul.com/attachments/stack.png"></p>
 
 <h2>Triggering Cucumber</h2>
 
@@ -452,7 +452,7 @@ You will notice that the script sources the .rvmrc file directly for the project
 
 <h2>Key Features</h2>
 
-<p><img src="http://www.rapaul.com/attachments/in-the-green.png"></p>
+<p><img src="http://rapaul.com/attachments/in-the-green.png"></p>
 
 <p>The above screenshot shows the various builds we have related to our product.  The Continuous Integration is our unit tests, these run quickly after every commit.  Next we break the Cucumber build down into 3 discrete builds. Key Features is a tag (@keyfeature) we use against features and scenarios the business identifies as being the most important, the idea being that these are run first to give us quick feedback, in this case there are 75 key features which run in just under 10 minutes.  The remaining scenarios are run in the non-key features build which runs automatically immediately after the key features have completed.  These currently take just under 50 minutes.  So the total feedback loop is roughly 1 hour.</p>
 
@@ -479,9 +479,9 @@ You will notice that the script sources the .rvmrc file directly for the project
   
   <entry>
     <title type="html"><![CDATA[Failing early in bash]]></title>
-    <link href="http://www.rapaul.com/2010/11/26/failing-early-in-bash/"/>
+    <link href="http://rapaul.com/2010/11/26/failing-early-in-bash/"/>
     <updated>2010-11-26T00:00:00+13:00</updated>
-    <id>http://www.rapaul.com/2010/11/26/failing-early-in-bash</id>
+    <id>http://rapaul.com/2010/11/26/failing-early-in-bash</id>
     <content type="html"><![CDATA[<p>We use a bash script to automate deployment to our live servers, today it didn&#8217;t go so well.  Drilling into the problem it appeared one of the copy commands failed due to permissions but the deployment continued anyway and we didn&#8217;t notice.</p>
 
 <p>Bash provides a handy feature which will stop the script if any of the commands fail (return a non-zero value).</p>
@@ -521,9 +521,9 @@ You will notice that the script sources the .rvmrc file directly for the project
   
   <entry>
     <title type="html"><![CDATA[Checking Wordpress images are present with Groovy]]></title>
-    <link href="http://www.rapaul.com/2010/10/26/checking-wordpress-images-are-present-with-groovy/"/>
+    <link href="http://rapaul.com/2010/10/26/checking-wordpress-images-are-present-with-groovy/"/>
     <updated>2010-10-26T00:00:00+13:00</updated>
-    <id>http://www.rapaul.com/2010/10/26/checking-wordpress-images-are-present-with-groovy</id>
+    <id>http://rapaul.com/2010/10/26/checking-wordpress-images-are-present-with-groovy</id>
     <content type="html"><![CDATA[<p>Below is a little script I knocked up today to ensure all uploaded images referenced in a Wordpress XML export are present on your server.  A useful check when moving to a new Wordpress instance.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -551,9 +551,9 @@ You will notice that the script sources the .rvmrc file directly for the project
   
   <entry>
     <title type="html"><![CDATA[Avoiding Brittle Element Selection with Selenium2]]></title>
-    <link href="http://www.rapaul.com/2010/07/18/avoiding-brittle-element-selection-with-selenium2/"/>
+    <link href="http://rapaul.com/2010/07/18/avoiding-brittle-element-selection-with-selenium2/"/>
     <updated>2010-07-18T00:00:00+12:00</updated>
-    <id>http://www.rapaul.com/2010/07/18/avoiding-brittle-element-selection-with-selenium2</id>
+    <id>http://rapaul.com/2010/07/18/avoiding-brittle-element-selection-with-selenium2</id>
     <content type="html"><![CDATA[<p>By automating acceptance tests we are striving to cut back on the maintenance effort of our software. The automated tests perform a majority of the checks thus freeing up time for exploratory testing.  However care needs to be taken when automating acceptance tests to ensure they remain flexible in the face of change.  Brittle tests, which fail for seemingly unrelated reasons, can place a huge maintenance burden on a testing team negating, some of the gains automation brings.</p>
 
 <p>But fear not, there are steps you can take to ensure your tests are flexible to change.  The rest of this post will give examples using <a href="http://code.google.com/p/selenium/">Selenium2</a>, however most of these suggestions can be applied to any browser automation framework.</p>
@@ -571,7 +571,7 @@ You will notice that the script sources the .rvmrc file directly for the project
 
 <p>These methods provide convenient access to elements on the page but we need to ensure the classes or IDs are semantic to ensure our selenium tests continue to function if the layout of the page changes.  Below is an example of how to build a navigational element and highlights semantic and brittle IDs for the elements.</p>
 
-<p><img src="http://www.rapaul.com/attachments/navigation.png"></p>
+<p><img src="http://rapaul.com/attachments/navigation.png"></p>
 
 <p>As you can see the navigation is broken down into a left and a right side. In order to select these sides a naïve approach would be to assign IDs of <code>leftNav</code> and <code>rightNav</code>.  While these two navigational elements can be easily selected using <code>browser.findElementById('leftNav')</code> and <code>browser.findElementById('rightNav')</code>, using these names can have a negative impact further down the line.</p>
 
@@ -656,10 +656,10 @@ You will notice that the script sources the .rvmrc file directly for the project
   
   <entry>
     <title type="html"><![CDATA[Agile Acceptance Testing Slides]]></title>
-    <link href="http://www.rapaul.com/2010/06/26/agile-acceptance-testing-slides/"/>
+    <link href="http://rapaul.com/2010/06/26/agile-acceptance-testing-slides/"/>
     <updated>2010-06-26T00:00:00+12:00</updated>
-    <id>http://www.rapaul.com/2010/06/26/agile-acceptance-testing-slides</id>
-    <content type="html"><![CDATA[<p>Below are slides I presented at the LJC Unconference on Agile Acceptance Testing with Cucumber, Cuke4Duke, Groovy &amp; Selenium.  Download in <a href="http://www.rapaul.com/attachments/Acceptance_Tests.pdf">PDF</a> format.</p>
+    <id>http://rapaul.com/2010/06/26/agile-acceptance-testing-slides</id>
+    <content type="html"><![CDATA[<p>Below are slides I presented at the LJC Unconference on Agile Acceptance Testing with Cucumber, Cuke4Duke, Groovy &amp; Selenium.  Download in <a href="http://rapaul.com/attachments/Acceptance_Tests.pdf">PDF</a> format.</p>
 
 <iframe src="http://www.slideshare.net/slideshow/embed_code/4620282" width="512" height="421" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen> </iframe>
 
@@ -668,9 +668,9 @@ You will notice that the script sources the .rvmrc file directly for the project
   
   <entry>
     <title type="html"><![CDATA[Gherkin Highlighting for VIM]]></title>
-    <link href="http://www.rapaul.com/2010/06/21/gherkin-highlighting-for-vim/"/>
+    <link href="http://rapaul.com/2010/06/21/gherkin-highlighting-for-vim/"/>
     <updated>2010-06-21T00:00:00+12:00</updated>
-    <id>http://www.rapaul.com/2010/06/21/gherkin-highlighting-for-vim</id>
+    <id>http://rapaul.com/2010/06/21/gherkin-highlighting-for-vim</id>
     <content type="html"><![CDATA[<p><strong>UPDATE</strong>: Check the comments, people have had more success with Brent&#8217;s suggestion.</p>
 
 <p>I really wanted some highlighting on my .feature files in vim, I&#8217;m no vim expert so I did a bit of googling and came up with the following:</p>
@@ -695,7 +695,7 @@ You will notice that the script sources the .rvmrc file directly for the project
 </ul>
 
 
-<p><img src="http://www.rapaul.com/attachments/vim-with-gherkin.png"></p>
+<p><img src="http://rapaul.com/attachments/vim-with-gherkin.png"></p>
 
 <p>If anyone knows a more <em>vim</em> way of doing this feel free to add a comment.</p>
 ]]></content>
@@ -703,9 +703,9 @@ You will notice that the script sources the .rvmrc file directly for the project
   
   <entry>
     <title type="html"><![CDATA[Avoiding Brittle Tests with Mockito's ArgumentCaptor]]></title>
-    <link href="http://www.rapaul.com/2010/06/10/avoiding-brittle-tests-with-mockitos-argument-captor/"/>
+    <link href="http://rapaul.com/2010/06/10/avoiding-brittle-tests-with-mockitos-argument-captor/"/>
     <updated>2010-06-10T00:00:00+12:00</updated>
-    <id>http://www.rapaul.com/2010/06/10/avoiding-brittle-tests-with-mockitos-argument-captor</id>
+    <id>http://rapaul.com/2010/06/10/avoiding-brittle-tests-with-mockitos-argument-captor</id>
     <content type="html"><![CDATA[<p>One of the core principles behind my love of <a href="http://mockito.org">Mockito</a> is its ability to avoid brittle tests, by brittle tests I mean unit tests which fail when seemingly unrelated functionality changes.</p>
 
 <p>Below I will outline one of Mockito&#8217;s lesser known features, the <a href="http://mockito.googlecode.com/svn/branches/1.8.3/javadoc/org/mockito/ArgumentCaptor.html">ArgumentCaptor</a> that shines in certain use cases.</p>
@@ -898,9 +898,9 @@ You will notice that the script sources the .rvmrc file directly for the project
   
   <entry>
     <title type="html"><![CDATA[Cucumber World with Groovy]]></title>
-    <link href="http://www.rapaul.com/2010/05/03/cucumber-world-with-groovy/"/>
+    <link href="http://rapaul.com/2010/05/03/cucumber-world-with-groovy/"/>
     <updated>2010-05-03T00:00:00+12:00</updated>
-    <id>http://www.rapaul.com/2010/05/03/cucumber-world-with-groovy</id>
+    <id>http://rapaul.com/2010/05/03/cucumber-world-with-groovy</id>
     <content type="html"><![CDATA[<p><a href="http://cukes.info/">Cucumber</a> provides the ability to create a <em>world</em> in which you can expose useful methods for the testing environment.  This post briefly details how to expose these methods when using Groovy with <a href="http://wiki.github.com/aslakhellesoy/cuke4duke/">Cuke4Duke</a>.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -1015,9 +1015,9 @@ You will notice that the script sources the .rvmrc file directly for the project
   
   <entry>
     <title type="html"><![CDATA[A Cucumber Scenario for Session Fixation Attacks]]></title>
-    <link href="http://www.rapaul.com/2010/03/16/cucumber-session-fixation/"/>
+    <link href="http://rapaul.com/2010/03/16/cucumber-session-fixation/"/>
     <updated>2010-03-16T00:00:00+13:00</updated>
-    <id>http://www.rapaul.com/2010/03/16/cucumber-session-fixation</id>
+    <id>http://rapaul.com/2010/03/16/cucumber-session-fixation</id>
     <content type="html"><![CDATA[<p>When working on a Spring project I was alerted via the logs that my login handling was susceptible to <a href="http://en.wikipedia.org/wiki/Session_fixation">Session Fixation Attacks</a>.  It was nice of Spring to alert me of this, and it seems like the <a href="http://markmail.org/thread/o7f6d5gkle4kqqbt">problem</a> is due to the Apache httpd connection via modjk.  But before diving into a solution I decided to write a simple acceptance test using <a href="http://cukes.info/">Cucumber</a>.  This allows me to first prove the security hole is present, easily tell when I have fixed it and has the additional benefit of being able to add the check to a set of automated regression tests to ensure it never happens again.</p>
 
 <p>The countermeasure <a href="http://static.springsource.org/spring-security/site/docs/3.0.x/apidocs/org/springframework/security/web/authentication/session/SessionFixationProtectionStrategy.html">built into Spring</a> uses the <a href="http://en.wikipedia.org/wiki/Session_fixation#Best_solution:_Identity_Confirmation">Identity Confirmation</a> technique.  This basically involves invalidating a user&#8217;s session when they login and creating a new session with a different <em>JSESSIONID</em>.  It turns out to be fairly easy to write a test for this in Cucumber.  Firstly I wrote the plain text scenario:</p>
@@ -1102,9 +1102,9 @@ You will notice that the script sources the .rvmrc file directly for the project
   
   <entry>
     <title type="html"><![CDATA[Avoiding ambiguities when using @RequestMapping]]></title>
-    <link href="http://www.rapaul.com/2010/02/14/request-mapping-ordering/"/>
+    <link href="http://rapaul.com/2010/02/14/request-mapping-ordering/"/>
     <updated>2010-02-14T00:00:00+13:00</updated>
-    <id>http://www.rapaul.com/2010/02/14/request-mapping-ordering</id>
+    <id>http://rapaul.com/2010/02/14/request-mapping-ordering</id>
     <content type="html"><![CDATA[<p>I&#8217;ve recently been using the param attribute of the <a href="http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/web/bind/annotation/RequestMapping.html">@RequestMapping</a> annotation from Spring MVC.</p>
 
 <p>Take the case of a search feature for a website.  If a &#8216;refine&#8217; parameter is present, the user should be shown a search form to refine their criteria. However if the refine parameter is not present the user is shown the search results for the query.</p>
@@ -1161,9 +1161,9 @@ You will notice that the script sources the .rvmrc file directly for the project
   
   <entry>
     <title type="html"><![CDATA[My git svn workflow]]></title>
-    <link href="http://www.rapaul.com/2010/01/13/my-git-svn-workflow/"/>
+    <link href="http://rapaul.com/2010/01/13/my-git-svn-workflow/"/>
     <updated>2010-01-13T00:00:00+13:00</updated>
-    <id>http://www.rapaul.com/2010/01/13/my-git-svn-workflow</id>
+    <id>http://rapaul.com/2010/01/13/my-git-svn-workflow</id>
     <content type="html"><![CDATA[<p>Below are the steps I use when working with Git &amp; SVN. Please note, I am in no way a Git or SVN expert, but these are the steps that seem to work for me.</p>
 
 <p><strong>1) Checkout codebase</strong></p>
@@ -1274,15 +1274,15 @@ Install in Eclipse using the update site: http://www.jgit.org/updates</p>
   
   <entry>
     <title type="html"><![CDATA[jQuery Behaviours]]></title>
-    <link href="http://www.rapaul.com/2009/09/15/jquery-behaviours/"/>
+    <link href="http://rapaul.com/2009/09/15/jquery-behaviours/"/>
     <updated>2009-09-15T00:00:00+12:00</updated>
-    <id>http://www.rapaul.com/2009/09/15/jquery-behaviours</id>
+    <id>http://rapaul.com/2009/09/15/jquery-behaviours</id>
     <content type="html"><![CDATA[<p>Below are slides from a short presentation I gave to my colleagues at f1000.  The slides contain a brief background on Javascript behaviours and provide a comparison between jQueries&#8217; <a href="http://docs.jquery.com/Events/bind">bind</a> and <a href="http://docs.jquery.com/Events/live">live</a> behaviours along with the <a href="http://docs.jquery.com/Plugins/livequery">liveQuery plugin</a>.</p>
 
 <iframe src="http://www.slideshare.net/slideshow/embed_code/2002204?rel=0" width="512" height="421" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen> </iframe>
 
 
-<p>A <a href="http://www.rapaul.com/attachments/jquery_behaviours.pdf">PDF version</a> of the slides is available.</p>
+<p>A <a href="http://rapaul.com/attachments/jquery_behaviours.pdf">PDF version</a> of the slides is available.</p>
 
 <p>Thanks to my manager Phil, for letting me post this on my personal blog.</p>
 ]]></content>
@@ -1290,12 +1290,12 @@ Install in Eclipse using the update site: http://www.jgit.org/updates</p>
   
   <entry>
     <title type="html"><![CDATA[A Behavioural World]]></title>
-    <link href="http://www.rapaul.com/2009/09/13/a-behavioural-world/"/>
+    <link href="http://rapaul.com/2009/09/13/a-behavioural-world/"/>
     <updated>2009-09-13T00:00:00+12:00</updated>
-    <id>http://www.rapaul.com/2009/09/13/a-behavioural-world</id>
+    <id>http://rapaul.com/2009/09/13/a-behavioural-world</id>
     <content type="html"><![CDATA[<p>Or at least a behavioural twitter world,</p>
 
-<p><img src="http://www.rapaul.com/attachments/abehaviouralworldintro.png"></p>
+<p><img src="http://rapaul.com/attachments/abehaviouralworldintro.png"></p>
 
 <p><a href="http://github.com/rapaul/abehaviouralworld">http://github.com/rapaul/abehaviouralworld</a> is a little project just launched which attempts to distill behaviours from twitter. Given my recent rapture in the world of <a href="http://en.wikipedia.org/wiki/Behaviour_driven_development">BDD</a>, the behaviours we are distilling are those that match the scenario format.</p>
 
@@ -1386,9 +1386,9 @@ Oops, nope. I&#8217;m yet to get into the world of writing executable scenarios 
   
   <entry>
     <title type="html"><![CDATA[Meetups in London]]></title>
-    <link href="http://www.rapaul.com/2009/09/01/meetups-in-london/"/>
+    <link href="http://rapaul.com/2009/09/01/meetups-in-london/"/>
     <updated>2009-09-01T00:00:00+12:00</updated>
-    <id>http://www.rapaul.com/2009/09/01/meetups-in-london</id>
+    <id>http://rapaul.com/2009/09/01/meetups-in-london</id>
     <content type="html"><![CDATA[<p><strong>Update</strong>, I&#8217;m now back in Auckland and the meetup scene is alive and well.</p>
 
 <p>One of the great things about London, from a developer&#8217;s perspective, is the wealth of meetups going on.  Don&#8217;t get me wrong, in Auckland we had a few notable meetups including the <a href="http://www.meetup.com/auckland-jug/">Auckland JVM Group</a> and the <a href="http://www.meetup.com/aucklandweb/">Auckland Web Meetup</a>. But London has more people, more developers &amp; hence more meetups.</p>
