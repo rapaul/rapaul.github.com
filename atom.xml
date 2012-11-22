@@ -4,7 +4,7 @@
   <title><![CDATA[rapaul.com]]></title>
   <link href="http://rapaul.com/atom.xml" rel="self"/>
   <link href="http://rapaul.com/"/>
-  <updated>2012-11-12T22:04:59+13:00</updated>
+  <updated>2012-11-22T20:08:23+13:00</updated>
   <id>http://rapaul.com/</id>
   <author>
     <name><![CDATA[Richard Paul]]></name>
@@ -12,6 +12,53 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Auckland Coderetreats 2012]]></title>
+    <link href="http://rapaul.com/2012/11/22/auckland-coderetreat/"/>
+    <updated>2012-11-22T19:17:00+13:00</updated>
+    <id>http://rapaul.com/2012/11/22/auckland-coderetreat</id>
+    <content type="html"><![CDATA[<p>Corey Haines was in town last month and delivered a great talk at <a href="http://codemania.co.nz/">Codemania</a>. Fortunately for us he stuck around for the weekend and facilitated Auckland&#8217;s first (as far as I know) <a href="http://coderetreat.org/">Coderetreat</a>.</p>
+
+<h2>Global Day of Coderetreat, 8th December 2012</h2>
+
+<p>On the 8th of December developers from all over the globe will be taking part in the <a href="http://globalday.coderetreat.org/">Global Day of Coderetreat</a>. The last Auckland Coderetreat filled up quick, this December we are fortunate enough to have 2 Coderetreats in Auckland.</p>
+
+<ul>
+<li>Hosted at Movio (<a href="http://www.meetup.com/kiwi-code-retreat/events/91578512/">sign up</a>)</li>
+<li>Hosted at BizDojo (<a href="http://www.meetup.com/kiwi-code-retreat/events/89757822/">sign up</a>)</li>
+</ul>
+
+
+<p>Each of these Coderetreats are language agnostic, so take your pick. I&#8217;ll be facilitating the Movio Coderetreat, so that may sway your choice either way :P</p>
+
+<p>Alex Henderson is facilitating the BizDojo Coderetreat and has written about it over on his <a href="http://blog.bittercoder.com/2012/11/04/global-day-of-code-retreat-2012/">blog</a>.</p>
+
+<p>Thanks to the great sponsors of these events there is no cost! To top that off there will be delicious food and drink provided throughout the day.</p>
+
+<p>Wellington peeps, <a href="http://www.meetup.com/kiwi-code-retreat/events/90182862/">you&#8217;re in luck too</a>.</p>
+
+<h3>What to bring</h3>
+
+<ul>
+<li>A laptop with a development environment setup (1 or more languages)</li>
+<li>A way to run tests</li>
+<li>A collaborative mindset, all work is done in pairs</li>
+<li>An open mind</li>
+</ul>
+
+
+<h2>Coderewhat?</h2>
+
+<p>If you haven&#8217;t heard of a Coderetreat before here&#8217;s a quick summary pulled from <a href="http://coderetreat.org/about">coderetreat.org/about</a>.</p>
+
+<blockquote><p>Coderetreat is a day-long, intensive practice event, focusing on the fundamentals of software development and design. By providing developers the opportunity to take part in focused practice, away from the pressures of &#8216;getting things done&#8217;, the coderetreat format has proven itself to be a highly effective means of skill improvement. Practicing the basic principles of modular and object-oriented design, developers can improve their ability to write code that minimizes the cost of change over time.</p></blockquote>
+
+<p>Sound exhausting? It is. It&#8217;s also a great deal of fun!</p>
+
+<p>If this sounds like you, please <a href="http://www.meetup.com/kiwi-code-retreat/">sign up</a> and we&#8217;ll see you on the 8th!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Constructor injection, and how it simplifies unit test setup]]></title>
@@ -1381,24 +1428,6 @@ Oops, nope. I&#8217;m yet to get into the world of writing executable scenarios 
 
 <p>PS: This idea was partially inspired by a <a href="http://twitter.com/soulnafein/status/3712851157">tweet by soulnafein</a> which read:
 <em>My girlfriend is taking the mickey out of me because recently I started explaining things using the Scenario format (Given When Then) :-)</em></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Meetups in London]]></title>
-    <link href="http://rapaul.com/2009/09/01/meetups-in-london/"/>
-    <updated>2009-09-01T00:00:00+12:00</updated>
-    <id>http://rapaul.com/2009/09/01/meetups-in-london</id>
-    <content type="html"><![CDATA[<p><strong>Update</strong>, I&#8217;m now back in Auckland and the meetup scene is alive and well.</p>
-
-<p>One of the great things about London, from a developer&#8217;s perspective, is the wealth of meetups going on.  Don&#8217;t get me wrong, in Auckland we had a few notable meetups including the <a href="http://www.meetup.com/auckland-jug/">Auckland JVM Group</a> and the <a href="http://www.meetup.com/aucklandweb/">Auckland Web Meetup</a>. But London has more people, more developers &amp; hence more meetups.</p>
-
-<p>Below is a live calendar of the meetups I&#8217;m planning on attending,</p>
-
-<iframe src="https://www.google.com/calendar/embed?showTitle=0&amp;showNav=0&amp;showDate=0&amp;showPrint=0&amp;showTabs=0&amp;showCalendars=0&amp;mode=AGENDA&amp;height=300&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=rc4b7dar1o2em74lj0c3omdvv8%40group.calendar.google.com&amp;color=%23A32929&amp;ctz=Pacific%2FAuckland" style=" border-width:0 " width="600" height="300" frameborder="0" scrolling="no"></iframe>
-
-
-<p>I&#8217;ll try to keep this up to date, so feel free to subscribe to the calendar if you have similar interests (java, javascript, groovy, scala, testing, mocking, android, webOS, html5&#8230; anything you see in this blog&#8217;s tag cloud).</p>
 ]]></content>
   </entry>
   
