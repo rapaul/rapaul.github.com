@@ -9,7 +9,7 @@ categories:
 Corey Haines was in town last month and delivered a great talk at [Codemania](http://codemania.co.nz/). Fortunately for us he stuck around for the weekend and facilitated Auckland's first (as far as I know) [Coderetreat](http://coderetreat.org/).
 
 ## Global Day of Coderetreat, 8th December 2012
-On the 8th of December developers from all over the globe will be taking part in the [Global Day of Coderetreat](http://globalday.coderetreat.org/). The last Auckland Coderetreat filled up quick, this December we are fortunate enough to have 2 Coderetreats in Auckland.
+On Saturday the 8th of December, developers from all over the globe will be taking part in the [Global Day of Coderetreat](http://globalday.coderetreat.org/). The last Auckland Coderetreat filled up quick, this December we are fortunate enough to have 2 Coderetreats in Auckland.
 
 * Hosted at Movio ([sign up](http://www.meetup.com/kiwi-code-retreat/events/91578512/))
 * Hosted at BizDojo ([sign up](http://www.meetup.com/kiwi-code-retreat/events/89757822/))
